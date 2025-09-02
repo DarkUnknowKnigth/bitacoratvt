@@ -8,16 +8,42 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Iniciar Sesión - {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .sticky-background {
+            /* Propiedades para el efecto sticky */
+            position: -webkit-sticky;
+            /* Soporte para navegadores antiguos */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            /* Asegura que el elemento esté encima de otros */
+            background-image: url('/images/bg.webp');
+            /* Propiedades para el background hover */
+            background-color: #f1f1f1;
+            /* Color de fondo inicial */
+            transition: background-color 0.3s ease;
+            /* Transición suave del color */
+            padding: 10px;
+            /* Espaciado interno */
+
+        }
+
+        /* Pseudo-clase :hover para cambiar el color de fondo */
+        .sticky-background:hover {
+            background-color: #1733af;
+            /* Nuevo color de fondo al pasar el cursor */
+        }
+    </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+<body class="min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-indigo-900 sticky-background">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Logo y header -->
             <div class="text-center">
                 <div class="mx-auto h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-lg">
                     <!-- Icono de TV/Cable -->
-                    <svg class="h-10 w-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-10 w-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
                         </path>
@@ -26,7 +52,7 @@
                 <h2 class="mt-6 text-3xl font-extrabold text-white">
                     Iniciar Sesión
                 </h2>
-                <p class="mt-2 text-sm text-blue-200">
+                <p class="mt-2 text-sm text-amber-200">
                     Accede a tu panel de administración
                 </p>
             </div>
@@ -55,8 +81,8 @@
                                 <input id="email" name="email" type="email" autocomplete="email" required
                                     value="{{ old('email') }}" class="block w-full pl-10 pr-3 py-3 border border-gray-300/30 rounded-lg
                                            bg-white/5 backdrop-blur-sm text-white placeholder-gray-300
-                                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                                           transition duration-200" placeholder="tu@empresa.com">
+                                           focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500
+                                           transition duration-200" placeholder="correo@tuvision.mx">
                             </div>
                             @error('email')
                             <p class="mt-1 text-sm text-red-300">{{ $message }}</p>
@@ -80,7 +106,7 @@
                                 <input id="password" name="password" type="password" autocomplete="current-password"
                                     required class="block w-full pl-10 pr-3 py-3 border border-gray-300/30 rounded-lg
                                            bg-white/5 backdrop-blur-sm text-white placeholder-gray-300
-                                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                                           focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500
                                            transition duration-200" placeholder="••••••••">
                             </div>
                             @error('password')
@@ -91,7 +117,7 @@
                         <!-- Recordarme y Olvidé contraseña -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input id="remember-me" name="remember" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded
+                                <input id="remember-me" name="remember" type="checkbox" class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded
                                     bg-white/10 backdrop-blur-sm">
                                 <label for="remember-me" class="ml-2 block text-sm text-white">
                                     Recordarme
@@ -101,13 +127,12 @@
 
                         <!-- Botón Iniciar Sesión -->
                         <div>
-                            <button type="submit"
-                                class="group relative w-full flex justify-center py-3 px-4 border border-transparent
-                                    text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600
-                                    hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                                    focus:ring-blue-500 transition duration-200 transform hover:scale-105 shadow-lg">
+                            <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent
+                                    text-sm font-medium rounded-lg text-white bg-gradient-to-r from-amber-600 to-indigo-600
+                                    hover:from-amber-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                                    transition duration-200 transform hover:scale-105 shadow-lg">
                                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                                    <svg class="h-5 w-5 text-blue-300 group-hover:text-blue-200" fill="none"
+                                    <svg class="h-5 w-5 text-amber-300 group-hover:text-amber-200" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
@@ -123,7 +148,7 @@
 
             <!-- Footer -->
             <div class="text-center">
-                <p class="text-xs text-blue-200">
+                <p class="text-xs text-amber-200">
                     © {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
                 </p>
             </div>
@@ -133,7 +158,7 @@
     <!-- Efectos visuales de fondo -->
     <div class="fixed inset-0 -z-10 overflow-hidden">
         <div
-            class="absolute -top-40 -right-32 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse">
+            class="absolute -top-40 -right-32 w-80 h-80 bg-amber-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse">
         </div>
         <div
             class="absolute -bottom-40 -left-32 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse">
