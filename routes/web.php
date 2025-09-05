@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Livewire\Dashboard\DashboardComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,7 @@ Route::get('/login', function(){
     return view('auth.login');
 })->name('auth');
 Route::post('/login',[AuthController::class,'login'])->name('login');
+Route::get('/home', DashboardComponent::class)->name('home');
 // Route::get('/register', function(){
 //     return view('auth.register');
 // });

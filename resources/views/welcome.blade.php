@@ -49,7 +49,7 @@
             text-align: center;
         }
 
-        bfff {
+        .mov {
             font-size: 5rem;
             font-weight: bold;
             text-transform: uppercase;
@@ -92,14 +92,14 @@
 
 <body class="sticky-background">
     <div class="flex flex-col">
-        <div class="rounded-t-xl bg-blue-900 p-10">
+        <div class="rounded-t-xl bg-blue-900/70 p-10">
             <div >
                 <h1>Bienvenido</h1>
                 <p>¡Tu vision telecable!</p>
             </div>
         </div>
         @if (Route::has('login'))
-        <div class="flex flex-row gap-4 bg-amber-700 rounded-b-xl p-5">
+        <div class="flex flex-row gap-4 bg-amber-700/70 rounded-b-xl p-5">
             @auth
             <a href="{{ url('/home') }}"
                 class="font-semibold text-blue-600 hover:text-blue-900 dark:text-blue-100 dark:hover:text-orange-400 focus:outline focus:rounded-sm focus:outline-orange-500">Home</a>

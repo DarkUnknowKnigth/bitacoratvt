@@ -62,7 +62,7 @@
                 @csrf
 
                 <!-- Card contenedor -->
-                <div class="bg-white/10 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-white/20">
+                <div class="bg-blue-700/10 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-white/20">
                     <div class="space-y-6">
                         <!-- Campo Email -->
                         <div>
