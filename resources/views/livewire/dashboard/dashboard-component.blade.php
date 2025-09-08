@@ -1,13 +1,14 @@
 <div class="min-h-screen bg-slate-100 dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
     <!-- Dashboard Header -->
-    <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Dashboard de Tareas</h1>
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Tareas</h1>
         <div class="flex space-x-4">
             <!-- Button to create task -->
-            <button wire:click="$toggle('showForm')"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50">
-                Crear Tarea
-            </button>
+            @if (Auth::user())
+                <span class="p-2 text-blue-900 font-bold bg-amber-500 rounded-lg">
+                    {{ Auth::user()->name }} - {{ Auth::user()->location?Auth::user()->location->name : 'Sin ubicación asignada'}}
+                </span>
+            @endif
         </div>
     </div>
 
@@ -30,13 +31,7 @@
                 <ul class="space-y-4">
                     @forelse ($tasks as $task)
                         <li class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                            <span class="text-lg {{ $task['completed'] ? 'line-through text-gray-500' : '' }}">{{ $task['name'] }}</span>
-                            <button wire:click="toggleTaskStatus({{ $task['id'] }})"
-                                    class="p-2 rounded-full {{ $task['completed'] ? 'bg-amber-500 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700' }} text-white transition-colors duration-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $task['completed'] ? 'M5 13l4 4L19 7' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' }}" />
-                                </svg>
-                            </button>
+                            <span>{{ $task->name }}</span>
                         </li>
                     @empty
                         <li class="text-center text-gray-500 dark:text-gray-400">No hay tareas para mostrar.</li>

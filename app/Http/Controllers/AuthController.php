@@ -12,6 +12,9 @@ class AuthController extends Controller
             'email'=>'email|required|string',
             'password'=>'min:8|required|string',
         ]);
+        if(!auth()->attempt($request->only('email','password'),$request->remember)){
+            return back()->with('status','Credenciales incorrectas');
+        }
         return redirect()->route('home');
     }
 }

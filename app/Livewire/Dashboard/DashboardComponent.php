@@ -2,25 +2,23 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Task;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class DashboardComponent extends Component
 {
     // Propiedades del componente
-    public array $tasks = [];
+    public $tasks = [];
     public bool $showForm = false;
     public string $newTaskName = '';
+    public $completedTasksCount = 0;
 
     // Método que se ejecuta al cargar el componente
     public function mount()
     {
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
-        $this->tasks = [
-            ['id' => 1, 'name' => 'Configurar el entorno de Laravel', 'completed' => false],
-            ['id' => 2, 'name' => 'Crear el componente Livewire Dashboard', 'completed' => false],
-            ['id' => 3, 'name' => 'Diseñar el dashboard con Tailwind CSS', 'completed' => false],
-        ];
+        $this->tasks = Task::with(['subtasks'])->where('main', true)->get();
     }
 
     // Propiedades computadas para obtener el conteo de tareas
@@ -65,6 +63,6 @@ class DashboardComponent extends Component
 
     public function render()
     {
-        return view('livewire.dashboard');
+        return view('livewire.dashboard.dashboard-component');
     }
 }

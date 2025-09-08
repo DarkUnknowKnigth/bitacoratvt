@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'address'];
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

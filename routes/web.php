@@ -3,6 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Livewire\Dashboard\DashboardComponent;
+use App\Livewire\Review\ReviewComponent;
+use App\Livewire\Tasks\TaskComponent;
+use App\Livewire\User\UserComponent;
+use App\Livewire\Validation\ValidationComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +28,10 @@ Route::get('/login', function(){
 })->name('auth');
 Route::post('/login',[AuthController::class,'login'])->name('login');
 Route::get('/home', DashboardComponent::class)->name('home');
+Route::get('/tasks', TaskComponent::class)->name('tasks');
+Route::get('/validations', ValidationComponent::class)->name('validations');
+Route::get('/reviews', ReviewComponent::class)->name('reviews');
+Route::get('/users', UserComponent::class)->name('users');
 // Route::get('/register', function(){
 //     return view('auth.register');
 // });
