@@ -20,23 +20,28 @@
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Usuarios</h2>
                 <div class="flex flex-col items-center justify-center text-center">
-                    <form action="" method="post" x-data="{value:'', name:'', task:0}">
+                    <form action="" method="post" x-data="{email:'', name:'', location:0}">
                         <div class="grid md:grid-cols-4 grid-cols-1 md:flex-row gap-5 items-center justify-center w-full">
                             <label for="name">
-                                Nombre de la validación:
+                                Nombre:
                             </label>
-                            <input type="text" name="name" x-model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
 
-                            <label for="name">
-                                Valor de la validación:
+                            <label for="email">
+                                Email:
                             </label>
-                            <input type="text" name="value" x-model="value" id="value" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-                            <label for="task">
-                                ¿Actividad a la que pertenece?:
+                            <input type="text" name="email" wire:model="email" id="email" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <label for="password">
+                                Email:
                             </label>
-                            <select name="task" x-model="task" id="task"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <input type="text" name="password" wire:model="password" id="password" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <label for="location">
+                                Lugar de trabajo:
+                            </label>
+                            <select name="location" wire:model="location" id="location"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                                <option value="">Seleccione</option>
                                 @foreach ($locations as $l)
-                                    <option value="{{ $l->id }}"> {{$l->main ? '': $l->mainTasks()->first()->name.' ->'}} {{$l->name}} - {{$l->main ? 'Principal':'Subtarea'}}</option>
+                                    <option value="{{ $l->id }}"> {{$l->name}}: {{$l->address}}</option>
                                 @endforeach
                             </select>
                             <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>

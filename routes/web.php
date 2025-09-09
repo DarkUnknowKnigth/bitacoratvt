@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Livewire\Dashboard\DashboardComponent;
+use App\Livewire\Locations\LocationComponent;
 use App\Livewire\Review\ReviewComponent;
 use App\Livewire\Tasks\TaskComponent;
 use App\Livewire\Users\UserComponent;
@@ -32,6 +33,7 @@ Route::get('/tasks', TaskComponent::class)->name('tasks');
 Route::get('/validations', ValidationComponent::class)->name('validations');
 Route::get('/reviews', ReviewComponent::class)->name('reviews');
 Route::get('/users', UserComponent::class)->name('users');
+Route::get('/locations', LocationComponent::class)->name('locations');
 // Route::get('/register', function(){
 //     return view('auth.register');
 // });

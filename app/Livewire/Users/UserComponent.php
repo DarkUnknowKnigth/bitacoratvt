@@ -8,6 +8,10 @@ use Livewire\Component;
 
 class UserComponent extends Component
 {
+    public $name;
+    public $email;
+    public $password;
+    public $location;
     public $locations = [];
     public $users = [];
     public function render()
