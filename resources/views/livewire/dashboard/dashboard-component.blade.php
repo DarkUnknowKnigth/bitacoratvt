@@ -1,6 +1,6 @@
 <div class="min-h-screen dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
     <!-- Dashboard Header -->
-    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+    <div class="flex flex-col md:flex-row gap-2 items-center justify-between mb-8">
         <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Actividades</h1>
         <div class="flex space-x-4">
             <!-- Button to create task -->
@@ -21,7 +21,7 @@
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Avance de Tareas</h2>
                 <div class="flex flex-col items-center justify-center text-center">
                     <span class="text-3xl font-bold text-blue-700 dark:text-blue-400">{{ $completedTasksCount }}</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">de {{ count($tasks) }} completadas</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">de {{ $allTasks }} completadas</span>
                 </div>
             </div>
 
@@ -32,6 +32,30 @@
                     @forelse ($tasks as $task)
                         <li class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span>{{ $task->name }}</span>
+                            @if ($task->validations->count() > 1)
+                                <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}">
+                                    <option value="">Selecciona</option>
+                                    @foreach ($task->validations as $v)
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                @if ($task->validations->count() > 0)
+                                    <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}">
+                                @endif
+                            @endif
+                            <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)">
+                            @if ($task->reviews->where([['date',$nowFormated],['task_id', $task->id]])->count() > 0)
+                                @php
+                                    $rw = $task->reviews->where([['date',$nowFormated],['task_id', $task->id]])->first();
+                                @endphp
+                                <span class="text-amber-600 font-semibold">{{$rw->user->name}} {{$rw->user->date}}: {{ $rw->validation->name }} - {{ $rw->validation->comment }}</span>
+                            @else
+                                <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2">
+                                    @include('icons.validate')
+                                    Validar
+                                </button>
+                            @endif
                         </li>
                         <ul class="space-y-2">
                             @foreach ($task->subtasks as $st )
@@ -54,7 +78,10 @@
                                     @endphp
                                     <span class="text-green-600 font-semibold">{{$rw->user->name}} {{$rw->user->date}}: {{ $rw->validation->name }} - {{ $rw->validation->comment }}</span>
                                 @else
-                                    <button class="w-full md:w-1/4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500/50 mt-2 md:mt-0">Validar</button>
+                                    <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2">
+                                        @include('icons.validate')
+                                        Validar
+                                    </button>
                                 @endif
                             </li>
                             @endforeach

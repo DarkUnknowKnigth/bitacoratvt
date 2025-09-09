@@ -5,7 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Review\ReviewComponent;
 use App\Livewire\Tasks\TaskComponent;
-use App\Livewire\User\UserComponent;
+use App\Livewire\Users\UserComponent;
 use App\Livewire\Validation\ValidationComponent;
 use Illuminate\Support\Facades\Route;
 
