@@ -1,11 +1,11 @@
-<div class="min-h-screen bg-slate-100 dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
+<div class="min-h-screen dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
     <!-- Dashboard Header -->
     <div class="flex flex-col md:flex-row items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Tareas</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Actividades</h1>
         <div class="flex space-x-4">
             <!-- Button to create task -->
             @if (Auth::user())
-                <span class="p-2 text-blue-900 font-bold bg-amber-500 rounded-lg">
+                <span class="p-4 text-blue-100 font-bold bg-amber-600 rounded-lg ">
                     {{ Auth::user()->name }} - {{ Auth::user()->location?Auth::user()->location->name : 'Sin ubicación asignada'}}
                 </span>
             @endif
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Main Container -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="flex flex-col gap-8">
         <!-- Tasks and simple progress section -->
         <div class="md:col-span-2 space-y-8">
             <!-- Task Progress Summary -->
@@ -33,6 +33,32 @@
                         <li class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span>{{ $task->name }}</span>
                         </li>
+                        <ul class="space-y-2">
+                            @foreach ($task->subtasks as $st )
+                            <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                                <span class="text-amber-500 ml-2 md:w-1/4 w-full">{{ $st->name }}</span>
+                                @if ($st->validations->count() > 1)
+                                    <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}">
+                                        <option value="">Selecciona</option>
+                                        @foreach ($st->validations as $v)
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <input type="{{ $st->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}" placeholder="{{ $st->validations->first()->name }}">
+                                @endif
+                                <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4 mt-2 md:mt-0" name="comment-{{ $st->id }}" id="comment-{{ $task->id.'.'.$st->id }}" placeholder="Comentario (opcional)">
+                                @if ($st->reviews->where([['date',$nowFormated],['task_id', $st->id]])->count() > 0)
+                                    @php
+                                        $rw = $st->reviews->where([['date',$nowFormated],['task_id', $st->id]])->first();
+                                    @endphp
+                                    <span class="text-green-600 font-semibold">{{$rw->user->name}} {{$rw->user->date}}: {{ $rw->validation->name }} - {{ $rw->validation->comment }}</span>
+                                @else
+                                    <button class="w-full md:w-1/4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500/50 mt-2 md:mt-0">Validar</button>
+                                @endif
+                            </li>
+                            @endforeach
+                        </ul>
                     @empty
                         <li class="text-center text-gray-500 dark:text-gray-400">No hay tareas para mostrar.</li>
                     @endforelse

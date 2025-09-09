@@ -9,8 +9,8 @@ class Validation extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'value', 'task_id'];
-    public function task()
+    public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsToMany(Task::class, 'task_validation', 'validation_id', 'task_id');
     }
 }

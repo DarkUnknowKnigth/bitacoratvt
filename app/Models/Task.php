@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'main', 'task_id'];
+    protected $fillable = ['name', 'main'];
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
     public function validations(){
-        return $this->hasMany(Validation::class);
+        return $this->belongsToMany(Validation::class, 'task_validation', 'task_id', 'validation_id');
     }
     public function subtasks(){
-        return $this->hasMany(Task::class, 'task_id');
+        return $this->belongsToMany(Task::class, 'subtasks', 'task_id', 'subtask_id');
     }
-    public function parentTask(){
-        return $this->belongsTo(Task::class, 'task_id');
+    public function mainTasks(){
+        return $this->belongsToMany(Task::class, 'subtasks', 'subtask_id', 'task_id');
     }
 }

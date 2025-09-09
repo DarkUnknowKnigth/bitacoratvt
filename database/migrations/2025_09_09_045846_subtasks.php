@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('subtasks', function (Blueprint $table) {
             $table->id();
-            $table->string('comments')->nullable();
             $table->foreignId('task_id');
-            $table->foreignId('user_id');
-            $table->foreignId('location_id');
-            $table->foreignId('validation_id')->nullable();
-            $table->double('value')->nullable();
-            $table->date('date');
-            $table->time('time');
+            $table->foreignId('subtask_id');
             $table->timestamps();
         });
     }
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('subtasks');
     }
 };

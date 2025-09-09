@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Task;
+use Carbon\Carbon;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -13,12 +14,14 @@ class DashboardComponent extends Component
     public bool $showForm = false;
     public string $newTaskName = '';
     public $completedTasksCount = 0;
+    public string $nowFormated = '';
 
     // Método que se ejecuta al cargar el componente
     public function mount()
     {
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
         $this->tasks = Task::with(['subtasks'])->where('main', true)->get();
+        $this->nowFormated = Carbon::now()->format('Y-m-d');
     }
 
     // Propiedades computadas para obtener el conteo de tareas
