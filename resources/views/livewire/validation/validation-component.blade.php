@@ -17,16 +17,15 @@
         <!-- validations and simple progress section -->
         <div class="md:col-span-2 space-y-8">
             <!-- validation Progress Summary -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
+            <div class="bg-white p-5 dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Validaciones</h2>
                 <div class="flex flex-col items-center justify-center text-center">
                     <form action="" method="post" x-data="{value:'', name:'', task:0}">
-                        <div class="grid md:grid-cols-4 grid-cols-1 md:flex-row gap-5 items-center justify-center w-full">
+                        <div class="grid md:grid-cols-4 grid-cols-1 gap-5 items-center justify-center w-full">
                             <label for="name">
                                 Nombre de la validación:
                             </label>
                             <input type="text" name="name" x-model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-
                             <label for="name">
                                 Valor de la validación:
                             </label>

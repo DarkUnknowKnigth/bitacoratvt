@@ -26,7 +26,6 @@
                                 Nombre:
                             </label>
                             <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-
                             <label for="address">
                                 Dirección:
                             </label>
@@ -45,7 +44,7 @@
                     @forelse ($locations as $location)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span class="md:w-3/4 w-full">{{ $location->name }}  <br> {{$location->address}}</span>
-                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2" wire:click="edit({{ $location->id }})">@include('icons.edit') Editar</button>
+                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2" wire:click="edit({{ $location->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
                             <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $location->id }}) : false;">@include('icons.delete') Eliminar</button>
                         </li>
                     @empty
