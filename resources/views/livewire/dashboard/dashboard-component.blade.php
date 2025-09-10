@@ -25,6 +25,7 @@
             <!-- Task List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
+                @include('partials._validation')
                 <ul class="space-y-4">
                     @forelse ($tasks as $task)
                         <li class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">

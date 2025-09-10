@@ -15,6 +15,7 @@
             <!-- user Progress Summary -->
             <div class="bg-white px-5 dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Usuarios</h2>
+                @include('partials._validation')
                 <div class="flex flex-col items-center justify-center text-center">
                     <form wire:submit="{{$user_id?'update('.$user_id.')':'save()'}}" method="post">
                         <div class="md:grid md:grid-cols-4 flex flex-col gap-5 items-center justify-center w-full">
