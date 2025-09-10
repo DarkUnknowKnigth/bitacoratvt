@@ -1,3 +1,4 @@
+
 <div class="min-h-screen dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
     <!-- Dashboard Header -->
     <div class="flex flex-col md:flex-row gap-2 items-center justify-between mb-8">

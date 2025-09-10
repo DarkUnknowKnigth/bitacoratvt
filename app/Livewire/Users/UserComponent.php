@@ -31,14 +31,14 @@ class UserComponent extends Component
     public function save(){
         $this->validate();
         User::create( $this->only(['name', 'email','password','location_id']));
-        session()->flash('status', 'Sucursal creada.');
+        session()->flash('status', 'Usuario creada.');
         $this->users = User::all();
         return redirect()->route('users');
     }
     public function destroy(User $user){
         $user->delete();
         $this->users = User::all();
-        session()->flash('status', 'Sucursal eliminada.');
+        session()->flash('status', 'Usuario eliminada.');
         return redirect()->route('users');
     }
     public function edit(User $user){
@@ -52,7 +52,7 @@ class UserComponent extends Component
         $this->validate();
         $user->update( $this->only(['name', 'email','password','location_id']));
         $this->users = User::all();
-        session()->flash('status', 'Sucursal actualizada.');
+        session()->flash('status', 'Usuario actualizada.');
         return redirect()->route('users');
     }
 }

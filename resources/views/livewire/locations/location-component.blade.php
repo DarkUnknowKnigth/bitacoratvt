@@ -21,16 +21,15 @@
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Sucursales</h2>
                 <div class="flex flex-col items-center justify-center text-center">
                     <form  wire:submit="{{$location_id?'update('.$location_id.')':'save()'}}" method="post">
-                        <div class="grid md:grid-cols-4 grid-cols-1 md:flex-row gap-5 items-center justify-center w-full">
-                            <label for="name">
-                                Nombre:
-                            </label>
-                            <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-                            <label for="address">
-                                Dirección:
-                            </label>
-                            <input type="text" name="address" wire:model="address" id="address" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-                            <span class="col-span-2"></span>
+                        <div class="md:grid md:grid-cols-2 flex flex-col gap-5 items-center justify-center w-full">
+                                <label for="name">
+                                    Nombre:
+                                </label>
+                                <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                                <label for="address">
+                                    Dirección:
+                                </label>
+                                <input type="text" name="address" wire:model="address" id="address" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
                             <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>
                         </div>
                     </form>

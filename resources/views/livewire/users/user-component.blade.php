@@ -21,21 +21,20 @@
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Usuarios</h2>
                 <div class="flex flex-col items-center justify-center text-center">
                     <form wire:submit="{{$user_id?'update('.$user_id.')':'save()'}}" method="post">
-                        <div class="grid md:grid-cols-4 grid-cols-1 md:flex-row gap-5 items-center justify-center w-full">
-                            <label for="name">
+                        <div class="md:grid md:grid-cols-4 flex flex-col gap-5 items-center justify-center w-full">
+                            <label class="w-full md:w-auto" for="name">
                                 Nombre:
                             </label>
                             <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-
-                            <label for="email">
+                            <label class="w-full md:w-auto" for="email">
                                 Email:
                             </label>
                             <input type="text" name="email" wire:model="email" id="email" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-                            <label for="password">
+                            <label class="w-full md:w-auto" for="password">
                                 Contraseña acceso:
                             </label>
                             <input type="text" name="password" wire:model="password" id="password" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
-                            <label for="location_id">
+                            <label class="w-full md:w-auto" for="location_id">
                                 Lugar de trabajo:
                             </label>
                             <select name="location_id" wire:model="location_id" id="location_id"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">

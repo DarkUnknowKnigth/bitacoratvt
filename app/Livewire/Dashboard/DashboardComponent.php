@@ -18,6 +18,7 @@ class DashboardComponent extends Component
     public $completedTasksCount = 0;
     public $pendingTasksCount = 0;
     public string $nowFormated = '';
+    public $title = "Dashboard";
 
     // Método que se ejecuta al cargar el componente
     public function mount()
