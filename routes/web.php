@@ -28,12 +28,15 @@ Route::get('/login', function(){
     return view('auth.login');
 })->name('auth');
 Route::post('/login',[AuthController::class,'login'])->name('login');
-Route::get('/home', DashboardComponent::class)->name('home');
-Route::get('/tasks', TaskComponent::class)->name('tasks');
-Route::get('/validations', ValidationComponent::class)->name('validations');
-Route::get('/reviews', ReviewComponent::class)->name('reviews');
-Route::get('/users', UserComponent::class)->name('users');
-Route::get('/locations', LocationComponent::class)->name('locations');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout',[AuthController::class,'logout'])->name('logout');
+    Route::get('/home', DashboardComponent::class)->name('home');
+    Route::get('/tasks', TaskComponent::class)->name('tasks');
+    Route::get('/validations', ValidationComponent::class)->name('validations');
+    Route::get('/reviews', ReviewComponent::class)->name('reviews');
+    Route::get('/users', UserComponent::class)->name('users');
+    Route::get('/locations', LocationComponent::class)->name('locations');
+});
 // Route::get('/register', function(){
 //     return view('auth.register');
 // });

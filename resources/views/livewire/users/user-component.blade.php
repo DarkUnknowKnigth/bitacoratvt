@@ -4,11 +4,7 @@
         <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Administrador de usuarios</h1>
         <div class="flex space-x-4">
             <!-- Button to create user -->
-            @if (Auth::user())
-                <span class="p-4 text-blue-100 font-bold bg-amber-600 rounded-lg ">
-                    {{ Auth::user()->name }} - {{ Auth::user()->location?Auth::user()->location->name : 'Sin ubicación asignada'}}
-                </span>
-            @endif
+            @include('auth._auth')
         </div>
     </div>
 
