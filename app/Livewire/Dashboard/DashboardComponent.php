@@ -13,7 +13,8 @@ class DashboardComponent extends Component
     // Propiedades del componente
     public $tasks = [];
     public $allTasks = [];
-    public string $comments ='';
+    public $validation_id = 0;
+    public string $comments;
     public $completedTasksCount = 0;
     public $pendingTasksCount = 0;
     public string $nowFormated = '';
@@ -69,14 +70,15 @@ class DashboardComponent extends Component
 
         $this->reset('newTaskName', 'showForm');
     }
-    public function reviewTask(Task $task){
+    public function reviewTask(Task $task, ?Task $subtask){
         $this->validate([
             'comments' => 'nullable|string|max:255',
         ]);
         Review::create([
             'task_id' => $task->id,
+            'subtask_id' => $subtask? $subtask->id : null,
             'user_id' => auth()->user()->id,
-            'validation_id' => $task->validations->first()->id,
+            'validation_id' => $this->validation_id ?? null,
             'comments' => $this->comments,
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,

@@ -30,11 +30,21 @@
                     @forelse ($tasks as $task)
                         <li class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span class="md:w-1/2 font-bold text-lg">{{ $task->name }}</span>
-                            @if ($task->reviews()->where([['date',$nowFormated],['task_id', $task->id]])->count() > 0)
+                            @if ($task->reviews()->where('date',$nowFormated)->count() > 0)
                                 @php
-                                    $rw = $task->reviews()->where([['date',$nowFormated],['task_id', $task->id]])->first();
+                                    $rw = $task->reviews()->where('date',$nowFormated)->first();
                                 @endphp
-                                <span class="text-amber-600 font-semibold">{{$rw->user->name}} {{$rw->date}}  {{ $rw->validation->name }} - {{ $rw->comment }}</span>
+                                <span class="text-amber-600 font-semibold">
+                                    Valido: {{$rw->user->name}}
+                                    <br>
+                                    Fecha y hora: {{$rw->date}} {{ $rw->time }}
+                                    <br>
+                                    @if ($rw->validation)
+                                        Validacion: {{ $rw->validation->name }}
+                                        <br>
+                                    @endif
+                                    com:{{ $rw->comments }}
+                                </span>
                             @else
                                 @if ($task->validations->count() > 1)
                                     <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}">
@@ -51,7 +61,9 @@
                                 <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)" wire:model="comments">
                                 <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $task->id }}" id="date-{{ $task->id.'.'.$task->id }}" wire:model="nowFormated">
                                 <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $task->id }}" id="time-{{ $task->id.'.'.$task->id }}" wire:model="nowTimeFormated">
-                                <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full">
+                                <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
+                                    wire:click="reviewTask( {{ $task->id }})"
+                                >
                                     @include('icons.validate')
                                     Validar
                                 </button>
@@ -69,22 +81,24 @@
                                         {{ $task->name }}
                                     </small>
                                 </span>
-                                @if ($st->reviews()->where([['date',$nowFormated],['task_id', $st->id]])->count() > 0)
+                                @if ($st->subReviews($task->id)->where('date',$nowFormated)->count() > 0)
                                     @php
-                                        $rw = $st->reviews()->where([['date',$nowFormated],['task_id', $st->id]])->first();
+                                        $rw = $st->subReviews($task->id)->where('date',$nowFormated)->first();
                                     @endphp
                                     <span class="text-green-600 font-semibold">
                                         Valido: {{$rw->user->name}}
                                         <br>
                                         Fecha y hora: {{$rw->date}} {{ $rw->time }}
                                         <br>
-                                        Validacion: {{ $rw->validation->name }}
-                                        <br>
-                                        {{ $rw->comment }}
+                                        @if ($rw->validation)
+                                            Validacion: {{ $rw->validation->name }}
+                                            <br>
+                                        @endif
+                                        com: {{ $rw->comments }}
                                     </span>
                                 @else
                                     @if ($st->validations->count() > 1)
-                                        <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}">
+                                        <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}" wire:model="validation_id">
                                             <option value="">Selecciona</option>
                                             @foreach ($st->validations as $v)
                                                 <option value="{{ $v->id }}">{{ $v->name }}</option>
@@ -97,7 +111,7 @@
                                     <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $st->id }}" id="date-{{ $st->id.'.'.$st->id }}" value="{{ $nowFormated }}" wire:model="nowFormated">
                                     <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $st->id }}" id="time-{{ $st->id.'.'.$st->id }}" value="{{ $nowTimeFormated }}" wire:model="nowTimeFormated">
                                     <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                        wire:click="reviewTask({{ $st->id }})"
+                                        wire:click="reviewTask({{ $task->id }},{{ $st->id }})"
                                     >
                                         @include('icons.validate')
                                         Validar

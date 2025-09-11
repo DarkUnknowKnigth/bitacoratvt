@@ -11,7 +11,10 @@ class Task extends Model
     protected $fillable = ['name', 'main'];
     public function reviews()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class)->where('subtask_id',null);
+    }
+    public function subReviews($id){
+        return $this->hasMany(Review::class, 'subtask_id')->where('task_id',$id);
     }
     public function validations(){
         return $this->belongsToMany(Validation::class, 'task_validation', 'task_id', 'validation_id');

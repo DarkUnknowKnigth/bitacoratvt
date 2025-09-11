@@ -13,6 +13,10 @@ class Review extends Model
     {
         return $this->belongsTo(Task::class);
     }
+    public function subtask()
+    {
+        return $this->belongsTo(Task::class, 'subtask_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
