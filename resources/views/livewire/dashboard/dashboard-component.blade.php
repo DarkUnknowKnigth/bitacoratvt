@@ -28,28 +28,30 @@
                 @include('partials._validation')
                 <ul class="space-y-4">
                     @forelse ($tasks as $task)
-                        <li class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                            <span>{{ $task->name }}</span>
-                            @if ($task->validations->count() > 1)
-                                <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}">
-                                    <option value="">Selecciona</option>
-                                    @foreach ($task->validations as $v)
-                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                    @endforeach
-                                </select>
-                            @else
-                                @if ($task->validations->count() > 0)
-                                    <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}">
-                                @endif
-                            @endif
-                            <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)">
-                            @if ($task->reviews->where([['date',$nowFormated],['task_id', $task->id]])->count() > 0)
+                        <li class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                            <span class="md:w-1/2 font-bold text-lg">{{ $task->name }}</span>
+                            @if ($task->reviews()->where([['date',$nowFormated],['task_id', $task->id]])->count() > 0)
                                 @php
-                                    $rw = $task->reviews->where([['date',$nowFormated],['task_id', $task->id]])->first();
+                                    $rw = $task->reviews()->where([['date',$nowFormated],['task_id', $task->id]])->first();
                                 @endphp
-                                <span class="text-amber-600 font-semibold">{{$rw->user->name}} {{$rw->user->date}}: {{ $rw->validation->name }} - {{ $rw->validation->comment }}</span>
+                                <span class="text-amber-600 font-semibold">{{$rw->user->name}} {{$rw->date}}  {{ $rw->validation->name }} - {{ $rw->comment }}</span>
                             @else
-                                <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2">
+                                @if ($task->validations->count() > 1)
+                                    <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}">
+                                        <option value="">Selecciona</option>
+                                        @foreach ($task->validations as $v)
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    @if ($task->validations->count() > 0)
+                                        <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}">
+                                    @endif
+                                @endif
+                                <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)" wire:model="comments">
+                                <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $task->id }}" id="date-{{ $task->id.'.'.$task->id }}" wire:model="nowFormated">
+                                <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $task->id }}" id="time-{{ $task->id.'.'.$task->id }}" wire:model="nowTimeFormated">
+                                <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full">
                                     @include('icons.validate')
                                     Validar
                                 </button>
@@ -58,25 +60,45 @@
                         <ul class="space-y-2">
                             @foreach ($task->subtasks as $st )
                             <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                                <span class="text-amber-500 ml-2 md:w-1/4 w-full">{{ $st->name }}</span>
-                                @if ($st->validations->count() > 1)
-                                    <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}">
-                                        <option value="">Selecciona</option>
-                                        @foreach ($st->validations as $v)
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    <input type="{{ $st->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}" placeholder="{{ $st->validations->first()->name }}">
-                                @endif
-                                <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4 mt-2 md:mt-0" name="comment-{{ $st->id }}" id="comment-{{ $task->id.'.'.$st->id }}" placeholder="Comentario (opcional)">
-                                @if ($st->reviews->where([['date',$nowFormated],['task_id', $st->id]])->count() > 0)
+                                <span class="text-amber-500 ml-2 md:w-3/8 w-full">
+                                    <span class="font-bold">
+                                        {{ $st->name }}
+                                    </span>
+                                    <br>
+                                    <small>
+                                        {{ $task->name }}
+                                    </small>
+                                </span>
+                                @if ($st->reviews()->where([['date',$nowFormated],['task_id', $st->id]])->count() > 0)
                                     @php
-                                        $rw = $st->reviews->where([['date',$nowFormated],['task_id', $st->id]])->first();
+                                        $rw = $st->reviews()->where([['date',$nowFormated],['task_id', $st->id]])->first();
                                     @endphp
-                                    <span class="text-green-600 font-semibold">{{$rw->user->name}} {{$rw->user->date}}: {{ $rw->validation->name }} - {{ $rw->validation->comment }}</span>
+                                    <span class="text-green-600 font-semibold">
+                                        Valido: {{$rw->user->name}}
+                                        <br>
+                                        Fecha y hora: {{$rw->date}} {{ $rw->time }}
+                                        <br>
+                                        Validacion: {{ $rw->validation->name }}
+                                        <br>
+                                        {{ $rw->comment }}
+                                    </span>
                                 @else
-                                    <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2">
+                                    @if ($st->validations->count() > 1)
+                                        <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}">
+                                            <option value="">Selecciona</option>
+                                            @foreach ($st->validations as $v)
+                                                <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input type="{{ $st->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $st->id.'.'.$st->id }}" placeholder="{{ $st->validations->first()->name }}">
+                                    @endif
+                                    <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}" placeholder="Comentario (opcional)" wire:model="comments">
+                                    <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $st->id }}" id="date-{{ $st->id.'.'.$st->id }}" value="{{ $nowFormated }}" wire:model="nowFormated">
+                                    <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $st->id }}" id="time-{{ $st->id.'.'.$st->id }}" value="{{ $nowTimeFormated }}" wire:model="nowTimeFormated">
+                                    <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
+                                        wire:click="reviewTask({{ $st->id }})"
+                                    >
                                         @include('icons.validate')
                                         Validar
                                     </button>
@@ -90,25 +112,5 @@
                 </ul>
             </div>
         </div>
-
-        <!-- Control Column (Form) -->
-        @if ($showForm)
-            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 transition-all duration-300">
-                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 w-full max-w-lg">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Crear Nueva Tarea</h2>
-                    <form wire:submit.prevent="createTask" class="space-y-4">
-                        <div class="flex flex-col">
-                            <label for="taskName" class="text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Nombre de la Tarea</label>
-                            <input type="text" id="taskName" wire:model="newTaskName" class="p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            @error('newTaskName') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="flex justify-end space-x-4">
-                            <button type="button" wire:click="$toggle('showForm')" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300/50">Cancelar</button>
-                            <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50">Guardar Tarea</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        @endif
     </div>
 </div>

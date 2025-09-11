@@ -49,8 +49,18 @@ class UserComponent extends Component
         $this->user_id = $user->id;
     }
     public function update(User $user){
-        $this->validate();
-        $user->update( $this->only(['name', 'email','password','location_id']));
+        $this->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'location_id' => 'required',
+        ]);
+        if($this->password){
+            $this->validate([
+                'password' => 'required',
+            ]);
+            $user->update( $this->only(['password']));
+        }
+        $user->update( $this->only(['name','email','location_id']));
         $this->users = User::all();
         session()->flash('status', 'Usuario actualizada.');
         return redirect()->route('users');

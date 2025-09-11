@@ -13,12 +13,12 @@ class DashboardComponent extends Component
     // Propiedades del componente
     public $tasks = [];
     public $allTasks = [];
-    public bool $showForm = false;
-    public string $newTaskName = '';
+    public string $comments ='';
     public $completedTasksCount = 0;
     public $pendingTasksCount = 0;
     public string $nowFormated = '';
-    public $title = "Dashboard";
+    public string $nowTimeFormated = '';
+    public $title = "Actividades diarias";
 
     // Método que se ejecuta al cargar el componente
     public function mount()
@@ -27,6 +27,7 @@ class DashboardComponent extends Component
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
         $this->allTasks = Task::with(['subtasks','subtasks.validations'])->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
+        $this->nowTimeFormated = Carbon::now()->format('H:i');
     }
 
     // Propiedades computadas para obtener el conteo de tareas
@@ -68,7 +69,20 @@ class DashboardComponent extends Component
 
         $this->reset('newTaskName', 'showForm');
     }
-
+    public function reviewTask(Task $task){
+        $this->validate([
+            'comments' => 'nullable|string|max:255',
+        ]);
+        Review::create([
+            'task_id' => $task->id,
+            'user_id' => auth()->user()->id,
+            'validation_id' => $task->validations->first()->id,
+            'comments' => $this->comments,
+            'date' => $this->nowFormated,
+            'time' => $this->nowTimeFormated,
+            'location_id' => auth()->user()->location_id ?? 1,
+        ]);
+    }
     public function render()
     {
         return view('livewire.dashboard.dashboard-component');

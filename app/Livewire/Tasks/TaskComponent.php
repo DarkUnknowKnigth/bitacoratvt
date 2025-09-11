@@ -3,6 +3,7 @@
 namespace App\Livewire\Tasks;
 
 use App\Models\Task;
+use App\Models\Validation;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,10 +12,12 @@ class TaskComponent extends Component
 {
     use WithPagination;
     public $tasks = [];
+    public $validations = [];
     public $mainTasks = [];
     public $task_id;
     #[Validate('required')]
     public $name;
+    public $validation;
     #[Validate('numeric')]
     public $main = 1;
     #[Validate('nullable')]
@@ -26,6 +29,7 @@ class TaskComponent extends Component
     public function mount(){
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
         $this->mainTasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
+        $this->validations = Validation::all();
     }
     public function save(){
         $this->validate();
@@ -39,6 +43,12 @@ class TaskComponent extends Component
         return redirect()->route('tasks');
     }
     public function destroy(Task $task){
+        $task->validations()->detach($task->validations->pluck('id')->toArray());
+        foreach ($task->subtasks as $subtask) {
+            $subtask->validations()->detach($subtask->validations->pluck('id')->toArray());
+            $subtask->delete();
+        }
+        $task->subtasks()->detach($task->subtasks->pluck('id')->toArray());
         $task->delete();
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
         session()->flash('status', 'Tarea eliminada.');
@@ -55,6 +65,17 @@ class TaskComponent extends Component
         $task->update( $this->only(['name', 'main']));
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
         session()->flash('status', 'Tarea actualizada.');
+        return redirect()->route('tasks');
+    }
+    public function addValidation($task_id){
+        $task = Task::find($task_id);
+        if ($task && $this->validation) {
+            $task->validations()->attach($this->validation);
+            $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
+            session()->flash('status', 'Validación agregada a la tarea.');
+            return redirect()->route('tasks');
+        }
+        session()->flash('error', 'No se pudo agregar la validación.');
         return redirect()->route('tasks');
     }
 }
