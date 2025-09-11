@@ -5,6 +5,8 @@ namespace App\Livewire\Dashboard;
 use App\Models\Review;
 use App\Models\Task;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -13,10 +15,10 @@ class DashboardComponent extends Component
     // Propiedades del componente
     public $tasks = [];
     public $allTasks = [];
-    public $validation_id = 0;
-    public string $comments;
+    public $validation_id = null;
+    public $validationValue = 0;
+    public string $comments = '';
     public $completedTasksCount = 0;
-    public $pendingTasksCount = 0;
     public string $nowFormated = '';
     public string $nowTimeFormated = '';
     public $title = "Actividades diarias";
@@ -26,22 +28,10 @@ class DashboardComponent extends Component
     {
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
-        $this->allTasks = Task::with(['subtasks','subtasks.validations'])->count();
+        $this->allTasks = DB::table('subtasks')->count()+DB::table('tasks')->where('main',true)->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
     }
-
-    // Propiedades computadas para obtener el conteo de tareas
-    public function getCompletedTasksCountProperty()
-    {
-        return Review::where('date', $this->nowFormated)->count();
-    }
-
-    public function getPendingTasksCountProperty()
-    {
-        return Task::whereNotIn('task_id', Review::where('date', $this->nowFormated)->select('task_id')->get()->pluck('task_id')->toArray())->count();
-    }
-
     // Método para alternar el estado de una tarea
     public function toggleTaskStatus(int $taskId)
     {
@@ -79,14 +69,21 @@ class DashboardComponent extends Component
             'subtask_id' => $subtask? $subtask->id : null,
             'user_id' => auth()->user()->id,
             'validation_id' => $this->validation_id ?? null,
-            'comments' => $this->comments,
+            'value'=> $this->validationValue ?? null,
+            'comments' => $this->comments ?? null,
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,
             'location_id' => auth()->user()->location_id ?? 1,
         ]);
+        $this->comments= '';
+        $this->validation_id = null;
+        $this->validationValue = 0;
+        session()->flash('status', 'Tarea completada.');
     }
     public function render()
     {
+
+        $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id',Auth::user()->location_id)->count();
         return view('livewire.dashboard.dashboard-component');
     }
 }
