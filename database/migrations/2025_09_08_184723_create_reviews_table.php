@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('comments')->nullable();
             $table->foreignId('task_id');
+            $table->foreignId('subtask_id');
             $table->foreignId('user_id');
             $table->foreignId('location_id');
             $table->foreignId('validation_id')->nullable();
