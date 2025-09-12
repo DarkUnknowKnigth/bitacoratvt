@@ -22,7 +22,7 @@ class RoleSeeder extends Seeder
         tap(
             Role::create(['slug' => 'user', 'name' => 'User']),
             function($role){
-                $role->modules()->sync(Module::whereIn('url',['review','home'])->pluck('id')->toArray());
+                $role->modules()->sync(Module::whereIn('url',['reviews','home'])->pluck('id')->toArray());
 
             }
         );
