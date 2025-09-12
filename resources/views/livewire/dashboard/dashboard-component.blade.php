@@ -28,7 +28,7 @@
                 <ul class="space-y-4">
                     @forelse ($tasks as $task)
                         <li class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                            <span class="md:w-1/2 font-bold text-lg">{{ $task->name }}</span>
+                            <span class="md:w-3/4 font-bold text-lg">{{ $task->name }}</span>
                             @if ($task->completedReview($nowFormated, auth()->user()->location_id)->count() > 0)
                                 @php
                                     $rw = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
@@ -74,7 +74,7 @@
                         <ul class="space-y-2">
                             @foreach ($task->subtasks as $st )
                             <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                                <span class="text-amber-500 ml-2 md:w-3/8 w-full">
+                                <span class="text-amber-500 ml-2 md:w-5/8 w-full">
                                     <span class="font-bold">
                                         {{ $st->name }}
                                     </span>
