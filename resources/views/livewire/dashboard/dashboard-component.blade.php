@@ -61,8 +61,8 @@
                                     @endif
                                 @endif
                                 <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)" wire:model="comments">
-                                <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $task->id }}" id="date-{{ $task->id.'.'.$task->id }}" wire:model="nowFormated">
-                                <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $task->id }}" id="time-{{ $task->id.'.'.$task->id }}" wire:model="nowTimeFormated">
+                                {{-- <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $task->id }}" id="date-{{ $task->id.'.'.$task->id }}" wire:model="nowFormated">
+                                <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $task->id }}" id="time-{{ $task->id.'.'.$task->id }}" wire:model="nowTimeFormated"> --}}
                                 <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
                                     wire:click="reviewTask( {{ $task->id }})"
                                 >
@@ -115,8 +115,8 @@
                                         @endif
                                     @endif
                                     <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}" placeholder="Comentario (opcional)" wire:model="comments">
-                                    <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $st->id }}" id="date-{{ $st->id.'.'.$st->id }}" value="{{ $nowFormated }}" wire:model="nowFormated">
-                                    <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $st->id }}" id="time-{{ $st->id.'.'.$st->id }}" value="{{ $nowTimeFormated }}" wire:model="nowTimeFormated">
+                                    {{-- <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $st->id }}" id="date-{{ $st->id.'.'.$st->id }}" value="{{ $nowFormated }}" wire:model="nowFormated">
+                                    <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $st->id }}" id="time-{{ $st->id.'.'.$st->id }}" value="{{ $nowTimeFormated }}" wire:model="nowTimeFormated"> --}}
                                     <button class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
                                         wire:click="reviewTask({{ $task->id }},{{ $st->id }})"
                                     >

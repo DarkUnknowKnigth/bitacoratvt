@@ -19,8 +19,8 @@ class DashboardComponent extends Component
     public $validationValue = 0;
     public string $comments = '';
     public $completedTasksCount = 0;
-    public string $nowFormated = '';
-    public string $nowTimeFormated = '';
+    private string $nowFormated = '';
+    private string $nowTimeFormated = '';
     public $title = "Actividades diarias";
 
     // Método que se ejecuta al cargar el componente
@@ -61,6 +61,8 @@ class DashboardComponent extends Component
         $this->reset('newTaskName', 'showForm');
     }
     public function reviewTask(Task $task, ?Task $subtask){
+        $this->nowFormated = Carbon::now()->format('Y-m-d');
+        $this->nowTimeFormated = Carbon::now()->format('H:i');
         $this->validate([
             'comments' => 'nullable|string|max:255',
         ]);
