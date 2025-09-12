@@ -110,7 +110,9 @@
                                             @endforeach
                                         </select>
                                     @else
-                                        <input type="{{ $st->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $st->id.'.'.$st->id }}" wire:model="validationValue" placeholder="{{ $st->validations->first()->name }}">
+                                        @if ($st->validations->count() > 0)
+                                            <input type="{{ $st->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $st->id.'.'.$st->id }}" wire:model="validationValue" placeholder="{{ $st->validations->first()->name }}">
+                                        @endif
                                     @endif
                                     <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}" placeholder="Comentario (opcional)" wire:model="comments">
                                     <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $st->id }}" id="date-{{ $st->id.'.'.$st->id }}" value="{{ $nowFormated }}" wire:model="nowFormated">
