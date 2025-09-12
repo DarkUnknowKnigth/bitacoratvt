@@ -57,7 +57,7 @@
                                     </select>
                                 @else
                                     @if ($task->validations->count() > 0)
-                                        <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}" wire:model="validationValue">
+                                        <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}" wire:model="validationValue">
                                     @endif
                                 @endif
                                 <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)" wire:model="comments">

@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reviews', ReviewComponent::class)->name('reviews');
     Route::get('/users', UserComponent::class)->name('users');
     Route::get('/locations', LocationComponent::class)->name('locations');
+    Route::get('/roles', function(){return response()->json(['message'=>'todo']);})->name('roles');
+    Route::get('/modules', function(){return response()->json(['message'=>'todo']);})->name('modules');
 });
 // Route::get('/register', function(){
 //     return view('auth.register');

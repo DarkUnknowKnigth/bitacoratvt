@@ -22,12 +22,10 @@
             </header>
             <nav class="p-8 -mt-4 bg-blue-900 rounded-b-xl">
                 <ul class="flex flex-col gap-5 md:flex-row font-bold">
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('home') }}">Dashboard</a></li>
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('tasks') }}">Tareas</a></li>
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('validations') }}">Validaciones</a></li>
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('users') }}">Usuarios</a></li>
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('reviews') }}">Bitacoras</a></li>
-                    <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route('locations') }}">Sucursales</a></li>
+                    @foreach (auth()->user()->role->modules()->orderBy('name')->get() as $module)
+                        <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route($module->url) }}">{{$module->name}}</a></li>
+
+                    @endforeach
                 </ul>
             </nav>
             {{ $slot }}

@@ -1,5 +1,8 @@
 @if (Auth::user())
     <span class="p-4 text-blue-100 font-bold bg-amber-600 rounded-lg flex flex-row gap-5 items-center">
+        <span class="bg-blue-800 rounded-lg h-full items-center text-center justify-center flex p-1">
+            {{ Auth::user()->role->name }}
+        </span>
         <span class="font-bold">
             {{ Auth::user()->name }} <br>
             <small>

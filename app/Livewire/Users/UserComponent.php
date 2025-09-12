@@ -3,6 +3,7 @@
 namespace App\Livewire\Users;
 
 use App\Models\Location;
+use App\Models\Role;
 use App\Models\User;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -20,6 +21,7 @@ class UserComponent extends Component
     public $user_id;
     public $users = [];
     public $locations = [];
+    public $roles = [];
     public function render()
     {
         return view('livewire.users.user-component');
@@ -27,6 +29,7 @@ class UserComponent extends Component
     public function mount(){
         $this->users = User::orderBy('name')->get();
         $this->locations = Location::orderBy('name')->get();
+        $this->roles = Role::orderBy('name')->get();
     }
     public function save(){
         $this->validate();

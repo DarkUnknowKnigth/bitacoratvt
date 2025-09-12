@@ -40,7 +40,15 @@
                                     <option value="{{ $l->id }}"> {{$l->name}}: {{$l->address}}</option>
                                 @endforeach
                             </select>
-                            <span class="col-span-2"></span>
+                            <label class="w-full md:w-auto" for="role_id">
+                                Rol
+                            </label>
+                            <select name="role_id" wire:model="role_id" id="role_id"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                                <option value="">Seleccione</option>
+                                @foreach ($roles as $l)
+                                    <option value="{{ $l->id }}"> {{$l->name}}: {{$l->slug}}</option>
+                                @endforeach
+                            </select>
                             <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>
                         </div>
                     </form>
@@ -53,7 +61,13 @@
                 <ul class="space-y-4">
                     @forelse ($users as $user)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                            <span class="md:w-3/4 w-full">{{ $user->name }} - {{$user->email}} <br> {{$user->location? $user->location->name: 'Sin asignacion'}}</span>
+                            <span class="md:w-3/4 w-full">
+                                <span class="font-bold text-amber-600">
+                                    {{ $user->role? $user->role->name: 'Sin asignacion'}}
+                                </span>
+                                <br>
+                                {{ $user->name }} - {{$user->email}} <br> {{$user->location? $user->location->name: 'Sin asignacion'}}</span>
+                            <br>
                             <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2"  wire:click="edit({{ $user->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
                             <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $user->id }}) : false;">@include('icons.delete') Eliminar</button>
                         </li>
