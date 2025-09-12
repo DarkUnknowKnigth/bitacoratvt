@@ -78,4 +78,7 @@ class TaskComponent extends Component
         session()->flash('error', 'No se pudo agregar la validación.');
         return redirect()->route('tasks');
     }
+    public function unvalidate(Task $task, Validation $validation){
+        $task->validations()->detach($validation->id);
+    }
 }
