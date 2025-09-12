@@ -19,7 +19,7 @@ class DashboardComponent extends Component
     public $validationValue = 0;
     public string $comments = '';
     public $completedTasksCount = 0;
-    private string $nowFormated = '';
+    public string $nowFormated = '';
     private string $nowTimeFormated = '';
     public $title = "Actividades diarias";
 
