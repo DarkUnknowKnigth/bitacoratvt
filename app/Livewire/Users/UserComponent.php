@@ -18,6 +18,7 @@ class UserComponent extends Component
     public $password;
     #[Validate('required')]
     public $location_id;
+    public $role_id;
     public $user_id;
     public $users = [];
     public $locations = [];
@@ -33,7 +34,7 @@ class UserComponent extends Component
     }
     public function save(){
         $this->validate();
-        User::create( $this->only(['name', 'email','password','location_id']));
+        User::create( $this->only(['name', 'email','password','location_id','role_id']));
         session()->flash('status', 'Usuario creada.');
         $this->users = User::all();
         return redirect()->route('users');
@@ -49,6 +50,7 @@ class UserComponent extends Component
         $this->email = $user->email;
         // $this->password = $user->password;
         $this->location_id = $user->location_id;
+        $this->role_id = $user->role_id;
         $this->user_id = $user->id;
     }
     public function update(User $user){
@@ -63,7 +65,7 @@ class UserComponent extends Component
             ]);
             $user->update( $this->only(['password']));
         }
-        $user->update( $this->only(['name','email','location_id']));
+        $user->update( $this->only(['name','email','location_id','role_id']));
         $this->users = User::all();
         session()->flash('status', 'Usuario actualizada.');
         return redirect()->route('users');
