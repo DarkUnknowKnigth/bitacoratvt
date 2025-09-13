@@ -77,9 +77,9 @@ class ReviewComponent extends Component
             ->when($this->user_id, function($query){
                 $query->where('user_id',$this->user_id);
             })
-            ->select(DB::raw('HOUR(time) as hour'), DB::raw('COUNT(*) as total'))
-            ->groupBy('hour')
-            ->orderBy('hour');
+            ->select(DB::raw('HOUR(time) as time'), DB::raw('COUNT(*) as total'))
+            ->groupBy('time')
+            ->orderBy('time');
         return $query->get()->toArray();
     }
 }
