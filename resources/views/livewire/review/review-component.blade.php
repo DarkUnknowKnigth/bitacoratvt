@@ -60,10 +60,10 @@
                                 <td>{{$review->date}} <br> {{$review->time}}</td>
                                 <td>{{$review->subtask_id ? 'Subtarea':'Tarea Principal'}}</td>
                                 <td>
-                                    @if (!$review->subtask_id && $review->task->main)
-                                        {{ $review->task->name }}
-                                    @else
+                                    @if ($review->subtask_id)
                                         {{ $review->subtask->name }}
+                                    @else
+                                        {{ $review->task->name }}
                                     @endif
                                 </td>
                                 <td>
