@@ -58,9 +58,9 @@
                             <tr>
                                 <td>{{$review->id}}</td>
                                 <td>{{$review->date}} <br> {{$review->time}}</td>
-                                <td>{{!$review->subtask && $review->task->main ? 'Tarea Principal':'Subtarea'}}</td>
+                                <td>{{$review->subtask_id ? 'Subtarea':'Tarea Principal'}}</td>
                                 <td>
-                                    @if (!$review->subtask && $review->task->main)
+                                    @if (!$review->subtask_id && $review->task->main)
                                         {{ $review->task->name }}
                                     @else
                                         {{ $review->subtask->name }}
