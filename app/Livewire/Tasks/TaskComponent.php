@@ -46,9 +46,15 @@ class TaskComponent extends Component
         $task->validations()->detach($task->validations->pluck('id')->toArray());
         foreach ($task->subtasks as $subtask) {
             $subtask->validations()->detach($subtask->validations->pluck('id')->toArray());
+            foreach($subtask->subReviews()->get() as $review){
+                $review->delete();
+            }
             $subtask->delete();
         }
         $task->subtasks()->detach($task->subtasks->pluck('id')->toArray());
+        foreach ($task->reviews()->get() as $review) {
+            $review->delete();
+        }
         $task->delete();
         $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
         session()->flash('status', 'Tarea eliminada.');

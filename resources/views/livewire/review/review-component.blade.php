@@ -59,18 +59,18 @@
                                 <td>{{$review->id}}</td>
                                 <td>{{$review->date}} <br> {{$review->time}}</td>
                                 <td>
-                                    @if ($review->task_id)
+                                    @if ($review->task_id && isset($review->task->id))
                                         {{ $review->task->name }}
                                     @endif
-                                    @if ($review->subtask_id)
+                                    @if ($review->subtask_id && isset($review->subtask->id))
                                         {{ $review->subtask->name }}
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($review->subtask_id)
+                                    @if ($review->subtask_id && isset($review->subtask->id))
                                         {{ $review->subtask->name }}
                                     @endif
-                                    @if ($review->task_id)
+                                    @if ($review->task_id && isset($review->task->id))
                                         {{ $review->task->name }}
                                     @endif
                                 </td>

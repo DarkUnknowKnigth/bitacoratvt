@@ -56,7 +56,7 @@
                                 wire:click="edit({{ $task->id }}); document.getElementById('name').focus()"
                             >@include('icons.edit') Editar</button>
                             <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
-                                onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $task->id }}) : false;"
+                                onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitácoras de este elemento y las subtereas y sus respectivas bitácoras?') ? @this.call('destroy', {{ $task->id }}) : false;"
                             >@include('icons.delete') Eliminar</button>
                             <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
                                 <option value="">Validaciones</option>
@@ -89,7 +89,7 @@
                                         wire:click="edit({{ $st->id }}); document.getElementById('name').focus()"
                                     >@include('icons.edit') Editar</button>
                                     <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
-                                        onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $st->id }}) : false;"
+                                        onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitacoras de este elemento?') ? @this.call('destroy', {{ $st->id }}) : false;"
                                     >@include('icons.delete') Eliminar</button>
                                     <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
                                         <option value="">Validaciones</option>
