@@ -36,7 +36,19 @@
         <div class="md:col-span-2 space-y-8">
             <!-- Task Progress Summary -->
             <div class="bg-white px-5 dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Bitácora</h2>
+                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Bitácora
+                    del dia <input type="date" wire:model="nowDate" wire:change="reloadReviews"> para la sucursal
+                    @if (auth()->user()->role->slug=='admin')
+                        <select name="location_id" wire:model="location_id" id="location_id" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950" wire:change="reloadReviews">
+                            <option value="">Selecciona</option>
+                            @foreach ($locations as $l)
+                                <option value="{{ $l->id }}">{{ $l->name }}</option>
+                            @endforeach
+                        </select>
+                    @else
+                        {{ auth()->user()->location->name }}
+                    @endif
+                </h2>
             </div>
 
             <!-- Task List -->
@@ -67,11 +79,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($review->subtask_id && isset($review->subtask->id))
-                                        {{ $review->subtask->name }}
-                                    @endif
                                     @if ($review->task_id && isset($review->task->id))
                                         {{ $review->task->name }}
+                                    @endif
+                                    @if ($review->subtask_id && isset($review->subtask->id))
+                                        {{ $review->subtask->name }}
                                     @endif
                                 </td>
                                 <td>
