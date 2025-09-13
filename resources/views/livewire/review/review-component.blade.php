@@ -50,7 +50,7 @@
                 la
                 hora y las tareas completas y lo debes de graficar con chartjs el eje x sera las horas del dia y el eje
                 y las tareas completadas --}}
-                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 max-w-xl mx-auto">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Rendimiento por hora</h2>
                     <canvas id="performanceChart"></canvas>
                 </div>
