@@ -14,3 +14,26 @@ input{
 button{
     @apply font-bold py-2 px-3 rounded-lg;
 }
+td,th {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: 6rem;
+    width: 6rem;
+}
+
+tr {
+    border-bottom: 1px solid #1e40af;
+    padding-top: 2rem;
+}
+
+::-webkit-scrollbar {
+    height: 6px;
+    width: 12px;
+    background: #e2850c;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e40af;
+    border-radius: 10px;
+}
