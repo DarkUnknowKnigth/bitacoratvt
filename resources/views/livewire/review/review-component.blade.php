@@ -58,12 +58,14 @@
                 @script
                 <script>
                     document.addEventListener('livewire:initialized', async () => {
-                    const ctx = document.getElementById('performanceChart').getContext('2d');                    let performanceChart;
-                    const dataframe = await @this.call('getHourlyPerformance');
+                    const ctx = document.getElementById('performanceChart').getContext('2d');
+                    let performanceChart;
+
                     const renderChart = (dataframe) => {
                         if (performanceChart) {
                             performanceChart.destroy();
                         }
+
                         performanceChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
@@ -99,7 +101,13 @@
                             }
                         });
                     };
+
+                    const dataframe = await @this.call('getHourlyPerformance');
                     renderChart(dataframe);
+
+                    @this.on('update-chart', ({
+                        data
+                    }) => renderChart(data));
                 });
                 </script>
                 @endscript
