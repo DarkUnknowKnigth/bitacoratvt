@@ -60,10 +60,10 @@
                                 <td>{{$review->date}} <br> {{$review->time}}</td>
                                 <td>
                                     @if ($review->task_id && isset($review->task->id))
-                                        {{ $review->task->name }}
+                                        Principal
                                     @endif
                                     @if ($review->subtask_id && isset($review->subtask->id))
-                                        {{ $review->subtask->name }}
+                                        Subtarea
                                     @endif
                                 </td>
                                 <td>
