@@ -69,7 +69,7 @@
                         performanceChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: dataframe.map(item => `${item.time}:00`),
+                                labels: dataframe.map(item => `${item.time}`),
                                 datasets: [{
                                     label: 'Tareas completadas',
                                     data: dataframe.map(item => item.total),
