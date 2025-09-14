@@ -6,6 +6,7 @@ use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Locations\LocationComponent;
 use App\Livewire\Modules\ModuleComponent;
 use App\Livewire\Review\ReviewComponent;
+use App\Livewire\Roles\RoleComponent;
 use App\Livewire\Tasks\TaskComponent;
 use App\Livewire\Users\UserComponent;
 use App\Livewire\Validation\ValidationComponent;
@@ -37,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reviews', ReviewComponent::class)->name('reviews');
     Route::get('/users', UserComponent::class)->name('users');
     Route::get('/locations', LocationComponent::class)->name('locations');
-    Route::get('/roles', function(){return response()->json(['message'=>'todo']);})->name('roles');
+    Route::get('/roles',RoleComponent::class)->name('roles');
     Route::get('/modules', ModuleComponent::class)->name('modules');
 });
 // Route::get('/register', function(){
