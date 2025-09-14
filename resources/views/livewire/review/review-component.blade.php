@@ -45,21 +45,29 @@
                     </span>
                 </h2>
             </div>
-            <div>
+            <div class="grid md:grid-cols-2 grid-cols-1 gap-8">
                 {{-- //crea un grafico en base al desempleño de las tareas por y hora te pasare una query que contenga
                 la
                 hora y las tareas completas y lo debes de graficar con chartjs el eje x sera las horas del dia y el eje
                 y las tareas completadas --}}
-                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 max-w-xl mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Rendimiento por hora</h2>
-                    <canvas id="performanceChart"></canvas>
+                    <canvas id="performanceChart" style="max-height: 500px;"></canvas>
                 </div>
+                @if (auth()->user()->role->slug == 'admin')
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Rendimiento por Sucursal</h2>
+                    <canvas id="locationChart" style="max-height: 500px;"></canvas>
+                </div>
+                @endif
 
                 @script
                 <script>
                     document.addEventListener('livewire:initialized', async () => {
                     const ctx = document.getElementById('performanceChart').getContext('2d');
                     let performanceChart;
+                    const ctxLocation = document.getElementById('locationChart')?.getContext('2d');
+                    let locationChart;
 
                     const renderChart = (dataframe) => {
                         if (performanceChart) {
@@ -102,12 +110,57 @@
                         });
                     };
 
+                    const renderLocationChart = (dataframe) => {
+                        if (!ctxLocation) return;
+                        if (locationChart) {
+                            locationChart.destroy();
+                        }
+
+                        locationChart = new Chart(ctxLocation, {
+                            type: 'pie', // O 'bar' si lo prefieres
+                            data: {
+                                labels: dataframe.map(item => item.location_name),
+                                datasets: [{
+                                    label: 'Tareas por Sucursal',
+                                    data: dataframe.map(item => item.total),
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.6)',
+                                        'rgba(54, 162, 235, 0.6)',
+                                        'rgba(255, 206, 86, 0.6)',
+                                        'rgba(75, 192, 192, 0.6)',
+                                        'rgba(153, 102, 255, 0.6)',
+                                        'rgba(255, 159, 64, 0.6)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    }
+                                }
+                            }
+                        });
+                    };
+
                     const dataframe = await @this.call('getHourlyPerformance');
                     renderChart(dataframe);
-
+                    const locationDataframe = await @this.call('getPerformanceByLocation');
+                    renderLocationChart(locationDataframe);
                     @this.on('update-chart', ({
                         data
                     }) => renderChart(data));
+                    @this.on('update-location-chart', ({ data }) => renderLocationChart(data));
                 });
                 </script>
                 @endscript

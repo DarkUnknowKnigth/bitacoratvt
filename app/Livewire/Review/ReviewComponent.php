@@ -49,6 +49,7 @@ class ReviewComponent extends Component
             ->get();
         }
         $this->dispatch('update-chart', data: $this->getHourlyPerformance());
+        $this->dispatch('update-location-chart', data: $this->getPerformanceByLocation());
     }
     public function mount(){
         $this->nowDate = $this->nowDate ?: Carbon::now()->format('Y-m-d');
@@ -80,6 +81,22 @@ class ReviewComponent extends Component
             ->select(DB::raw('time'), DB::raw('COUNT(*) as total'))
             ->groupBy('time')
             ->orderBy('time');
+        return $query->get()->toArray();
+    }
+
+    public function getPerformanceByLocation(){
+        // Solo tiene sentido si el usuario es admin, que puede ver varias sucursales.
+        if (auth()->user()->role->slug !== 'admin') {
+            return [];
+        }
+
+        $query = Review::join('locations', 'reviews.location_id', '=', 'locations.id')
+            ->whereDate('date', $this->nowDate)
+            ->when($this->user_id, function($query){
+                $query->where('user_id', $this->user_id);
+            })
+            ->select('locations.name as location_name', DB::raw('COUNT(reviews.id) as total'))
+            ->groupBy('locations.name');
         return $query->get()->toArray();
     }
 }
