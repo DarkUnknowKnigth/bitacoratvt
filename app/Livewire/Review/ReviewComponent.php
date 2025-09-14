@@ -65,8 +65,8 @@ class ReviewComponent extends Component
     }
     public function destroy(Review $review){
         $review->delete();
-        session()->flash('message','Bitácora eliminada correctamente');
-        $this->reloadReviews();
+        session()->flash('status','Bitácora eliminada correctamente');
+        return redirect()->route('reviews');
     }
     public function getHourlyPerformance(){
         $query = Review::whereDate('date', $this->nowDate)

@@ -52,10 +52,10 @@
                     @forelse($tasks as $task)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span class="md:w-3/4 w-full">{{ $task->name }}</span>
-                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2"
+                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                 wire:click="edit({{ $task->id }}); document.getElementById('name').focus()"
                             >@include('icons.edit') Editar</button>
-                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
+                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                 onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitácoras de este elemento y las subtereas y sus respectivas bitácoras?') ? @this.call('destroy', {{ $task->id }}) : false;"
                             >@include('icons.delete') Eliminar</button>
                             <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
@@ -64,7 +64,7 @@
                                     <option value="{{ $v->id }}">{{$v->name}}:({{$v->value}})</option>
                                 @endforeach
                             </select>
-                            <button class="px-3 py-2 bg-blue-500 text-white rounded-lg flex flex-row gap-2"
+                            <button class="px-3 py-2 bg-blue-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                 wire:click="addValidation({{ $task->id }});"
                             >@include('icons.add') Validación</button>
                         </li>
@@ -74,7 +74,7 @@
                                 @foreach ($task->validations as $v)
                                     <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2">
                                         Texto: {{$v->name}} <br> Valor: {{$v->value}}
-                                        <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
+                                        <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                             onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $st->id }},{{ $v->id }}) : false;"
                                         >@include('icons.delete') Eliminar</button>
                                     </span>
@@ -85,10 +85,10 @@
                             @foreach ($task->subtasks as $st )
                                 <li class="flex flex-col gap-4 w-full md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                     <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">{{ $task->name }} -> {{ $st->name }}</span>
-                                    <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2"
+                                    <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                         wire:click="edit({{ $st->id }}); document.getElementById('name').focus()"
                                     >@include('icons.edit') Editar</button>
-                                    <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
+                                    <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                         onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitacoras de este elemento?') ? @this.call('destroy', {{ $st->id }}) : false;"
                                     >@include('icons.delete') Eliminar</button>
                                     <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
@@ -97,7 +97,7 @@
                                             <option value="{{ $v->id }}">{{$v->name}}:({{$v->value}})</option>
                                         @endforeach
                                     </select>
-                                    <button class="px-3 py-2 bg-blue-500 text-white rounded-lg flex flex-row gap-2"
+                                    <button class="px-3 py-2 bg-blue-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                         wire:click="addValidation({{ $st->id }});"
                                     >@include('icons.add') Validación</button>
                                 </li>
@@ -105,9 +105,9 @@
                                     <li class="gap-4 md:grid md:grid-cols-4 flex flex-col items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                         <span class="px-3 py-2 rounded-lg md:col-span-4 col-span-2">Validaciones de {{ $st->name }}:</span>
                                         @foreach ($st->validations as $v)
-                                            <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2">
+                                            <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2 md:w-auto w-full items-center">
                                                 Texto: {{$v->name}} <br> Valor: {{$v->value}}
-                                                <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
+                                                <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                                     onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $st->id }},{{ $v->id }}) : false;"
                                                 >@include('icons.delete') Eliminar</button>
                                             </span>

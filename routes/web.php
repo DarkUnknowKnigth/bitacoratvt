@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Locations\LocationComponent;
+use App\Livewire\Modules\ModuleComponent;
 use App\Livewire\Review\ReviewComponent;
 use App\Livewire\Tasks\TaskComponent;
 use App\Livewire\Users\UserComponent;
@@ -37,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users', UserComponent::class)->name('users');
     Route::get('/locations', LocationComponent::class)->name('locations');
     Route::get('/roles', function(){return response()->json(['message'=>'todo']);})->name('roles');
-    Route::get('/modules', function(){return response()->json(['message'=>'todo']);})->name('modules');
+    Route::get('/modules', ModuleComponent::class)->name('modules');
 });
 // Route::get('/register', function(){
 //     return view('auth.register');

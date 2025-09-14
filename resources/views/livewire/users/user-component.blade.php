@@ -49,7 +49,7 @@
                                     <option value="{{ $l->id }}"> {{$l->name}}: {{$l->slug}}</option>
                                 @endforeach
                             </select>
-                            <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>
+                            <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2 items-center justify-center">@include('icons.save') Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -68,8 +68,8 @@
                                 <br>
                                 {{ $user->name }} - {{$user->email}} <br> {{$user->location? $user->location->name: 'Sin asignacion'}}</span>
                             <br>
-                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2"  wire:click="edit({{ $user->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
-                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $user->id }}) : false;">@include('icons.delete') Eliminar</button>
+                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"  wire:click="edit({{ $user->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
+                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $user->id }}) : false;">@include('icons.delete') Eliminar</button>
                         </li>
                     @empty
                         <li class="text-center text-gray-500 dark:text-gray-400">No hay usuarios para mostrar.</li>
