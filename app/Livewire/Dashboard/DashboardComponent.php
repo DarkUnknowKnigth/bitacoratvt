@@ -15,9 +15,9 @@ class DashboardComponent extends Component
     // Propiedades del componente
     public $tasks = [];
     public $allTasks = [];
-    public $validation_id = null;
-    public $validationValue = 0;
-    public string $comments = '';
+    public array $validation_ids = [];
+    public array $validationValues = [];
+    public array $comments = [];
     public $completedTasksCount = 0;
     public string $nowFormated = '';
     private string $nowTimeFormated = '';
@@ -60,26 +60,29 @@ class DashboardComponent extends Component
 
         $this->reset('newTaskName', 'showForm');
     }
-    public function reviewTask(Task $task, ?Task $subtask){
+    public function reviewTask(Task $task, ?Task $subtask = null){
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
+
+        $key = $subtask->id ? 'st-'.$subtask->id : 't-'.$task->id;
+
         $this->validate([
-            'comments' => 'nullable|string|max:255',
+            "comments.{$key}" => 'nullable|string|max:255',
         ]);
         Review::create([
             'task_id' => $task->id,
             'subtask_id' => $subtask? $subtask->id : null,
             'user_id' => auth()->user()->id,
-            'validation_id' => $this->validation_id ?? null,
-            'value'=> $this->validationValue ?? null,
-            'comments' => $this->comments ?? null,
+            'validation_id' => $this->validation_ids[$key] ?? null,
+            'value'=> $this->validationValues[$key] ?? null,
+            'comments' => $this->comments[$key] ?? null,
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,
             'location_id' => auth()->user()->location_id ?? 1,
         ]);
-        $this->comments= '';
-        $this->validation_id = null;
-        $this->validationValue = 0;
+        $this->comments[$key] = '';
+        $this->validation_ids[$key] = null;
+        $this->validationValues[$key] = null;
         session()->flash('status', 'Tarea completada.');
     }
     public function render()
