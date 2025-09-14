@@ -18,7 +18,9 @@ class UserComponent extends Component
     public $password;
     #[Validate('required')]
     public $location_id;
+    #[Validate('required')]
     public $role_id;
+    #[Validate('required')]
     public $user_id;
     public $users = [];
     public $locations = [];
