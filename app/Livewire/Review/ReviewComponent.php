@@ -92,8 +92,9 @@ class ReviewComponent extends Component
 
         $query = Review::join('locations', 'reviews.location_id', '=', 'locations.id')
             ->whereDate('date', $this->nowDate)
-            ->select('locations.name as location_name','locations.id as location_id', DB::raw('COUNT(reviews.id) as total'))
-            ->groupBy('location_id');
+
+            ->select('locations.name as location_name', DB::raw('COUNT(reviews.id) as total'))
+            ->groupBy('locations.name');
         return $query->get()->toArray();
     }
 }
