@@ -49,8 +49,8 @@
                     @forelse ($validations as $validation)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span class="md:w-3/4 w-full">{{ $validation->name }} : {{$validation->value}}</span>
-                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2"  wire:click="edit({{ $validation->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
-                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2"
+                            <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"  wire:click="edit({{ $validation->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
+                            <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                 onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $validation->id }}) : false;"
                             >@include('icons.delete') Eliminar</button>
                         </li>
