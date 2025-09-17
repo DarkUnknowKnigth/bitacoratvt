@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
 use App\Livewire\Dashboard\DashboardComponent;
+use App\Livewire\Dashboard\ProductivityComponent;
+use App\Livewire\Dashboard\ViewerComponent;
 use App\Livewire\Locations\LocationComponent;
 use App\Livewire\Modules\ModuleComponent;
 use App\Livewire\Review\ReviewComponent;
@@ -40,6 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/locations', LocationComponent::class)->name('locations');
     Route::get('/roles',RoleComponent::class)->name('roles');
     Route::get('/modules', ModuleComponent::class)->name('modules');
+    Route::get('/porductivity', ProductivityComponent::class)->name('productivity');
+    Route::get('/viewer', ViewerComponent::class)->name('viewer');
 });
 // Route::get('/register', function(){
 //     return view('auth.register');
