@@ -38,7 +38,7 @@
     </div>
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
         <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
-        <table class="table-auto m-auto md:max-w-xl w-full">
+        <table class="table-auto m-auto md:max-w-2xl w-full">
             @foreach ($tasks as $task)
                 <tr>
                     <td>Tarea</td>
