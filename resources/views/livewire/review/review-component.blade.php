@@ -229,6 +229,44 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Listado de Fallas -->
+            @if ($failures->count() > 0)
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Fallas Reportadas</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Fecha</th>
+                                <th scope="col" class="px-6 py-3">Tarea / Subtarea</th>
+                                <th scope="col" class="px-6 py-3">Sucursal</th>
+                                <th scope="col" class="px-6 py-3">Descripción</th>
+                                <th scope="col" class="px-6 py-3">Reportó</th>
+                                <th scope="col" class="px-6 py-3">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($failures as $failure)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4">{{ \Carbon\Carbon::parse($failure->date)->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4">{{ $failure->task->name }} {{ $failure->subtask ? '-> '.$failure->subtask->name : '' }}</td>
+                                    <td class="px-6 py-4">{{ $failure->location->name }}</td>
+                                    <td class="px-6 py-4 max-w-xs truncate" title="{{ $failure->description }}">{{ $failure->description }}</td>
+                                    <td class="px-6 py-4">{{ $failure->user->name }}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $failure->solved ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                                            {{ $failure->solved ? 'Resuelta' : 'Pendiente' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
         </div>
     </div>
 </div>
