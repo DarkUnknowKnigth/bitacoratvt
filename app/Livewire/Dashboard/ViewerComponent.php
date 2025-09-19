@@ -43,10 +43,10 @@ class ViewerComponent extends Component
                 $query->where('date', $this->selectedDate)
                     ->when($this->selectedLocation, function ($q) {
                         $q->where('location_id', $this->selectedLocation);
+                    })
+                    ->when($this->selectedUser, function ($q) {
+                        $q->where('user_id', $this->selectedUser);
                     });
-                    // ->when($this->selectedUser, function ($q) {
-                    //     $q->where('user_id', $this->selectedUser);
-                    // });
             }, 'subtasks.reviews.user', 'subtasks.reviews.validation'])
             ->get();
 

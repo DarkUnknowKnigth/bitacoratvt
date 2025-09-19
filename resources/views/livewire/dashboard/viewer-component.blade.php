@@ -49,7 +49,7 @@
                     </td>
                     <td>
                         @php
-                            $taskReview = $task->completedReview($nowFormated, auth()->user()->location_id)->where('user_id',auth()->user()->id)->first();
+                            $taskReview = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
                         @endphp
                         {{ $taskReview->comments ?? 'Sin comentarios adicionales' }}
                     </td>
@@ -65,8 +65,8 @@
                 @foreach ($task->subtasks as $st)
                     <tr>
                         @php
-                            $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->where('user_id',auth()->user()->id);
-                            $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->location_id, $task->id)->where('user_id',auth()->user()->id);
+                            $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id);
+                            $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->location_id, $task->id);
                         @endphp
                         <td>{{$st->name}}</td>
                         <td>
