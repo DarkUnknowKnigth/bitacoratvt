@@ -169,63 +169,58 @@
             <!-- Task List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de bitácoras</h2>
-                <div class="space-y-4 overflow-x-scroll w-full">
-                    <table class="table w-full text-center">
-                        <tr>
-                            <th>id</th>
-                            <th>Fecha y hora</th>
-                            <th>Tipo</th>
-                            <th>Tarea</th>
-                            <th>Sucursal</th>
-                            <th>Valor</th>
-                            <th>Comentario</th>
-                            <th>#</th>
-                        </tr>
-                        @forelse($reviews as $review)
-                        <tr>
-                            <td>{{$review->id}}</td>
-                            <td>{{$review->date}} <br> {{$review->time}}</td>
-                            <td>
-                                @if ($review->task_id && isset($review->task->id))
-                                Principal
-                                @endif
-                                @if ($review->subtask_id && isset($review->subtask->id))
-                                Subtarea
-                                @endif
-                            </td>
-                            <td>
-                                @if ($review->task_id && isset($review->task->id))
-                                {{ $review->task->name }}
-                                @endif
-                                @if ($review->subtask_id && isset($review->subtask->id))
-                                {{ $review->subtask->name }}
-                                @endif
-                            </td>
-                            <td>
-                                {{ $review->location->name }}
-                            </td>
-                            <td>
-                                @if ($review->validation_id)
-                                {{ $review->validation->value }}
-                                @else
-                                {{ $review->value }}
-                                @endif
-                            </td>
-                            <td>{{$review->comments}}</td>
-                            <td>
-                                <button class="flex gap-5 bg-red-600 w-full text-center items-center justify-center"
-                                    wire:click="destroy({{ $review->id }})">
-                                    @include('icons.delete') Eliminar
-                                </button>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr class="text-center text-gray-500 dark:text-gray-400">
-                            <td colspan="6">
-                                No hay bitácora para mostrar.
-                            </td>
-                        </tr>
-                        @endforelse
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Fecha y Hora</th>
+                                <th scope="col" class="px-6 py-3">Tipo</th>
+                                <th scope="col" class="px-6 py-3">Tarea</th>
+                                <th scope="col" class="px-6 py-3">Sucursal</th>
+                                <th scope="col" class="px-6 py-3">Valor</th>
+                                <th scope="col" class="px-6 py-3">Comentario</th>
+                                <th scope="col" class="px-6 py-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($reviews as $review)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4">{{ \Carbon\Carbon::parse($review->date)->format('d/m/Y') }} {{ $review->time }}</td>
+                                    <td class="px-6 py-4">
+                                        @if ($review->subtask_id && isset($review->subtask->id))
+                                            Subtarea
+                                        @else
+                                            Principal
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                        @if ($review->subtask_id && isset($review->subtask->id))
+                                            {{ $review->subtask->name }}
+                                        @elseif ($review->task_id && isset($review->task->id))
+                                            {{ $review->task->name }}
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">{{ $review->location->name }}</td>
+                                    <td class="px-6 py-4">
+                                        @if ($review->validation_id)
+                                            {{ $review->validation->value }}
+                                        @else
+                                            {{ $review->value ?? 'N/A' }}
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">{{ $review->comments }}</td>
+                                    <td class="px-6 py-4">
+                                        <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex items-center justify-center gap-2" wire:click="destroy({{ $review->id }})">
+                                            @include('icons.delete') Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-gray-500 dark:text-gray-400">No hay bitácora para mostrar.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
                     </table>
                 </div>
             </div>
