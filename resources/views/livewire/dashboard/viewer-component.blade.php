@@ -36,21 +36,22 @@
             </div>
         </div>
     </div>
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 overflow-x-scroll">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 overflow-x-scroll w-full md:max-w-4xl mx-auto">
         <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
-        <table class="table-auto m-auto md:max-w-2xl w-full">
+        <table class="table-auto m-auto w-full text-left">
             @foreach ($tasks as $task)
                 <tr class="text-blue-900 dark:text-blue-200">
                     <td>Tarea</td>
                     <td colspan="2">{{$task->name}}</td>
                     <td>
-                        Sub tareas completadas
-                        {{ $task->completedReview($nowFormated, auth()->user()->location_id)->count()}}/{{ $task->subtasks->count() }}
+                        Subtareas completadas
+                        {{ $task->completedSubtasks($nowFormated, auth()->user()->location_id, auth()->user())->count() }} / {{ $task->subtasks->count() }}
                     </td>
                 </tr>
                 <tr class="text-amber-900 dark:text-amber-200">
-                    <td>Sub tarea</td>
-                    <td>Validacion</td>
+                    <td>Subtareas</td>
+                    <td>Estado Val. <br> {{$prevDate}}</td>
+                    <td>Validación {{$nowFormated}}</td>
                     <td>Comentario</td>
                     <td>Fecha y hora</td>
                 </tr>
@@ -58,8 +59,30 @@
                     <tr>
                         @php
                             $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->where('user_id',auth()->user()->id);
+                            $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->location_id, $task->id)->where('user_id',auth()->user()->id);
                         @endphp
                         <td>{{$st->name}}</td>
+                        <td>
+                            <ul>
+                                @forelse ($prevReviewQuery->get() as $review)
+                                    @if ($review->validation)
+                                        <li class="flex items-center gap-2">
+                                            {!! $review->validation->icon !!}
+                                            <span>{{$review->validation->value}}</span>
+                                        </li>
+                                    @else
+                                        {{$review->value}}
+                                    @endif
+                                @empty
+                                    <li class="flex items-center gap-2 text-amber-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                        </svg>
+                                        <small>Sin captura</small>
+                                    </li>
+                                @endforelse
+                            </ul>
+                        </td>
                         <td>
                             <ul>
                                 @forelse ($reviewQuery->get() as $review)

@@ -14,10 +14,12 @@ class ViewerComponent extends Component
     public $selectedLocation;
     public $selectedUser;
     public $selectedDate;
+    public $prevDate;
 
     public function mount()
     {
         $this->selectedDate = Carbon::now()->format('Y-m-d');
+        $this->prevDate = Carbon::now()->subDay()->format('Y-m-d');
     }
 
     public function render()
