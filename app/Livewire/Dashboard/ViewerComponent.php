@@ -25,7 +25,7 @@ class ViewerComponent extends Component
     public function render()
     {
         $locations = Location::when(Auth::user()->role->slug != 'admin', function($query){
-                $query->where('location_id', Auth::user()->location_id);
+                $query->where('id', Auth::user()->location_id);
             })
             ->get();
         $users = User::query()
