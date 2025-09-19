@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 overflow-x-scroll w-full md:max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 overflow-x-scroll w-full max-w-7xl mx-auto">
         <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
         <table class="table-auto m-auto w-full text-left">
             @foreach ($tasks as $task)
@@ -56,9 +56,10 @@
                 </tr>
                 <tr class="text-amber-900 dark:text-amber-200">
                     <td>Subtareas</td>
-                    <td>Estado Val. <br> {{$prevDate}}</td>
+                    <td>Previa Val. <br> {{$prevDate}}</td>
                     <td>Validación {{$nowFormated}}</td>
                     <td>Comentario</td>
+                    <td>Fallas</td>
                     <td>Fecha y hora</td>
                 </tr>
                 @foreach ($task->subtasks as $st)
@@ -116,6 +117,22 @@
                             @else
                                 Sin captura
                             @endif
+                        </td>
+                        <td>
+                            <ul>
+                                @forelse ($st->subtaskFailures as $failure)
+                                    <li class="mb-1">
+                                        <span title="{{$failure->description}}" class="flex items-center justify-left gap-2 p-1 text-xs font-semibold {{ $failure->solved ? 'text-green-500' : 'text-red-500' }}">
+                                            <span class="px-2 py-1 rounded-full {{ $failure->solved ? 'bg-green-600 text-white' : 'bg-red-700 text-white' }}">
+                                                @if ($failure->solved) Solucionado @else Sin resolver @endif
+                                            </span>
+                                            <span class="truncate max-w-xs">{{ $failure->description }}</span>
+                                        </span>
+                                    </li>
+                                @empty
+                                    <span class="text-gray-400">Sin fallas</span>
+                                @endforelse
+                            </ul>
                         </td>
                         <td>
                             @if ($reviewQuery->count() > 0)
