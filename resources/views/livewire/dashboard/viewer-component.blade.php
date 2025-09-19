@@ -47,6 +47,12 @@
                         Subtareas completadas
                         {{ $task->completedSubtasks($nowFormated, auth()->user()->location_id, auth()->user())->count() }} / {{ $task->subtasks->count() }}
                     </td>
+                    <td>
+                        @php
+                            $taskReview = $task->completedReview($nowFormated, auth()->user()->location_id)->where('user_id',auth()->user()->id)->first();
+                        @endphp
+                        {{ $taskReview->comments ?? 'Sin comentarios adicionales' }}
+                    </td>
                 </tr>
                 <tr class="text-amber-900 dark:text-amber-200">
                     <td>Subtareas</td>

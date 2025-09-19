@@ -50,7 +50,6 @@
                             @else
                                 @if ($task->validations->count() > 1)
                                     <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" wire:model="validation_ids.t-{{$task->id}}">
-                                        <option value="">Selecciona</option>
                                         @foreach ($task->validations as $v)
                                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                                         @endforeach
@@ -104,7 +103,6 @@
                                 @else
                                     @if ($st->validations->count() > 1)
                                         <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $st->id }}" id="{{ $task->id.'.'.$st->id }}" wire:model="validation_ids.st-{{$st->id}}">
-                                            <option value="">Selecciona</option>
                                             @foreach ($st->validations as $v)
                                                 <option value="{{ $v->id }}">{{ $v->name }}</option>
                                             @endforeach
