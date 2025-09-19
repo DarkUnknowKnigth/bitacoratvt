@@ -29,11 +29,11 @@ class ViewerComponent extends Component
             })
             ->get();
         $users = User::query()
-            ->when(Auth::user()->role->slug != 'admin', function($query){
-                $query->where('location_id', Auth::user()->location_id);
-            })
             ->when($this->selectedLocation, function ($query) {
                 $query->where('location_id', $this->selectedLocation);
+            })
+            ->when(Auth::user()->role->slug != 'admin', function($query){
+                $query->where('location_id', Auth::user()->location_id);
             })
             ->get();
 
