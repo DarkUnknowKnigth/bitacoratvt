@@ -37,4 +37,20 @@ class Task extends Model
             $quer->where('user_id',$user->id);
         });
     }
+
+    /**
+     * Obtiene las fallas asociadas directamente a esta tarea (como tarea principal).
+     */
+    public function failures()
+    {
+        return $this->hasMany(Failure::class, 'task_id');
+    }
+
+    /**
+     * Obtiene las fallas donde esta tarea actúa como subtarea.
+     */
+    public function subtaskFailures()
+    {
+        return $this->hasMany(Failure::class, 'subtask_id');
+    }
 }

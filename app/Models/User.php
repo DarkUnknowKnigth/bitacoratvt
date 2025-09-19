@@ -55,4 +55,12 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * Obtiene las fallas reportadas por este usuario.
+     */
+    public function failures()
+    {
+        return $this->hasMany(Failure::class);
+    }
 }

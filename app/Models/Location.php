@@ -17,4 +17,12 @@ class Location extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Obtiene las fallas reportadas en esta sucursal.
+     */
+    public function failures()
+    {
+        return $this->hasMany(Failure::class);
+    }
 }
