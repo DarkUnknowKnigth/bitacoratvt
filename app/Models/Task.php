@@ -49,8 +49,10 @@ class Task extends Model
     /**
      * Obtiene las fallas donde esta tarea actúa como subtarea.
      */
-    public function subtaskFailures()
+    public function subtaskFailures(?Task $task = null)
     {
-        return $this->hasMany(Failure::class, 'subtask_id');
+        return $this->hasMany(Failure::class, 'subtask_id')->when($task && $task->id, function ($query) use($task) {
+            $query->where('task_id', $task->id);
+        });
     }
 }
