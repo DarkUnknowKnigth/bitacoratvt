@@ -48,7 +48,7 @@
                                     com:{{ $rw->comments }}
                                 </span>
                             @else
-                                @if ($task->validations->count() > 1)
+                                {{-- @if ($task->validations->count() > 1)
                                     <select class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/4" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" wire:model="validation_ids.t-{{$task->id}}">
                                         <option value="">Seleciona</option>
                                         @foreach ($task->validations as $v)
@@ -59,15 +59,15 @@
                                     @if ($task->validations->count() > 0)
                                         <input type="{{ $task->validations->first()->value }}" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8" name="subtask-{{ $task->id }}" id="{{ $task->id.'.'.$task->id }}" placeholder="{{ $task->validations->first()->name }}" wire:model="validationValues.t-{{$task->id}}">
                                     @endif
-                                @endif
+                                @endif --}}
                                 <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}" placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
                                 {{-- <input type="date" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="date-{{ $task->id }}" id="date-{{ $task->id.'.'.$task->id }}" wire:model="nowFormated">
                                 <input type="time" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0" name="time-{{ $task->id }}" id="time-{{ $task->id.'.'.$task->id }}" wire:model="nowTimeFormated"> --}}
                                 <button class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
                                     wire:click="reviewTask({{ $task->id }})"
                                 >
-                                    @include('icons.validate')
-                                    Validar
+                                    @include('icons.save')
+                                    Observación general
                                 </button>
                             @endif
                         </li>
