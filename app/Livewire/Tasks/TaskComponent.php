@@ -106,12 +106,6 @@ class TaskComponent extends Component
         $orphan_subtasks = Task::where('main', false)
             ->whereNotIn('id', $valid_subtask_ids)
             ->get();
-
-        if ($orphan_subtasks->isEmpty()) {
-            session()->flash('status', 'No se encontraron subtareas huérfanas.');
-            return redirect()->route('tasks');
-        }
-
         $deleted_count = $orphan_subtasks->count();
 
         foreach ($orphan_subtasks as $task) {
@@ -120,9 +114,18 @@ class TaskComponent extends Component
             $task->reviews()->delete();
             $task->delete();
         }
+        //parent ghost buster
+        $ghost_tasks = DB::table('subtasks')->whereNotIn('tasK_id', Task::where('main',true)->pluck('id'));
+        $ghost_counter = $ghost_tasks->count();
+        $ghost_tasks->delete();
+        //child ghost buster
+        $ghost_tasks = DB::table('subtasks')->whereNotIn('subtasK_id', Task::where('main',false)->pluck('id'));
+        $ghost_counter = $ghost_tasks->count();
+        $ghost_tasks->delete();
 
-        session()->flash('status', $deleted_count . ' subtarea(s) huérfana(s) han sido eliminada(s).');
 
+
+        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s) y $ghost_counter fanstasmas(s).");
         // Recargar las tareas para reflejar los cambios en la vista
         $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
         return redirect()->route('tasks');
