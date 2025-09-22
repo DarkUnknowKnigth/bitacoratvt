@@ -75,7 +75,7 @@
                                     <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2">
                                         Texto: {{$v->name}} <br> Valor: {{$v->value}}
                                         <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
-                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $st->id }},{{ $v->id }}) : false;"
+                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $task->id }},{{ $v->id }}) : false;"
                                         >@include('icons.delete') Eliminar</button>
                                     </span>
                                 @endforeach
