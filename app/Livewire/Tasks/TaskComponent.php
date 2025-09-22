@@ -47,15 +47,15 @@ class TaskComponent extends Component
     }
     public function destroy(Task $task)
     {
-        $task->validations()->detach($task->validations->pluck('id')->toArray());
+        $task->validations()->detach();
         foreach ($task->subtasks as $subtask) {
-            $subtask->validations()->detach($subtask->validations->pluck('id')->toArray());
+            $subtask->validations()->detach();
             foreach ($subtask->subReviews($task->id)->get() as $review) {
                 $review->delete();
             }
             $subtask->delete();
         }
-        $task->subtasks()->detach($task->subtasks->pluck('id')->toArray());
+        $task->subtasks()->detach();
         foreach ($task->reviews()->get() as $review) {
             $review->delete();
         }
