@@ -119,9 +119,9 @@ class TaskComponent extends Component
         $ghost_counter = $ghost_tasks->count();
         $ghost_tasks->delete();
         //child ghost buster
-        $ghost_tasks = DB::table('subtasks')->whereNotIn('subtasK_id', Task::where('main',false)->pluck('id'));
-        $ghost_counter = $ghost_tasks->count();
-        $ghost_tasks->delete();
+        $ghost_parent_tasks = DB::table('subtasks')->whereNotIn('subtasK_id', Task::where('main',false)->pluck('id'));
+        $ghost_counter += $ghost_parent_tasks->count();
+        $ghost_parent_tasks->delete();
 
 
 
