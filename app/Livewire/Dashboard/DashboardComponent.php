@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Group;
 use App\Models\Review;
 use App\Models\Task;
 use Carbon\Carbon;
@@ -14,6 +15,8 @@ class DashboardComponent extends Component
 {
     // Propiedades del componente
     public $tasks = [];
+    public $groups = [];
+    public $tasksWithoutGroup = [];
     public $allTasks = [];
     public array $validation_ids = [];
     public array $validationValues = [];
@@ -27,7 +30,16 @@ class DashboardComponent extends Component
     public function mount()
     {
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
-        $this->tasks = Task::with(['subtasks','subtasks.validations'])->where('main', true)->get();
+        $this->groups = Group::with([
+            'tasks' => function ($query) {
+                $query->where('main', true)->with(['subtasks', 'subtasks.validations']);
+            }
+        ])->orderBy('name')->get();
+
+        $this->tasksWithoutGroup = Task::where('main', true)
+            ->whereDoesntHave('group')
+            ->with(['subtasks', 'subtasks.validations'])
+            ->get();
         $this->allTasks = DB::table('subtasks')->count()+DB::table('tasks')->where('main',true)->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
