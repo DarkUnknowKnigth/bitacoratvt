@@ -55,4 +55,7 @@ class Task extends Model
             $query->where('task_id', $task->id);
         });
     }
+    public function group(){
+        return $this->belongsToMany(Group::class,'group_task','task_id','group_id');
+    }
 }

@@ -23,16 +23,34 @@ class TaskComponent extends Component
     public $main = 1;
     #[Validate('nullable')]
     public $parent;
+    public $search = '';
+
+    private function loadTasks()
+    {
+        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])
+            ->where('main', true)
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->get();
+    }
+
     public function render()
     {
         return view('livewire.tasks.task-component');
     }
     public function mount()
     {
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+        $this->loadTasks();
         $this->mainTasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
         $this->validations = Validation::all();
     }
+
+    public function updatedSearch()
+    {
+        $this->loadTasks();
+    }
+
     public function save()
     {
         $this->validate();
@@ -42,7 +60,7 @@ class TaskComponent extends Component
             $parentTask->subtasks()->attach($task->id);
         }
         session()->flash('status', 'Tarea creada.');
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+        $this->loadTasks();
         return redirect()->route('tasks');
     }
     public function destroy(Task $task)
@@ -60,7 +78,7 @@ class TaskComponent extends Component
             $review->delete();
         }
         $task->delete();
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+        $this->loadTasks();
         session()->flash('status', 'Tarea eliminada.');
         return redirect()->route('tasks');
     }
@@ -75,7 +93,7 @@ class TaskComponent extends Component
     {
         $this->validate();
         $task->update($this->only(['name', 'main']));
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+        $this->loadTasks();
         session()->flash('status', 'Tarea actualizada.');
         return redirect()->route('tasks');
     }
@@ -84,7 +102,7 @@ class TaskComponent extends Component
         $task = Task::find($task_id);
         if ($task && $this->validation) {
             $task->validations()->attach($this->validation);
-            $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+            $this->loadTasks();
             session()->flash('status', 'Validación agregada a la tarea.');
             return redirect()->route('tasks');
         }
@@ -127,7 +145,7 @@ class TaskComponent extends Component
 
         session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s) y $ghost_counter fanstasmas(s).");
         // Recargar las tareas para reflejar los cambios en la vista
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
+        $this->loadTasks();
         return redirect()->route('tasks');
     }
 }

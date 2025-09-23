@@ -47,10 +47,14 @@
 
             <!-- Task List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
-                <div class="flex md:flex-row flex-col items-center justify-between text-center">
+                <div class="flex md:flex-row flex-col items-center justify-between text-center mb-4 gap-4">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
+                    <div class="flex-grow">
+                        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar tarea por nombre..." class="w-full rounded-lg px-3 py-2 text-blue-950 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
                     <button type="button" wire:click="deleteErrors()" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-purple-600 flex flex-row gap-2">@include('icons.tool') Borrar errores</button>
                 </div>
+
                 <ul class="space-y-4">
                     @forelse($tasks as $task)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
