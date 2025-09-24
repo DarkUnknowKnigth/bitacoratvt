@@ -63,4 +63,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Failure::class);
     }
+    //agrega la funcionalidad para saber si es administrador    public function isAdmin()
+    public function isAdmin()
+    {
+        return $this->role && $this->role->slug === 'admin';
+    }
+
 }

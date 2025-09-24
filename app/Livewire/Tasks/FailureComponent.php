@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -23,9 +24,11 @@ class FailureComponent extends Component
     public $statusFilter = ''; // '', '1' para resueltas, '0' para pendientes
 
     // Propiedades del formulario
+    #[Url(as: 'task_id', keep: true)]
     #[Validate('required|exists:tasks,id')]
     public $task_id = '';
 
+    #[Url(as: 'subtask_id', keep: true)]
     #[Validate('nullable|exists:tasks,id')]
     public $subtask_id = '';
 
@@ -47,6 +50,12 @@ class FailureComponent extends Component
         $this->locations = Location::orderBy('name')->get();
         $this->date = Carbon::now()->format('Y-m-d');
         $this->location_id = Auth::user()->location_id;
+
+        // Si se proporciona un task_id en la URL, cargamos las subtareas correspondientes
+        if ($this->task_id) {
+            $this->updatedTaskId($this->task_id);
+        }
+
         $this->loadFailures();
     }
 
@@ -57,7 +66,7 @@ class FailureComponent extends Component
         } else {
             $this->subtasks = [];
         }
-        $this->subtask_id = '';
+        // $this->subtask_id = '';
     }
 
     public function updatedSearch()

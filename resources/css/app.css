@@ -5,13 +5,10 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-select {
-    @apply text-blue-950 border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm bg-white px-3 py-2;
+select, input, textarea {
+    @apply text-blue-950 border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm bg-gray-200 px-3 py-2;
 }
-input{
-    @apply text-blue-950 border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm bg-white px-3 py-2;
-}
-button{
+button, a{
     @apply font-bold py-2 px-3 rounded-lg;
 }
 td,th {
