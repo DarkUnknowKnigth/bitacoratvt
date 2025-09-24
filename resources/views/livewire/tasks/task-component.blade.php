@@ -34,6 +34,7 @@
                                 ¿Actividad principal a la que pertenece?:
                             </label>
                             <select wire:show="main==0" name="parent" wire:model="parent" id="parent"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
+                                <option value="">Selecciona una tarea</option>
                                 @foreach ($mainTasks as $t)
                                     <option value="{{ $t->id }}">{{$t->name}}</option>
                                 @endforeach
