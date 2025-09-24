@@ -18,6 +18,10 @@ class FailureComponent extends Component
     public $locations = [];
     public $failure_id = null;
 
+    // Propiedades para la búsqueda y filtrado
+    public $search = '';
+    public $statusFilter = ''; // '', '1' para resueltas, '0' para pendientes
+
     // Propiedades del formulario
     #[Validate('required|exists:tasks,id')]
     public $task_id = '';
@@ -56,9 +60,27 @@ class FailureComponent extends Component
         $this->subtask_id = '';
     }
 
+    public function updatedSearch()
+    {
+        $this->loadFailures();
+    }
+
+    public function updatedStatusFilter()
+    {
+        $this->loadFailures();
+    }
+
     public function loadFailures()
     {
         $this->failures = Failure::with(['task', 'subtask', 'user', 'location'])
+            ->when($this->search, function ($query) {
+                $query->where('description', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('task', fn($q) => $q->where('name', 'like', '%' . $this->search . '%'))
+                    ->orWhereHas('subtask', fn($q) => $q->where('name', 'like', '%' . $this->search . '%'));
+            })
+            ->when($this->statusFilter !== '', function ($query) {
+                $query->where('solved', $this->statusFilter);
+            })
             ->orderBy('date', 'desc')
             ->get();
     }
@@ -78,7 +100,8 @@ class FailureComponent extends Component
         ]);
 
         session()->flash('status', 'Falla registrada correctamente.');
-        return redirect()->route('failures');
+        $this->resetForm();
+        $this->loadFailures();
     }
 
     public function edit(Failure $failure)
@@ -100,7 +123,8 @@ class FailureComponent extends Component
         $failure->update($this->only(['task_id', 'subtask_id', 'location_id', 'description', 'date', 'solved']));
 
         session()->flash('status', 'Falla actualizada correctamente.');
-        return redirect()->route('failures');
+        $this->resetForm();
+        $this->loadFailures();
     }
 
     public function destroy(Failure $failure)
@@ -114,6 +138,20 @@ class FailureComponent extends Component
     {
         $failure->update(['solved' => !$failure->solved]);
         $this->loadFailures();
+    }
+
+    public function resetForm()
+    {
+        $this->reset([
+            'failure_id',
+            'task_id',
+            'subtask_id',
+            'description',
+            'solved'
+        ]);
+        // Restaurar valores por defecto
+        $this->date = Carbon::now()->format('Y-m-d');
+        $this->location_id = Auth::user()->location_id;
     }
 
     public function render()

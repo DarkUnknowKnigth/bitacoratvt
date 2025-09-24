@@ -76,11 +76,16 @@
                             </div>
                         </div>
 
-                        <!-- Botón de Guardar -->
-                        <div class="mt-6">
-                            <button type="submit" class="w-full text-white md:w-auto px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 flex flex-row gap-2 items-center justify-center">
+                        <!-- Botones de Acción -->
+                        <div class="mt-6 flex flex-col md:flex-row gap-4 justify-center">
+                            <button type="submit" class="w-full md:w-auto text-white px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 flex flex-row gap-2 items-center justify-center">
                                 @include('icons.save') Guardar Falla
                             </button>
+                            @if ($failure_id)
+                                <button type="button" wire:click="resetForm" class="w-full md:w-auto text-white px-5 py-2.5 rounded-lg bg-gray-500 hover:bg-gray-600 flex flex-row gap-2 items-center justify-center">
+                                    @include('icons.cancel') Cancelar Edición
+                                </button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -88,7 +93,17 @@
 
             <!-- Listado de Fallas -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Fallas</h2>
+                <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Listado de Fallas</h2>
+                    <div class="flex-grow md:max-w-md">
+                        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por descripción, tarea..." class="w-full rounded-lg px-3 py-2 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="">Todos los estados</option>
+                        <option value="0">Pendientes</option>
+                        <option value="1">Resueltas</option>
+                    </select>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -132,4 +147,3 @@
         </div>
     </div>
 </div>
-
