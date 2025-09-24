@@ -64,7 +64,7 @@
                                         wire:click="reviewTask({{ $task->id }})"
                                     >
                                         @include('icons.save')
-                                        Observación general
+                                        Comentario general
                                     </button>
                                 @endif
                             </li>
@@ -162,7 +162,7 @@
                                     wire:click="reviewTask({{ $task->id }})"
                                 >
                                     @include('icons.save')
-                                    Observación general
+                                    Comentario general
                                 </button>
                             @endif
                         </li>
