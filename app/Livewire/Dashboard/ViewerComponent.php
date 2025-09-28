@@ -75,7 +75,8 @@ class ViewerComponent extends Component
                             ->when($this->selectedUser, fn($q) => $q->where('user_id', $this->selectedUser));
                     },
                     'subtasks.reviews.validation'
-                ]);
+                ])
+                ->orderBy('name');
         };
         $groups = Group::with(['tasks' => $commonTaskQuery])->get();
 
