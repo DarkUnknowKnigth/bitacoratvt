@@ -32,4 +32,8 @@ class Task extends Model
     public function mainTasks(){
         return $this->belongsToMany(Task::class, 'subtasks', 'subtask_id', 'task_id');
     }
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class, 'location_task', 'task_id', 'location_id');
+    }
 }
