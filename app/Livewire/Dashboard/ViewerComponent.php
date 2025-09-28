@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class ViewerComponent extends Component
@@ -16,9 +17,22 @@ class ViewerComponent extends Component
     public $selectedUser;
     public $selectedDate;
     public $prevDate;
+    private $specific_tasks;
+    private $not_specific_tasks;
 
     public function mount()
     {
+        $this->specific_tasks = DB::table('location_task')
+        ->select('task_id','location_id')
+        ->where('location_id', Auth::user()->location_id )
+        ->get()
+        ->pluck('task_id')
+        ->toArray();
+        $this->not_specific_tasks = Task::select('id')
+        ->whereNotIn('id', $this->specific_tasks)
+        ->get()
+        ->pluck('id')
+        ->toArray();
         $this->selectedDate = Carbon::now()->format('Y-m-d');
         $this->prevDate = Carbon::now()->subDay()->format('Y-m-d');
     }
@@ -40,8 +54,14 @@ class ViewerComponent extends Component
 
         // Lógica para obtener los grupos con sus tareas y las tareas sin grupo
         $commonTaskQuery = function ($query) {
-            $query->where('main', true)
+            $query
+                ->where('main', true)
+                ->when($this->specific_tasks, function ($query) {
+                    $query->whereIn('tasks.id', $this->not_specific_tasks)
+                        ->orWhereIn('tasks.id', $this->specific_tasks);
+                })
                 ->with([
+                    'locations',
                     'subtasks.validations',
                     'subtasks.subtaskFailures',
                     'reviews' => function ($reviewQuery) {
@@ -57,7 +77,6 @@ class ViewerComponent extends Component
                     'subtasks.reviews.validation'
                 ]);
         };
-
         $groups = Group::with(['tasks' => $commonTaskQuery])->get();
 
         $tasksWithoutGroup = Task::whereDoesntHave('group')

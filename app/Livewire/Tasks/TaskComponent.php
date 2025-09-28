@@ -5,6 +5,7 @@ namespace App\Livewire\Tasks;
 use App\Models\Location;
 use App\Models\Task;
 use App\Models\Validation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -27,8 +28,6 @@ class TaskComponent extends Component
     public $parent;
     public $search = '';
     public $location_ids = [];
-
-
     private function loadTasks()
     {
         $this->tasks = Task::with(['subtasks', 'subtasks.validations','locations'])
@@ -46,7 +45,6 @@ class TaskComponent extends Component
     public function mount()
     {
         $this->loadTasks();
-        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations','locations'])->where('main', true)->get();
         $this->validations = Validation::all();
         $this->locations = Location::all();
     }
@@ -63,6 +61,9 @@ class TaskComponent extends Component
         if ($this->parent && $this->main == 0) {
             $parentTask = Task::find($this->parent);
             $parentTask->subtasks()->attach($task->id);
+        }
+        if ($this->location_ids && count($this->location_ids) > 0) {
+            $task->locations()->sync($this->location_ids);
         }
         $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
         session()->flash('status', 'Tarea creada.');
@@ -101,6 +102,9 @@ class TaskComponent extends Component
         $this->validate();
         $task->update($this->only(['name', 'main']));
         $this->loadTasks();
+        if ($this->location_ids && count($this->location_ids) > 0) {
+            $task->locations()->sync($this->location_ids);
+        }
         session()->flash('status', 'Tarea actualizada.');
         $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
         return redirect()->route('tasks');
