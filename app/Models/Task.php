@@ -36,4 +36,30 @@ class Task extends Model
     {
         return $this->belongsToMany(Location::class, 'location_task', 'task_id', 'location_id');
     }
+    public function completedSubtasks($date, $location_id, ?User $user){
+        return $this->hasMany(Review::class, 'task_id')->where([['date',$date],['location_id',$location_id]])->when($user->id,function($quer) use($user){
+            $quer->where('user_id',$user->id);
+        });
+    }
+
+    /**
+     * Obtiene las fallas asociadas directamente a esta tarea (como tarea principal).
+     */
+    public function failures()
+    {
+        return $this->hasMany(Failure::class, 'task_id');
+    }
+
+    /**
+     * Obtiene las fallas donde esta tarea actúa como subtarea.
+     */
+    public function subtaskFailures(?Task $task = null)
+    {
+        return $this->hasMany(Failure::class, 'subtask_id')->when($task && $task->id, function ($query) use($task) {
+            $query->where('task_id', $task->id);
+        });
+    }
+    public function group(){
+        return $this->belongsToMany(Group::class,'group_task','task_id','group_id');
+    }
 }

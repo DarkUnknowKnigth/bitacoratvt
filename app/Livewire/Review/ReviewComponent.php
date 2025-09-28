@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Review;
 
+use App\Models\Failure;
 use App\Models\Location;
 use App\Models\Review;
 use App\Models\User;
@@ -16,6 +17,7 @@ class ReviewComponent extends Component
     use WithPagination;
     public $users = [];
     public $reviews = [];
+    public $failures = [];
     public $locations = [];
 
     #[Url(as: 'fecha', keep: true)]
@@ -48,6 +50,18 @@ class ReviewComponent extends Component
             ->where('user_id',auth()->user()->id)
             ->get();
         }
+
+        // Cargar fallas correspondientes a los filtros
+        $this->failures = Failure::with(['task', 'subtask', 'user', 'location'])
+            ->whereDate('date', $this->nowDate)
+            ->when($this->location_id, function($query) {
+                $query->where('location_id', $this->location_id);
+            })
+            ->when($this->user_id, function($query) {
+                $query->where('user_id', $this->user_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
         $this->dispatch('update-chart', data: $this->getHourlyPerformance());
         $this->dispatch('update-location-chart', data: $this->getPerformanceByLocation());
     }

@@ -8,7 +8,9 @@ use App\Livewire\Locations\LocationComponent;
 use App\Livewire\Modules\ModuleComponent;
 use App\Livewire\Review\ReviewComponent;
 use App\Livewire\Roles\RoleComponent;
+use App\Livewire\Tasks\FailureComponent;
 use App\Livewire\Tasks\TaskComponent;
+use App\Livewire\Tasks\GroupComponent;
 use App\Livewire\Users\UserComponent;
 use App\Livewire\Validation\ValidationComponent;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +45,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/modules', ModuleComponent::class)->name('modules');
     Route::get('/porductivity', ProductivityComponent::class)->name('productivity');
     Route::get('/viewer', ViewerComponent::class)->name('viewer');
+    Route::get('/failures', FailureComponent::class)->name('failures');
+    Route::get('/groups', GroupComponent::class)->name('groups');
 });
 // Route::get('/register', function(){
 //     return view('auth.register');

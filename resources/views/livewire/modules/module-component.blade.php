@@ -39,19 +39,35 @@
             <!-- module List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de módulos</h2>
-                <ul class="space-y-4">
-                    @forelse ($modules as $module)
-                        <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                            <span class="md:flex-wrap w-full">
-                                {{ $module->name }} - {{$module->url}} <br> {{$module->description}}
-                            </span>
-                            <button class="bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"  wire:click="edit({{ $module->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
-                            <button class="bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $module->id }}) : false;">@include('icons.delete') Eliminar</button>
-                        </li>
-                    @empty
-                        <li class="text-center text-gray-500 dark:text-gray-400">No hay módulos para mostrar.</li>
-                    @endforelse
-                </ul>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Nombre</th>
+                                <th scope="col" class="px-6 py-3">URL</th>
+                                <th scope="col" class="px-6 py-3">Descripción</th>
+                                <th scope="col" class="px-6 py-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($modules as $module)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ $module->name }}</td>
+                                    <td class="px-6 py-4">{{ $module->url }}</td>
+                                    <td class="px-6 py-4">{{ $module->description }}</td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button class="gap-2 px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex items-center justify-center" wire:click="edit({{ $module->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>
+                                        <button class="gap-2 px-3 py-2 bg-red-500 text-white rounded-lg flex items-center justify-center" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('destroy', {{ $module->id }}) : false;">@include('icons.delete') Eliminar</button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-gray-500 dark:text-gray-400">No hay módulos para mostrar.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

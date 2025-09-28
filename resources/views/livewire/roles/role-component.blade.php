@@ -69,9 +69,9 @@
                             @if ($role->modules->isNotEmpty())
                                 <div class="flex flex-col gap-2 mt-2 text-sm text-gray-600 dark:text-gray-300">
                                     <strong>Módulos asignados:</strong>
-                                    <div class="md:flex md:flex-row grid grid-cols-3 gap-2 items-center justify-left ml-4">
+                                    <div class="md:flex md:flex-row grid grid-cols-3 gap-2 items-center justify-left ml-4 w-full">
                                         @foreach ($role->modules as $module)
-                                            <span class="font-semibold bg-amber-600 rounded-full px-2 py-1 text-white">{{ $module->name }}</span>
+                                            <span class="font-semibold bg-amber-600 rounded-lg px-2 py-1 text-white">{{ $module->name }}</span>
                                         @endforeach
                                     </div>
                                 </div>

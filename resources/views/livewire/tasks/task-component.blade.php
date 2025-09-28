@@ -22,18 +22,19 @@
                             <label for="name">
                                 Nombre de la actividad:
                             </label>
-                            <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <input type="text" name="name" wire:model="name" id="name" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
                             <label for="main">
                                 ¿Es una actividad principal?:
                             </label>
-                            <select name="main" wire:model="main" x-model="main" id="main"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <select name="main" wire:model="main" x-model="main" id="main"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
                                 <option value="1">Si</option>
                                 <option value="0">No</option>
                             </select>
                             <label wire:show="main==0" for="parent">
                                 ¿Actividad principal a la que pertenece?:
                             </label>
-                            <select wire:show="main==0" name="parent" wire:model="parent" id="parent"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <select wire:show="main==0" name="parent" wire:model="parent" id="parent"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
+                                <option value="">Selecciona una tarea</option>
                                 @foreach ($mainTasks as $t)
                                     <option value="{{ $t->id }}">{{$t->name}}</option>
                                 @endforeach
@@ -55,7 +56,14 @@
 
             <!-- Task List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
+                <div class="flex md:flex-row flex-col items-center justify-between text-center mb-4 gap-4">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
+                    <div class="flex-grow">
+                        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar tarea por nombre..." class="w-full rounded-lg px-3 py-2 text-blue-950 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <button type="button" wire:click="deleteErrors()" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-purple-600 flex flex-row gap-2">@include('icons.tool') Borrar errores</button>
+                </div>
+
                 <ul class="space-y-4">
                     @forelse($tasks as $task)
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
@@ -75,7 +83,7 @@
                             <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                 onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitácoras de este elemento y las subtereas y sus respectivas bitácoras?') ? @this.call('destroy', {{ $task->id }}) : false;"
                             >@include('icons.delete') Eliminar</button>
-                            <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
                                 <option value="">Validaciones</option>
                                 @foreach ($validations as $v)
                                     <option value="{{ $v->id }}">{{$v->name}}:({{$v->value}})</option>
@@ -92,7 +100,7 @@
                                     <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2">
                                         Texto: {{$v->name}} <br> Valor: {{$v->value}}
                                         <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
-                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $st->id }},{{ $v->id }}) : false;"
+                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?') ? @this.call('unvalidate',{{ $task->id }},{{ $v->id }}) : false;"
                                         >@include('icons.delete') Eliminar</button>
                                     </span>
                                 @endforeach
@@ -108,7 +116,7 @@
                                     <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                         onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento, se eliminar las bitacoras de este elemento?') ? @this.call('destroy', {{ $st->id }}) : false;"
                                     >@include('icons.delete') Eliminar</button>
-                                    <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                                    <select name="validation" wire:model="validation" id="validation"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
                                         <option value="">Validaciones</option>
                                         @foreach ($validations as $v)
                                             <option value="{{ $v->id }}">{{$v->name}}:({{$v->value}})</option>

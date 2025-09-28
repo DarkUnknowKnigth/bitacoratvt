@@ -16,42 +16,52 @@ class ModuleSeeder extends Seeder
         Module::create([
             'name'=>'Usuarios',
             'url'=>'users',
-            'description'=>'Módulo para la gestion de usuarios'
+            'description'=>'Módulo para la gestión de usuarios'
         ]);
         Module::create([
             'name'=>'Roles',
             'url'=>'roles',
-            'description'=>'Módulo para la gestion de roles'
+            'description'=>'Módulo para la gestión de roles'
         ]);
         Module::create([
             'name'=>'Modulos',
             'url'=>'modules',
-            'description'=>'Módulo para la gestion de módulos'
+            'description'=>'Módulo para la gestión de módulos'
         ]);
         Module::create([
-            'name'=>'Bitacora',
+            'name'=>'Historial de bitácoras',
             'url'=>'reviews',
-            'description'=>'Módulo para la gestion de la bitácora'
+            'description'=>'Módulo para la gestión de la bitácora'
         ]);
         Module::create([
             'name'=>'Tareas',
             'url'=>'tasks',
-            'description'=>'Módulo para la gestion de tareas'
+            'description'=>'Módulo para la gestión de tareas'
         ]);
         Module::create([
             'name'=>'Sucursales',
             'url'=>'locations',
-            'description'=>'Módulo para la gestion de sucursales'
+            'description'=>'Módulo para la gestión de sucursales'
         ]);
         Module::create([
             'name'=>'Validaciones',
             'url'=>'validations',
-            'description'=>'Módulo para la gestion de validaciones'
+            'description'=>'Módulo para la gestión de validaciones'
         ]);
-            Module::create([
-            'name'=>'Dashboard',
+        Module::create([
+            'name'=>'Captura',
             'url'=>'home',
-            'description'=>'Módulo de dashboard'
+            'description'=>'Módulo de captura de bitacoras'
+        ]);
+        Module::create([
+            'name'=>'Bitácora',
+            'url'=>'viewer',
+            'description'=>'Módulo de visualización de bitácoras'
+        ]);
+        Module::create([
+            'name'=>'Fallas',
+            'url'=>'failures',
+            'description'=>'Módulo de gestión de fallas'
         ]);
     }
 }
