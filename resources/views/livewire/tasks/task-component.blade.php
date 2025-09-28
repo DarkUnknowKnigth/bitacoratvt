@@ -107,7 +107,7 @@
                             </li>
                         @endif
                         <ul class="space-y-2">
-                            @foreach ($task->subtasks as $st )
+                            @foreach ($task->subtasks->sortBy('name') as $st )
                                 <li class="flex flex-col gap-4 w-full md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                     <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">{{ $task->name }} -> {{ $st->name }}</span>
                                     <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
