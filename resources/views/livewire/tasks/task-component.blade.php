@@ -109,7 +109,18 @@
                         <ul class="space-y-2">
                             @foreach ($task->subtasks->sortBy('name') as $st )
                                 <li class="flex flex-col gap-4 w-full md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
-                                    <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">{{ $task->name }} -> {{ $st->name }}</span>
+                                    <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">
+                                        <span>
+                                            {{ $task->name }} -> {{ $st->name }}
+                                        </span>
+                                        <div class="flex flex-wrap gap-1 mt-2">
+                                        @forelse ($st->locations as $slocation)
+                                            <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $slocation->name }}</span>
+                                        @empty
+                                            <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
+                                        @endforelse
+                                </div>
+                                    </span>
                                     <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
                                         wire:click="edit({{ $st->id }}); document.getElementById('name').focus()"
                                     >@include('icons.edit') Editar</button>

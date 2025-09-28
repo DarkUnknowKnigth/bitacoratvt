@@ -45,6 +45,7 @@ class TaskComponent extends Component
     }
     public function mount()
     {
+        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations','locations'])->where('main', true)->get();
         $this->loadTasks();
         $this->validations = Validation::all();
         $this->locations = Location::all();
