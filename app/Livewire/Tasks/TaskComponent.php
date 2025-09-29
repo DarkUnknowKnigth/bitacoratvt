@@ -81,6 +81,7 @@ class TaskComponent extends Component
             foreach ($subtask->subReviews($task->id)->get() as $review) {
                 $review->delete();
             }
+            $subtask->failures()->delete();
             $subtask->delete();
         }
         $task->subtasks()->detach();
@@ -88,6 +89,7 @@ class TaskComponent extends Component
             $review->delete();
         }
         $task->locations()->detach();
+        $task->failures()->delete();
         $task->delete();
         $this->loadTasks();
         session()->flash('status', 'Tarea eliminada.');
