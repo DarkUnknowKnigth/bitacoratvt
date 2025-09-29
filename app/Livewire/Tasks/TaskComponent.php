@@ -148,6 +148,8 @@ class TaskComponent extends Component
             $task->validations()->detach();
             $task->reviews()->delete();
             $task->failures()->delete();
+            $task->group()->detach();
+            $task->locations()->detach();
             $task->subtasks()->detach();
             $task->delete();
         }
@@ -173,8 +175,12 @@ class TaskComponent extends Component
         foreach ($failures_with_deleted_tasks as $failure) {
             $failure->delete();
         }
+        // borrar las tareas eliminadas de grupos
+        $groups_with_deleted_tasks = DB::table('group_task')->whereNotIn('task_id', Task::pluck('id'));
+        $deleted_groups_count = $groups_with_deleted_tasks->count();
+        $groups_with_deleted_tasks->delete();
 
-        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s), $ghost_counter fantasma(s) y $deleted_failures_count fallos(s) huérfano(s).");
+        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s), $ghost_counter fantasma(s), $deleted_failures_count fallos(s) huérfano(s) y $deleted_groups_count grupos(s) huérfano(s).");
         // Recargar las tareas para reflejar los cambios en la vista
         $this->loadTasks();
         return redirect()->route('tasks');
