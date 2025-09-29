@@ -174,7 +174,7 @@ class TaskComponent extends Component
             $failure->delete();
         }
 
-        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s), $ghost_counter fantasma(s) y $deleted_failures_count failure(s) huérfano(s).");
+        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s), $ghost_counter fantasma(s) y $deleted_failures_count fallos(s) huérfano(s).");
         // Recargar las tareas para reflejar los cambios en la vista
         $this->loadTasks();
         return redirect()->route('tasks');
