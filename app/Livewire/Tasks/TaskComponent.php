@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tasks;
 
+use App\Models\Failure;
 use App\Models\Task;
 use App\Models\Validation;
 use Illuminate\Support\Facades\DB;
@@ -130,6 +131,8 @@ class TaskComponent extends Component
             // Eliminar relaciones y la tarea misma
             $task->validations()->detach();
             $task->reviews()->delete();
+            $task->failures()->delete();
+            $task->subtasks()->detach();
             $task->delete();
         }
         //parent ghost buster
@@ -141,9 +144,21 @@ class TaskComponent extends Component
         $ghost_counter += $ghost_parent_tasks->count();
         $ghost_parent_tasks->delete();
 
+        //buscar failures con tareas que han sido eliminadaas
+        $failures_with_deleted_tasks = Failure::whereNotIn('task_id', Task::pluck('id'))
+            ->orWhere(function ($query) {
+                $query->whereNotNull('subtask_id')
+                    ->whereNotIn('subtask_id', Task::pluck('id'));
+            })
+            ->get();
 
+        $deleted_failures_count = $failures_with_deleted_tasks->count();
 
-        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s) y $ghost_counter fanstasmas(s).");
+        foreach ($failures_with_deleted_tasks as $failure) {
+            $failure->delete();
+        }
+
+        session()->flash('status',"$deleted_count subtarea(s) huérfana(s) han sido eliminada(s), $ghost_counter fantasma(s) y $deleted_failures_count failure(s) huérfano(s).");
         // Recargar las tareas para reflejar los cambios en la vista
         $this->loadTasks();
         return redirect()->route('tasks');
