@@ -3,8 +3,10 @@
 namespace App\Livewire\Tasks;
 
 use App\Models\Failure;
+use App\Models\Location;
 use App\Models\Task;
 use App\Models\Validation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -16,6 +18,7 @@ class TaskComponent extends Component
     public $tasks = [];
     public $validations = [];
     public $mainTasks = [];
+    public $locations = [];
     public $task_id;
     #[Validate('required')]
     public $name;
@@ -25,14 +28,15 @@ class TaskComponent extends Component
     #[Validate('nullable')]
     public $parent;
     public $search = '';
-
+    public $location_ids = [];
     private function loadTasks()
     {
-        $this->tasks = Task::with(['subtasks', 'subtasks.validations'])
+        $this->tasks = Task::with(['subtasks', 'subtasks.validations','locations'])
             ->where('main', true)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
+            ->orderBy('name')
             ->get();
     }
 
@@ -42,9 +46,10 @@ class TaskComponent extends Component
     }
     public function mount()
     {
+        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations','locations'])->where('main', true)->get();
         $this->loadTasks();
-        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations'])->where('main', true)->get();
         $this->validations = Validation::all();
+        $this->locations = Location::all();
     }
 
     public function updatedSearch()
@@ -60,6 +65,10 @@ class TaskComponent extends Component
             $parentTask = Task::find($this->parent);
             $parentTask->subtasks()->attach($task->id);
         }
+        if ($this->location_ids && count($this->location_ids) > 0) {
+            $task->locations()->sync($this->location_ids);
+        }
+        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
         session()->flash('status', 'Tarea creada.');
         $this->loadTasks();
         return redirect()->route('tasks');
@@ -78,6 +87,7 @@ class TaskComponent extends Component
         foreach ($task->reviews()->get() as $review) {
             $review->delete();
         }
+        $task->locations()->detach();
         $task->delete();
         $this->loadTasks();
         session()->flash('status', 'Tarea eliminada.');
@@ -87,7 +97,7 @@ class TaskComponent extends Component
     {
         $this->name = $task->name;
         $this->main = $task->main;
-        // $this->password = $task->password;
+        $this->location_ids = $task->locations->pluck('id')->toArray();
         $this->task_id = $task->id;
     }
     public function update(Task $task)
@@ -95,7 +105,11 @@ class TaskComponent extends Component
         $this->validate();
         $task->update($this->only(['name', 'main']));
         $this->loadTasks();
+        if ($this->location_ids && count($this->location_ids) > 0) {
+            $task->locations()->sync($this->location_ids);
+        }
         session()->flash('status', 'Tarea actualizada.');
+        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
         return redirect()->route('tasks');
     }
     public function addValidation($task_id)

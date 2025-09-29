@@ -32,6 +32,10 @@ class Task extends Model
     public function mainTasks(){
         return $this->belongsToMany(Task::class, 'subtasks', 'subtask_id', 'task_id');
     }
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class, 'location_task', 'task_id', 'location_id');
+    }
     public function completedSubtasks($date, $location_id, ?User $user){
         return $this->hasMany(Review::class, 'task_id')->where([['date',$date],['location_id',$location_id]])->when($user->id,function($quer) use($user){
             $quer->where('user_id',$user->id);

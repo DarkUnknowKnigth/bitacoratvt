@@ -17,7 +17,10 @@ class Location extends Model
     {
         return $this->hasMany(User::class);
     }
-
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'location_task', 'location_id', 'task_id');
+    }
     /**
      * Obtiene las fallas reportadas en esta sucursal.
      */
