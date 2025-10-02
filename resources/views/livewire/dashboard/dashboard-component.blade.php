@@ -309,7 +309,7 @@
                         (position) => {
                             console.log('Ubicación obtenida:', position.coords);
                             @this.set('latitude', position.coords.latitude);
-                            @this.set('longitude', position.coords.latitude);
+                            @this.set('longitude', position.coords.longitude);
                         },
                         (error) => {
                             if (error.code === error.PERMISSION_DENIED) {
