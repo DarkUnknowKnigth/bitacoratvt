@@ -1,4 +1,21 @@
 <div class="min-h-screen dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
+    @php
+        $taskColors = [
+            'bg-blue-50 dark:bg-blue-900',
+            'bg-green-50 dark:bg-green-900',
+            'bg-yellow-50 dark:bg-yellow-900',
+            'bg-red-50 dark:bg-red-900',
+            'bg-indigo-50 dark:bg-indigo-900',
+            'bg-purple-50 dark:bg-purple-900',
+            'bg-pink-50 dark:bg-pink-900',
+            'bg-amber-50 dark:bg-amber-900',
+            'bg-lime-50 dark:bg-lime-900',
+            'bg-orange-50 dark:bg-orange-900',
+            'bg-teal-50 dark:bg-teal-900',
+            'bg-cyan-50 dark:bg-cyan-900',
+            'bg-fuchsia-50 dark:bg-fuchsia-900',
+        ];
+    @endphp
     <!-- Dashboard Header -->
     <div class="flex flex-col md:flex-row gap-2 items-center justify-between mb-8">
         <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Administrador de actividades</h1>
@@ -66,7 +83,10 @@
 
                 <ul class="space-y-4">
                     @forelse($tasks as $task)
-                        <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                        @php
+                            $custom_color =  $taskColors[array_rand($taskColors)];
+                        @endphp
+                        <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 {{ $custom_color }} rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <div class="md:w-1/2 w-full">
                                 <p class="font-bold">{{ $task->name }}</p>
                                 <div class="flex flex-wrap gap-1 mt-2">
@@ -108,10 +128,10 @@
                         @endif
                         <ul class="space-y-2">
                             @foreach ($task->subtasks->sortBy('name') as $st )
-                                <li class="flex flex-col gap-4 w-full md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                                <li class="ml-4 flex flex-col gap-4 w-full md:flex-row items-center justify-between {{ $custom_color }} p-4 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                     <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">
                                         <span>
-                                            {{ $task->name }} -> {{ $st->name }}
+                                            {{ $st->name }}
                                         </span>
                                         <div class="flex flex-wrap gap-1 mt-2">
                                         @forelse ($st->locations as $slocation)
@@ -138,7 +158,7 @@
                                     >@include('icons.add') Validación</button>
                                 </li>
                                 @if ($st->validations->count() > 0)
-                                    <li class="gap-4 md:grid md:grid-cols-4 flex flex-col items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                                    <li class="ml-8 gap-4 md:grid md:grid-cols-4 flex flex-col items-center justify-between p-4 {{ $custom_color }} rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                         <span class="px-3 py-2 rounded-lg md:col-span-4 col-span-2">Validaciones de {{ $st->name }}:</span>
                                         @foreach ($st->validations as $v)
                                             <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2 md:w-auto w-full items-center">
