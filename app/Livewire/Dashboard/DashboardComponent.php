@@ -93,6 +93,8 @@ class DashboardComponent extends Component
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,
             'location_id' => auth()->user()->location_id ?? 1,
+            'latitude'=>$this->latitude,
+            'longitude'=>$this->longitude,
         ]);
         $this->comments[$key] = '';
         $this->validation_ids[$key] = null;
