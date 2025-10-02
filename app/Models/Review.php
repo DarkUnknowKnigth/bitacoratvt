@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
-    protected $fillable = ['comments', 'task_id','subtask_id', 'user_id', 'location_id', 'validation_id', 'date', 'time','value'];
+    protected $fillable = ['comments', 'task_id','subtask_id', 'user_id', 'location_id', 'validation_id', 'date', 'time','value','latitude','longitude'];
     public function task()
     {
         return $this->belongsTo(Task::class);
