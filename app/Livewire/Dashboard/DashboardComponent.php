@@ -40,7 +40,7 @@ class DashboardComponent extends Component
             ->whereDoesntHave('group')
             ->with(['subtasks', 'subtasks.validations'])
             ->get();
-        $this->allTasks = DB::table('subtasks')->count()+DB::table('tasks')->where('main',true)->count();
+        $this->allTasks = DB::table('subtasks')->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
     }
