@@ -94,7 +94,7 @@
                 <td>Validación {{$nowFormated}}</td>
                 <td>Comentario</td>
                 <td>Fallas</td>
-                <td>Fecha y hora</td>
+                <td>Ubicación, fecha y hora</td>
             </tr>
             {{-- Iterar sobre las Subtareas --}}
             @foreach ($task->subtasks->sortBy('name') as $st)
@@ -188,7 +188,9 @@
                 </td>
                 <td>
                     @if ($reviewQuery->count() > 0)
-                    {{ $reviewQuery->first()->date }} {{ $reviewQuery->first()->time }}
+                    <a href="{{ route('map',['user'=>$reviewQuery->first()->user->id, 'date'=>  $reviewQuery->first()->date]) }}">
+                        @include('icons.map') {{ $reviewQuery->first()->date }} {{ $reviewQuery->first()->time }}
+                    </a>
                     @else
                     <div class="flex items-center gap-2 text-amber-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -249,7 +251,7 @@
                 <td>Validación {{$nowFormated}}</td>
                 <td>Comentario</td>
                 <td>Fallas</td>
-                <td>Fecha y hora</td>
+                <td>Ubicación, fecha y hora</td>
             </tr>
             @foreach ($task->subtasks->sortBy('name') as $st)
             <tr>
@@ -342,7 +344,10 @@
                 </td>
                 <td>
                     @if ($reviewQuery->count() > 0)
-                    {{ $reviewQuery->first()->date }} {{ $reviewQuery->first()->time }}
+                    <a href="{{ route('map',['user'=>$reviewQuery->first()->user->id, 'date'=>  $reviewQuery->first()->date]) }}">
+                        @include('icons.map')
+                        {{ $reviewQuery->first()->date }} {{ $reviewQuery->first()->time }}
+                    </a>
                     @else
                     <div class="flex items-center gap-2 text-amber-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
