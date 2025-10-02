@@ -77,7 +77,7 @@
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
                         <button
                             class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
-                            wire:click="reviewTask({{ $task->id }})">
+                            x-on:click="getLocationAndReview({{ $task->id }}, null)">
                             @include('icons.save')
                             Comentario general
                         </button>
@@ -147,7 +147,7 @@
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
                             <button
                                 class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                wire:click="reviewTask({{ $task->id }},{{ $st->id }})">
+                                x-on:click="getLocationAndReview({{ $task->id }}, {{ $st->id }})">
                                 @include('icons.validate')
                                 Validar
                             </button>
@@ -213,7 +213,7 @@
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
                         <button
                             class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
-                            wire:click="reviewTask({{ $task->id }})">
+                            x-on:click="getLocationAndReview({{ $task->id }}, null)">
                             @include('icons.save')
                             Comentario general
                         </button>
@@ -283,7 +283,7 @@
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
                             <button
                                 class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                wire:click="reviewTask({{ $task->id }},{{ $st->id }})">
+                                x-on:click="getLocationAndReview({{ $task->id }}, {{ $st->id }})">
                                 @include('icons.validate')
                                 Validar
                             </button>
@@ -300,31 +300,30 @@
             </div>
         </div>
     </div>
-    @script
-        <script>
-            //solicitar la ubicacion de la persona de no tener el permiso notificar por alert que no podra capturar sus tareas si no la comparte
-            document.addEventListener('livewire:initialized', async () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            console.log('Ubicación obtenida:', position.coords);
-                            @this.set('latitude', position.coords.latitude);
-                            @this.set('longitude', position.coords.longitude);
-                        },
-                        (error) => {
-                            if (error.code === error.PERMISSION_DENIED) {
-                                alert('El permiso de ubicación es necesario para registrar tus tareas. Por favor, habilita la ubicación en tu navegador.');
-                            } else {
-                                alert('No se pudo obtener la ubicación: ' + error.message);
-                            }
-                            console.error('Error al obtener la ubicación:', error);
-                        }
-                    );
-                } else {
-                    alert('Tu navegador no soporta la geolocalización. No podrás registrar tus tareas.');
-                }
-            });
+    <script>
+        function getLocationAndReview(taskId, subtaskId) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        console.log(`Ubicación para review: ${latitude}, ${longitude}`);
 
-        </script>
-    @endscript
+                        // Llama al método de Livewire con los datos de ubicación
+                        @this.reviewTask(taskId, subtaskId, latitude, longitude);
+                    },
+                    (error) => {
+                        if (error.code === error.PERMISSION_DENIED) {
+                            alert('El permiso de ubicación es necesario para registrar tus tareas. Por favor, habilita la ubicación en tu navegador.');
+                        } else {
+                            alert('No se pudo obtener la ubicación: ' + error.message);
+                        }
+                        console.error('Error al obtener la ubicación:', error);
+                    }
+                );
+            } else {
+                alert('Tu navegador no soporta la geolocalización. No podrás registrar tus tareas.');
+            }
+        }
+    </script>
 </div>

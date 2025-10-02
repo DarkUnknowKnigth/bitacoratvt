@@ -74,7 +74,7 @@ class DashboardComponent extends Component
 
         $this->reset('newTaskName', 'showForm');
     }
-    public function reviewTask(Task $task, ?Task $subtask = null){
+    public function reviewTask(Task $task, ?Task $subtask = null, $latitude = null, $longitude = null){
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
 
@@ -94,8 +94,8 @@ class DashboardComponent extends Component
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,
             'location_id' => auth()->user()->location_id ?? 1,
-            'latitude'=>$this->latitude,
-            'longitude'=>$this->longitude,
+            'latitude'=> $latitude,
+            'longitude'=> $longitude,
         ]);
         $this->comments[$key] = '';
         $this->validation_ids[$key] = null;
