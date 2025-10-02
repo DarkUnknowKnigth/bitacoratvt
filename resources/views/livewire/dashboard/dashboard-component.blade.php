@@ -300,4 +300,30 @@
             </div>
         </div>
     </div>
+    @script
+        <script>
+            //solicitar la ubicacion de la persona de no tener el permiso notificar por alert que no podra capturar sus tareas si no la comparte
+            document.addEventListener('livewire:initialized', async () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('Ubicación obtenida:', position.coords);
+                            @this.call('setLocation', position.coords.latitude, position.coords.longitude);
+                        },
+                        (error) => {
+                            if (error.code === error.PERMISSION_DENIED) {
+                                alert('El permiso de ubicación es necesario para registrar tus tareas. Por favor, habilita la ubicación en tu navegador.');
+                            } else {
+                                alert('No se pudo obtener la ubicación: ' + error.message);
+                            }
+                            console.error('Error al obtener la ubicación:', error);
+                        }
+                    );
+                } else {
+                    alert('Tu navegador no soporta la geolocalización. No podrás registrar tus tareas.');
+                }
+            });
+
+        </script>
+    @endscript
 </div>

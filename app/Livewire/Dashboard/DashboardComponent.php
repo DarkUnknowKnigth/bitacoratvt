@@ -25,6 +25,8 @@ class DashboardComponent extends Component
     public string $nowFormated = '';
     private string $nowTimeFormated = '';
     public $title = "Actividades diarias";
+    public $latitude;
+    public $longitude;
 
     // Método que se ejecuta al cargar el componente
     public function mount()
@@ -102,5 +104,9 @@ class DashboardComponent extends Component
 
         $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id',Auth::user()->location_id)->count();
         return view('livewire.dashboard.dashboard-component');
+    }
+    public function setLocation(float $latitude, float $longitude){
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
     }
 }
