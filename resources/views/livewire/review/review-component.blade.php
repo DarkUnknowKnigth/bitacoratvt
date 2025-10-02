@@ -179,6 +179,7 @@
                                 <th scope="col" class="px-6 py-3">Sucursal</th>
                                 <th scope="col" class="px-6 py-3">Valor</th>
                                 <th scope="col" class="px-6 py-3">Comentario</th>
+                                <th scope="col" class="px-6 py-3">Ubicación</th>
                                 <th scope="col" class="px-6 py-3">Acciones</th>
                             </tr>
                         </thead>
@@ -209,6 +210,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">{{ $review->comments }}</td>
+                                    <td class="px-6 py-4">{{ $review->latitude }} {{ $review->longitude }}</td>
                                     <td class="px-6 py-4">
                                         <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex items-center justify-center gap-2" wire:click="destroy({{ $review->id }})">
                                             @include('icons.delete') Eliminar
