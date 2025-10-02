@@ -75,12 +75,16 @@
                         <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                             name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}"
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
-                        <button
-                            class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
-                            x-on:click="getLocationAndReview({{ $task->id }}, null)">
-                            @include('icons.save')
-                            Comentario general
-                        </button>
+                        <div x-data="{ loading: false }" class="md:w-1/8 w-full">
+                            <button
+                                class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 text-center items-center justify-center w-full"
+                                x-on:click="loading = true; getLocationAndReview({{ $task->id }}, null)"
+                                x-bind:disabled="loading"
+                                x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                <span x-show="!loading">@include('icons.save') Comentario general</span>
+                                <span x-show="loading">Obteniendo ubicación...</span>
+                            </button>
+                        </div>
                         @endif
                     </li>
                     <ul class="space-y-2">
@@ -145,12 +149,16 @@
                             <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                                 name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}"
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
-                            <button
-                                class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                x-on:click="getLocationAndReview({{ $task->id }}, {{ $st->id }})">
-                                @include('icons.validate')
-                                Validar
-                            </button>
+                            <div x-data="{ loading: false }" class="md:w-auto w-full">
+                                <button
+                                    class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 items-center justify-center w-full"
+                                    x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
+                                    x-bind:disabled="loading"
+                                    x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                    <span x-show="!loading">@include('icons.validate') Validar</span>
+                                    <span x-show="loading">Obteniendo ubicación...</span>
+                                </button>
+                            </div>
                             <a
                                 class=" bg-red-500 text-white rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
                                 href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
@@ -211,12 +219,16 @@
                         <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                             name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}"
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
-                        <button
-                            class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-1/8 text-center items-center justify-center w-full"
-                            x-on:click="getLocationAndReview({{ $task->id }}, null)">
-                            @include('icons.save')
-                            Comentario general
-                        </button>
+                        <div x-data="{ loading: false }" class="md:w-1/8 w-full">
+                            <button
+                                class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 text-center items-center justify-center w-full"
+                                x-on:click="loading = true; getLocationAndReview({{ $task->id }}, null)"
+                                x-bind:disabled="loading"
+                                x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                <span x-show="!loading">@include('icons.save') Comentario general</span>
+                                <span x-show="loading">Obteniendo ubicación...</span>
+                            </button>
+                        </div>
                         @endif
                     </li>
                     <ul class="space-y-2">
@@ -281,12 +293,16 @@
                             <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                                 name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}"
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
-                            <button
-                                class=" bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                x-on:click="getLocationAndReview({{ $task->id }}, {{ $st->id }})">
-                                @include('icons.validate')
-                                Validar
-                            </button>
+                            <div x-data="{ loading: false }" class="md:w-auto w-full">
+                                <button
+                                    class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 items-center justify-center w-full"
+                                    x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
+                                    x-bind:disabled="loading"
+                                    x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                    <span x-show="!loading">@include('icons.validate') Validar</span>
+                                    <span x-show="loading">Obteniendo ubicación...</span>
+                                </button>
+                            </div>
                             @endif
                         </li>
                         @endforeach
@@ -301,28 +317,36 @@
         </div>
     </div>
     <script>
-        function getLocationAndReview(taskId, subtaskId) {
+        function getLocationAndReview(taskId, subtaskId = null) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
-                        console.log(`Ubicación para review: ${latitude}, ${longitude}`);
+                        console.log(`Ubicación obtenida: ${latitude}, ${longitude}`);
 
-                        // Llama al método de Livewire con los datos de ubicación
-                        @this.reviewTask(taskId, subtaskId, latitude, longitude);
+                        // 1. Establece las propiedades en Livewire
+                        @this.set('latitude', latitude);
+                        @this.set('longitude', longitude);
+
+                        // 2. Llama al método de Livewire DESPUÉS de establecer la ubicación
+                        @this.reviewTask(taskId, subtaskId);
                     },
                     (error) => {
                         if (error.code === error.PERMISSION_DENIED) {
                             alert('El permiso de ubicación es necesario para registrar tus tareas. Por favor, habilita la ubicación en tu navegador.');
                         } else {
-                            alert('No se pudo obtener la ubicación: ' + error.message);
+                            alert('No se pudo obtener la ubicación. Se registrará sin coordenadas. Error: ' + error.message);
                         }
                         console.error('Error al obtener la ubicación:', error);
+                        // Opcional: Registrar la tarea sin ubicación si falla
+                        @this.reviewTask(taskId, subtaskId);
                     }
                 );
             } else {
                 alert('Tu navegador no soporta la geolocalización. No podrás registrar tus tareas.');
+                // Opcional: Registrar la tarea sin ubicación si el navegador no es compatible
+                @this.reviewTask(taskId, subtaskId);
             }
         }
     </script>
