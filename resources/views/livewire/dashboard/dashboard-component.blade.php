@@ -308,7 +308,8 @@
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
                             console.log('Ubicación obtenida:', position.coords);
-                            @this.call('setLocation', position.coords.latitude, position.coords.longitude);
+                            @this.set('latitude', position.coords.latitude);
+                            @this.set('longitude', position.coords.latitude);
                         },
                         (error) => {
                             if (error.code === error.PERMISSION_DENIED) {
