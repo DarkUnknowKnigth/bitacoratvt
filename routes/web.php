@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/locations', LocationComponent::class)->name('locations');
     Route::get('/roles',RoleComponent::class)->name('roles');
     Route::get('/modules', ModuleComponent::class)->name('modules');
-    Route::get('/porductivity', ProductivityComponent::class)->name('productivity');
+    Route::get('/map/{user}/{date}', ProductivityComponent::class)->name('map');
     Route::get('/viewer', ViewerComponent::class)->name('viewer');
     Route::get('/failures', FailureComponent::class)->name('failures');
     Route::get('/groups', GroupComponent::class)->name('groups');

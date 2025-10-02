@@ -210,7 +210,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">{{ $review->comments }}</td>
-                                    <td class="px-6 py-4">{{ $review->latitude }} {{ $review->longitude }}</td>
+                                    <td class="px-6 py-4"><a href="{{ route('map',['user'=> $review->user->id, 'date'=> $nowDate]) }}">Ver ubicación</a></td>
                                     <td class="px-6 py-4">
                                         <button class="px-3 py-2 bg-red-500 text-white rounded-lg flex items-center justify-center gap-2" wire:click="destroy({{ $review->id }})">
                                             @include('icons.delete') Eliminar
