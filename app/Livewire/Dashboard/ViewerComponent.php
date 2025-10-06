@@ -56,6 +56,12 @@ class ViewerComponent extends Component
         $commonTaskQuery = function ($query) {
             $query
                 ->where('main', true)
+                ->where(function ($query) {
+                    $query->whereDoesntHave('locations')
+                        ->orWhereHas('locations', function ($locationQuery) {
+                            $locationQuery->where('locations.id', Auth::user()->location_id);
+                        });
+                })
                 ->when($this->specific_tasks, function ($query) {
                     $query->whereIn('tasks.id', $this->not_specific_tasks)
                         ->orWhereIn('tasks.id', $this->specific_tasks);
