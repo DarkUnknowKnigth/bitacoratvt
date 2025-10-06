@@ -34,7 +34,13 @@ class DashboardComponent extends Component
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
         $this->groups = Group::with([
             'tasks' => function ($query) {
-                $query->where('main', true)->with(['subtasks', 'subtasks.validations']);
+                $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
+                    ->where(function ($subQuery) {
+                        $subQuery->whereDoesntHave('locations')
+                            ->orWhereHas('locations', function ($locationQuery) {
+                                $locationQuery->where('locations.id', Auth::user()->location_id);
+                            });
+                    });
             }
         ])->orderBy('name')->get();
 
@@ -74,11 +80,12 @@ class DashboardComponent extends Component
 
         $this->reset('newTaskName', 'showForm');
     }
-    public function reviewTask(Task $task, ?Task $subtask = null){
+    public function reviewTask(Task $task, ?Task $subtask = null)
+    {
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
 
-        $key = $subtask->id ? 'st-'.$subtask->id : 't-'.$task->id;
+        $key = $subtask->id ? 'st-' . $subtask->id : 't-' . $task->id;
 
         $this->validate([
             "comments.{$key}" => 'nullable|string|max:255',
@@ -86,16 +93,16 @@ class DashboardComponent extends Component
 
         Review::create([
             'task_id' => $task->id,
-            'subtask_id' => $subtask? $subtask->id : null,
+            'subtask_id' => $subtask ? $subtask->id : null,
             'user_id' => auth()->user()->id,
             'validation_id' => $this->validation_ids[$key] ?? null,
-            'value'=> $this->validationValues[$key] ?? null,
+            'value' => $this->validationValues[$key] ?? null,
             'comments' => $this->comments[$key] ?? null,
             'date' => $this->nowFormated,
             'time' => $this->nowTimeFormated,
             'location_id' => auth()->user()->location_id ?? 1,
-            'latitude'=> $this->latitude,
-            'longitude'=> $this->longitude,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
         ]);
         $this->comments[$key] = '';
         $this->validation_ids[$key] = null;
@@ -105,7 +112,7 @@ class DashboardComponent extends Component
     public function render()
     {
 
-        $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id',Auth::user()->location_id)->count();
+        $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id', Auth::user()->location_id)->count();
         return view('livewire.dashboard.dashboard-component');
     }
 }
