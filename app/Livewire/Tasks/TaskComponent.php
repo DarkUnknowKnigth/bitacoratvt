@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tasks;
 
+use App\Models\Binnacle;
 use App\Models\Failure;
 use App\Models\Location;
 use App\Models\Task;
@@ -18,6 +19,7 @@ class TaskComponent extends Component
     public $tasks = [];
     public $validations = [];
     public $mainTasks = [];
+    public $binnacles = [];
     public $locations = [];
     public $task_id;
     #[Validate('required')]
@@ -29,6 +31,8 @@ class TaskComponent extends Component
     public $parent;
     public $search = '';
     public $location_ids = [];
+    #[Validate('nullable|numeric|exists:binnacles,id')]
+    public $binnacle_id;
     private function loadTasks()
     {
         $this->tasks = Task::with(['subtasks', 'subtasks.validations','locations'])
@@ -50,6 +54,7 @@ class TaskComponent extends Component
         $this->loadTasks();
         $this->validations = Validation::all();
         $this->locations = Location::all();
+        $this->binnacles = Binnacle::orderBy('name')->get();
     }
 
     public function updatedSearch()
@@ -60,7 +65,7 @@ class TaskComponent extends Component
     public function save()
     {
         $this->validate();
-        $task = Task::create($this->only(['name', 'main']));
+        $task = Task::create($this->only(['name', 'main', 'binnacle_id']));
         if ($this->parent && $this->main == 0) {
             $parentTask = Task::find($this->parent);
             $parentTask->subtasks()->attach($task->id);
@@ -68,7 +73,7 @@ class TaskComponent extends Component
         if ($this->location_ids && count($this->location_ids) > 0) {
             $task->locations()->sync($this->location_ids);
         }
-        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
+        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id', 'binnacle_id');
         session()->flash('status', 'Tarea creada.');
         $this->loadTasks();
         return redirect()->route('tasks');
@@ -103,18 +108,19 @@ class TaskComponent extends Component
         $this->name = $task->name;
         $this->main = $task->main;
         $this->location_ids = $task->locations->pluck('id')->toArray();
+        $this->binnacle_id = $task->binnacle_id;
         $this->task_id = $task->id;
     }
     public function update(Task $task)
     {
         $this->validate();
-        $task->update($this->only(['name', 'main']));
+        $task->update($this->only(['name', 'main', 'binnacle_id']));
         $this->loadTasks();
         if ($this->location_ids && count($this->location_ids) > 0) {
             $task->locations()->sync($this->location_ids);
         }
         session()->flash('status', 'Tarea actualizada.');
-        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
+        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id', 'binnacle_id');
         return redirect()->route('tasks');
     }
     public function addValidation($task_id)

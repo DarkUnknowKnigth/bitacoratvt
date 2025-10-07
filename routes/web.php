@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Livewire\Binnacle\BinnacleComponent;
 use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Dashboard\ProductivityComponent;
 use App\Livewire\Dashboard\ViewerComponent;
@@ -47,6 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/viewer', ViewerComponent::class)->name('viewer');
     Route::get('/failures', FailureComponent::class)->name('failures');
     Route::get('/groups', GroupComponent::class)->name('groups');
+    Route::get('/binnacles', BinnacleComponent::class)->name('binnacles');
 });
 // Route::get('/register', function(){
 //     return view('auth.register');

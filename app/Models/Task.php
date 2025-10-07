@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'main'];
+    protected $fillable = ['name', 'main','binnacle_id'];
     public function reviews()
     {
         return $this->hasMany(Review::class)->where('subtask_id',null);
@@ -61,5 +61,8 @@ class Task extends Model
     }
     public function group(){
         return $this->belongsToMany(Group::class,'group_task','task_id','group_id');
+    }
+    public function binnacle(){
+        return $this->belongsTo(Binnacle::class);
     }
 }

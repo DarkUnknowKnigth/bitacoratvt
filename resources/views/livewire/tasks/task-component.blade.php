@@ -55,6 +55,15 @@
                                     <option value="{{ $location->id }}">{{$location->name}}</option>
                                 @endforeach
                             </select>
+                            <label for="binnacle_id">
+                                Bitácora (Opcional):
+                            </label>
+                            <select name="binnacle_id" wire:model="binnacle_id" id="binnacle_id" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
+                                <option value="">Ninguna</option>
+                                @foreach ($binnacles as $binnacle)
+                                    <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
+                                @endforeach
+                            </select>
                             <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>
                         </div>
                     </form>
@@ -85,6 +94,9 @@
                                     @empty
                                         <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
                                     @endforelse
+                                    @if ($task->binnacle)
+                                        <span class="text-xs bg-gray-200 text-amber-800 dark:bg-amber-600 dark:text-gray-200 px-2 py-1 rounded-full">Bitácora {{$task->binnacle->name}}</span>
+                                    @endif
                                 </div>
                             </div>
                             <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
@@ -129,6 +141,9 @@
                                         @empty
                                             <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
                                         @endforelse
+                                        @if ($st->binnacle)
+                                            <span class="text-xs bg-gray-200 text-amber-800 dark:bg-amber-600 dark:text-gray-200 px-2 py-1 rounded-full">Bitácora {{$task->binnacle->name}}</span>
+                                        @endif
                                 </div>
                                     </span>
                                     <button class="px-3 py-2 bg-yellow-400 text-gray-900 rounded-lg flex flex-row gap-2 md:w-auto w-full items-center justify-center"
