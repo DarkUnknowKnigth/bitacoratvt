@@ -72,7 +72,7 @@
                             </span>
                         </span>
                         @else
-                        <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
+                        {{-- <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                             name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}"
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
                         <div x-data="{ loading: false }" class="md:w-1/8 w-full">
@@ -84,7 +84,7 @@
                                 <span x-show="!loading">@include('icons.save') Comentario general</span>
                                 <span x-show="loading">Obteniendo ubicación...</span>
                             </button>
-                        </div>
+                        </div> --}}
                         @endif
                     </li>
                     <ul class="space-y-2">
@@ -149,23 +149,25 @@
                             <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                                 name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}"
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
-                            <div x-data="{ loading: false }" class="md:w-auto w-full">
-                                <button
-                                    class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 items-center justify-center w-full"
-                                    x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
-                                    x-bind:disabled="loading"
-                                    x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
-                                    <span x-show="!loading">@include('icons.validate') Validar</span>
-                                    <span x-show="loading">Obteniendo ubicación...</span>
-                                </button>
+                            <div class="flex flex-row gap-2 w-1/2 md:max-w-2/8">
+                                <div x-data="{ loading: false }" class="w-1/2">
+                                    <button
+                                        class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
+                                        x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
+                                        x-bind:disabled="loading"
+                                        x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                        <span x-show="!loading" class="flex flex-row gap-2 items-center justify-center">@include('icons.validate') Validar Tarea</span>
+                                        <span x-show="loading">Obteniendo ubicación...</span>
+                                    </button>
+                                </div>
+                                <a
+                                    class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
+                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
+                                >
+                                    @include('icons.cancel')
+                                    Registrar Falla
+                                </a>
                             </div>
-                            <a
-                                class=" bg-red-500 text-white rounded-lg px-3 py-2 flex flex-row gap-2 md:w-auto items-center justify-center w-full"
-                                href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
-                            >
-                                @include('icons.cancel')
-                                Falla
-                            </a>
                             @endif
                         </li>
                         @endforeach
@@ -216,7 +218,7 @@
                             </span>
                         </span>
                         @else
-                        <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
+                        {{-- <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                             name="comment-{{ $task->id }}" id="comment-{{ $task->id.'.'.$task->id }}"
                             placeholder="Comentario (opcional)" wire:model="comments.t-{{$task->id}}">
                         <div x-data="{ loading: false }" class="md:w-1/8 w-full">
@@ -228,7 +230,7 @@
                                 <span x-show="!loading">@include('icons.save') Comentario general</span>
                                 <span x-show="loading">Obteniendo ubicación...</span>
                             </button>
-                        </div>
+                        </div> --}}
                         @endif
                     </li>
                     <ul class="space-y-2">
@@ -293,15 +295,24 @@
                             <input type="text" class="text-amber-700 rounded-lg px-3 py-2 w-full md:w-1/8 mt-2 md:mt-0"
                                 name="comment-{{ $st->id }}" id="comment-{{ $st->id.'.'.$st->id }}"
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
-                            <div x-data="{ loading: false }" class="md:w-auto w-full">
-                                <button
-                                    class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 items-center justify-center w-full"
-                                    x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
-                                    x-bind:disabled="loading"
-                                    x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
-                                    <span x-show="!loading">@include('icons.validate') Validar</span>
-                                    <span x-show="loading">Obteniendo ubicación...</span>
-                                </button>
+                            <div class="flex flex-row gap-2 w-1/2 md:max-w-2/8">
+                                <div x-data="{ loading: false }" class="w-1/2">
+                                    <button
+                                        class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
+                                        x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
+                                        x-bind:disabled="loading"
+                                        x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                        <span x-show="!loading" class="flex flex-row gap-2 items-center justify-center">@include('icons.validate') Validar Tarea</span>
+                                        <span x-show="loading">Obteniendo ubicación...</span>
+                                    </button>
+                                </div>
+                                <a
+                                    class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
+                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
+                                >
+                                    @include('icons.cancel')
+                                    Registrar Falla
+                                </a>
                             </div>
                             @endif
                         </li>

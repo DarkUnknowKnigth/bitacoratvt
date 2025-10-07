@@ -2,19 +2,9 @@
     @php
         $taskColors = [
             'bg-blue-50 dark:bg-blue-900',
-            'bg-green-50 dark:bg-green-900',
-            'bg-yellow-50 dark:bg-yellow-900',
-            'bg-red-50 dark:bg-red-900',
-            'bg-indigo-50 dark:bg-indigo-900',
-            'bg-purple-50 dark:bg-purple-900',
-            'bg-pink-50 dark:bg-pink-900',
-            'bg-amber-50 dark:bg-amber-900',
-            'bg-lime-50 dark:bg-lime-900',
-            'bg-orange-50 dark:bg-orange-900',
-            'bg-teal-50 dark:bg-teal-900',
-            'bg-cyan-50 dark:bg-cyan-900',
-            'bg-fuchsia-50 dark:bg-fuchsia-900',
+            'bg-amber-50 dark:bg-amber-900'
         ];
+        $subtaskColors = ['bg-blue-200 dark:bg-blue-700', 'bg-amber-200 dark:bg-amber-700']
     @endphp
     <!-- Dashboard Header -->
     <div class="flex flex-col md:flex-row gap-2 items-center justify-between mb-8">
@@ -82,9 +72,9 @@
                 </div>
 
                 <ul class="space-y-4">
-                    @forelse($tasks as $task)
+                    @forelse($tasks as $i => $task)
                         @php
-                            $custom_color =  $taskColors[array_rand($taskColors)];
+                            $custom_color =  ($i+1)%2 == 0 ? $taskColors[1] : $taskColors[0];
                         @endphp
                         <li class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 {{ $custom_color }} rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <div class="md:w-1/2 w-full">
@@ -127,8 +117,8 @@
                             </li>
                         @endif
                         <ul class="space-y-2">
-                            @foreach ($task->subtasks->sortBy('name') as $st )
-                                <li class="ml-4 flex flex-col gap-4 w-full md:flex-row items-center justify-between {{ $custom_color }} p-4 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                            @foreach ($task->subtasks->sortBy('name') as $index => $st )
+                                <li class="ml-4 flex flex-col gap-4 w-full md:flex-row items-center justify-between {{ ($index+1)%2 == 0 ? $subtaskColors[0] : $subtaskColors[1] }} p-4 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                     <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">
                                         <span>
                                             {{ $st->name }}
@@ -158,7 +148,7 @@
                                     >@include('icons.add') Validación</button>
                                 </li>
                                 @if ($st->validations->count() > 0)
-                                    <li class="ml-8 gap-4 md:grid md:grid-cols-4 flex flex-col items-center justify-between p-4 {{ $custom_color }} rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
+                                    <li class="ml-8 gap-4 md:grid md:grid-cols-4 flex flex-col items-center justify-between p-4 {{ ($index+1)%2 == 0 ? $subtaskColors[0] : $subtaskColors[1] }} rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                         <span class="px-3 py-2 rounded-lg md:col-span-4 col-span-2">Validaciones de {{ $st->name }}:</span>
                                         @foreach ($st->validations as $v)
                                             <span class="px-3 py-2 rounded-lg bg-amber-500 text-gray-900 flex md:flex-row flex-col justify-between gap-2 md:w-auto w-full items-center">
