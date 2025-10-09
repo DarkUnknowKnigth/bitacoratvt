@@ -123,7 +123,6 @@ class DashboardComponent extends Component
     }
     public function render()
     {
-
         $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id', Auth::user()->location_id)->count();
         return view('livewire.dashboard.dashboard-component');
     }

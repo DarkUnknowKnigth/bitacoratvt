@@ -33,12 +33,17 @@ class TaskComponent extends Component
     public $location_ids = [];
     #[Validate('nullable|numeric|exists:binnacles,id')]
     public $binnacle_id;
+    public $binnacle_query_id;
     private function loadTasks()
     {
         $this->tasks = Task::with(['subtasks', 'subtasks.validations','locations'])
             ->where('main', true)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->when($this->binnacle_query_id, function ($query) {
+                $query
+                ->where('binnacle_id', $this->binnacle_query_id);
             })
             ->orderBy('name')
             ->get();
@@ -58,6 +63,10 @@ class TaskComponent extends Component
     }
 
     public function updatedSearch()
+    {
+        $this->loadTasks();
+    }
+    public function updatedBinnacleQueryId()
     {
         $this->loadTasks();
     }
