@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Binnacle;
 use App\Models\Group;
 use App\Models\Review;
 use App\Models\Task;
@@ -35,16 +36,27 @@ class DashboardComponent extends Component
         $this->groups = Group::with([
             'tasks' => function ($query) {
                 $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
-                    ->where(function ($subQuery) {
-                        $subQuery->whereDoesntHave('locations')
-                            ->orWhereHas('locations', function ($locationQuery) {
-                                $locationQuery->where('locations.id', Auth::user()->location_id);
-                            });
-                    });
-            }
-        ])->orderBy('name')->get();
+                ->where('binnacle_id',
+                    Binnacle::where('location_id', Auth::user()->location->id)
+                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->select('id')
+                    ->get()
+                    ->pluck('id')
+                    ->toArray()
+                );
+            }]
+        )->orderBy('name')
+        ->get();
 
         $this->tasksWithoutGroup = Task::where('main', true)
+            ->where('binnacle_id',
+                Binnacle::where('location_id', Auth::user()->location->id)
+                ->orWhere('role_id', Auth::user()->role->id)
+                ->select('id')
+                ->get()
+                ->pluck('id')
+                ->toArray()
+            )
             ->whereDoesntHave('group')
             ->with(['subtasks', 'subtasks.validations'])
             ->get();

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Binnacle;
 use App\Models\Group;
 use App\Models\Location;
 use App\Models\Task;
@@ -17,22 +18,9 @@ class ViewerComponent extends Component
     public $selectedUser;
     public $selectedDate;
     public $prevDate;
-    private $specific_tasks;
-    private $not_specific_tasks;
 
     public function mount()
     {
-        $this->specific_tasks = DB::table('location_task')
-        ->select('task_id','location_id')
-        ->where('location_id', Auth::user()->location_id )
-        ->get()
-        ->pluck('task_id')
-        ->toArray();
-        $this->not_specific_tasks = Task::select('id')
-        ->whereNotIn('id', $this->specific_tasks)
-        ->get()
-        ->pluck('id')
-        ->toArray();
         $this->selectedDate = Carbon::now()->format('Y-m-d');
         $this->prevDate = Carbon::now()->subDay()->format('Y-m-d');
     }
@@ -56,16 +44,14 @@ class ViewerComponent extends Component
         $commonTaskQuery = function ($query) {
             $query
                 ->where('main', true)
-                ->where(function ($query) {
-                    $query->whereDoesntHave('locations')
-                        ->orWhereHas('locations', function ($locationQuery) {
-                            $locationQuery->where('locations.id', Auth::user()->location_id);
-                        });
-                })
-                ->when($this->specific_tasks, function ($query) {
-                    $query->whereIn('tasks.id', $this->not_specific_tasks)
-                        ->orWhereIn('tasks.id', $this->specific_tasks);
-                })
+                ->whereIn('binnacle_id',
+                    Binnacle::where('location_id', Auth::user()->location->id)
+                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->select('id')
+                    ->get()
+                    ->pluck('id')
+                    ->toArray()
+                )
                 ->with([
                     'locations',
                     'subtasks.validations',
@@ -87,7 +73,14 @@ class ViewerComponent extends Component
         $groups = Group::with(['tasks' => $commonTaskQuery])->get();
 
         $tasksWithoutGroup = Task::whereDoesntHave('group')
-            ->where($commonTaskQuery)
+            ->whereIn('binnacle_id',
+                Binnacle::where('location_id', Auth::user()->location->id)
+                ->orWhere('role_id', Auth::user()->role->id)
+                ->select('id')
+                ->get()
+                ->pluck('id')
+                ->toArray()
+            )
             ->get();
 
         return view('livewire.dashboard.viewer-component', [
