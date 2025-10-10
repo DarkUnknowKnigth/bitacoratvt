@@ -46,7 +46,8 @@
                                     <option value="{{ $t->id }}">{{$t->name}}</option>
                                 @endforeach
                             </select>
-                            {{-- <label for="location_ids">
+                            {{--
+                            <label for="location_ids">
                                 ¿A que sucursal(es) pertenece?:
                             </label>
                             <select name="location_ids" wire:model="location_ids" id="location_ids" multiple class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950 h-32">
@@ -54,7 +55,8 @@
                                 @foreach ($locations as $location)
                                     <option value="{{ $location->id }}">{{$location->name}}</option>
                                 @endforeach
-                            </select> --}}
+                            </select>
+                            --}}
                             <label for="binnacle_query_id">
                                 Bitácora (Opcional):
                             </label>
