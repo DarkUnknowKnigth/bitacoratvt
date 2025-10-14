@@ -97,11 +97,11 @@
                             <div class="md:w-1/2 w-full">
                                 <p class="font-bold">{{ $task->name }}</p>
                                 <div class="flex flex-wrap gap-1 mt-2">
-                                    @forelse ($task->locations as $location)
+                                    {{-- @forelse ($task->locations as $location)
                                         <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $location->name }}</span>
                                     @empty
                                         <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                                    @endforelse
+                                    @endforelse --}}
                                     @if ($task->binnacle)
                                         <span class="text-xs bg-gray-200 text-amber-800 dark:bg-amber-600 dark:text-gray-200 px-2 py-1 rounded-full">Bitácora {{$task->binnacle->name}}</span>
                                     @endif
@@ -144,11 +144,11 @@
                                             {{ $st->name }}
                                         </span>
                                         <div class="flex flex-wrap gap-1 mt-2">
-                                        @forelse ($st->locations as $slocation)
+                                        {{-- @forelse ($st->locations as $slocation)
                                             <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $slocation->name }}</span>
                                         @empty
                                             <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                                        @endforelse
+                                        @endforelse --}}
                                         @if ($st->binnacle)
                                             <span class="text-xs bg-gray-200 text-amber-800 dark:bg-amber-600 dark:text-gray-200 px-2 py-1 rounded-full">Bitácora {{$task->binnacle->name}}</span>
                                         @endif
