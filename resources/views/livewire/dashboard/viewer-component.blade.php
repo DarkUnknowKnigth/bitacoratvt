@@ -66,14 +66,6 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
-                    @if ($task->locations->first())
-                    <span
-                        class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{
-                        $task->locations->first()->name }}</span>
-                    @else
-                    <span
-                        class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                    @endif
                 </td>
                 <td>
                     Subtareas completadas
@@ -106,14 +98,7 @@
                 <td>
                     {{$st->name}}
                     <br>
-                    @if ($st->locations->first())
-                        <span
-                            class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{
-                            $st->locations->first()->name }}</span>
-                    @else
-                        <span
-                            class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                    @endif
+
                 </td>
                 <td>
                     <ul>
@@ -224,14 +209,7 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
-                    @if ($task->locations->first())
-                    <span
-                        class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{
-                        $task->locations->first()->name }}</span>
-                    @else
-                    <span
-                        class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                    @endif
+
                 </td>
                 <td>
                     Subtareas completadas
@@ -262,14 +240,7 @@
                 <td>
                     {{$st->name}}
                     <br>
-                    @if ($st->locations->first())
-                    <span
-                        class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{
-                        $st->locations->first()->name }}</span>
-                    @else
-                    <span
-                        class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                    @endif
+
                 </td>
                 <td>
                     <ul>

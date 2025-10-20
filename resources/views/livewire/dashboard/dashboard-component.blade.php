@@ -45,11 +45,7 @@
                         <span class="md:w-3/4 font-bold text-lg">
                             {{ $task->name }}
                             <br>
-                            @forelse ($task->locations as $location)
-                                <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $location->name }}</span>
-                            @empty
-                                <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                            @endforelse
+
                         </span>
                         @if ($task->completedReview($nowFormated, auth()->user()->location_id)->count() > 0)
                         @php
@@ -95,11 +91,7 @@
                                 <span class="font-bold">
                                     {{ $st->name }}
                                     <br>
-                                    @forelse ($st->locations as $location)
-                                        <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $location->name }}</span>
-                                    @empty
-                                        <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                                    @endforelse
+
 
                                 </span>
                                 <br>
@@ -190,11 +182,7 @@
                         class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                         <span class="md:w-3/4 font-bold text-lg">{{ $task->name }}
                         <br>
-                            @forelse ($task->locations as $location)
-                                <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $location->name }}</span>
-                            @empty
-                                <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                            @endforelse
+
 
                         </span>
                         @if ($task->completedReview($nowFormated, auth()->user()->location_id)->count() > 0)
@@ -241,11 +229,7 @@
                                 <span class="font-bold">
                                     {{ $st->name }}
                                     <br>
-                                    @forelse ($st->locations as $location)
-                                        <span class="text-xs bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-200 px-2 py-1 rounded-full">{{ $location->name }}</span>
-                                    @empty
-                                        <span class="text-xs bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200 px-2 py-1 rounded-full">Global</span>
-                                    @endforelse
+
 
                                 </span>
                                 <br>
