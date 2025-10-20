@@ -60,12 +60,19 @@ class DashboardComponent extends Component
             ->whereDoesntHave('group')
             ->with(['subtasks', 'subtasks.validations'])
             ->get();
-        $this->allTasks = DB::table('subtasks')->whereIn('tasK_id', Task::where('main',true)->whereIn('binnacle_id',  Binnacle::where('location_id', Auth::user()->location->id)
-                ->orWhere('role_id', Auth::user()->role->id)
-                ->select('id')
-                ->get()
+        $this->allTasks = DB::table('subtasks')->whereIn('tasK_id', Task::where('main',true)
+                ->whereIn('binnacle_id',
+                    Binnacle::where('location_id', Auth::user()->location->id)
+                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->select('id')
+                    ->get()
+                    ->pluck('id')
+                    ->toArray()
+                )
                 ->pluck('id')
-                ->toArray()))->count();
+                ->toArray()
+            )
+            ->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
     }
