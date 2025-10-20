@@ -66,6 +66,8 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
+
+                    {{ $task->binnacle->name }}
                 </td>
                 <td>
                     Subtareas completadas
@@ -98,7 +100,7 @@
                 <td>
                     {{$st->name}}
                     <br>
-
+                    {{ $st->binnacle->name }}
                 </td>
                 <td>
                     <ul>
@@ -209,7 +211,7 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
-
+                    {{ $task->binnacle->name }}
                 </td>
                 <td>
                     Subtareas completadas
@@ -240,7 +242,7 @@
                 <td>
                     {{$st->name}}
                     <br>
-
+                    {{ $st->binnacle->name }}
                 </td>
                 <td>
                     <ul>
