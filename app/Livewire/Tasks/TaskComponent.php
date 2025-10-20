@@ -70,6 +70,14 @@ class TaskComponent extends Component
     {
         $this->loadTasks();
     }
+    public function updatedParent($value){
+        // asigna el binnecle id que tenga la tarea padre
+        Task::find($value)->binnacle_id;
+        if ($this->parent) {
+            $parentTask = Task::find($this->parent);
+            $this->binnacle_id = $parentTask->binnacle_id;
+        }
+    }
 
     public function save()
     {
