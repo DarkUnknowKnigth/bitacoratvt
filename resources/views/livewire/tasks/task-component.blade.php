@@ -58,9 +58,9 @@
                             </select>
                             --}}
                             <label for="binnacle_query_id">
-                                Bitácora (Opcional):
+                                Bitácora:
                             </label>
-                            <select name="binnacle_id" wire:model="binnacle_id" id="binnacle_id" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
+                            <select name="binnacle_id" required wire:model="binnacle_id" id="binnacle_id" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
                                 <option value="">Ninguna</option>
                                 @foreach ($binnacles as $binnacle)
                                     <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
