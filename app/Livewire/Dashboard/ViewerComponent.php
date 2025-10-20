@@ -45,7 +45,7 @@ class ViewerComponent extends Component
             $query
                 ->where('main', true)
                 ->whereIn('binnacle_id',
-                    Binnacle::where('location_id', Auth::user()->location->id)
+                    Binnacle::whereIn('location_id', Auth::user()->location->id)
                     ->orWhere('role_id', Auth::user()->role->id)
                     ->select('id')
                     ->get()
@@ -74,7 +74,7 @@ class ViewerComponent extends Component
 
         $tasksWithoutGroup = Task::whereDoesntHave('group')
             ->whereIn('binnacle_id',
-                Binnacle::where('location_id', Auth::user()->location->id)
+                Binnacle::whereIn('location_id', Auth::user()->location->id)
                 ->orWhere('role_id', Auth::user()->role->id)
                 ->select('id')
                 ->get()

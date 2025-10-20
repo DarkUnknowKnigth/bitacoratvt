@@ -36,7 +36,7 @@ class DashboardComponent extends Component
         $this->groups = Group::with([
             'tasks' => function ($query) {
                 $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
-                ->where('binnacle_id',
+                ->whereIn('binnacle_id',
                     Binnacle::where('location_id', Auth::user()->location->id)
                     ->orWhere('role_id', Auth::user()->role->id)
                     ->select('id')
@@ -49,7 +49,7 @@ class DashboardComponent extends Component
         ->get();
 
         $this->tasksWithoutGroup = Task::where('main', true)
-            ->where('binnacle_id',
+            ->whereIn('binnacle_id',
                 Binnacle::where('location_id', Auth::user()->location->id)
                 ->orWhere('role_id', Auth::user()->role->id)
                 ->select('id')
@@ -60,7 +60,7 @@ class DashboardComponent extends Component
             ->whereDoesntHave('group')
             ->with(['subtasks', 'subtasks.validations'])
             ->get();
-        $this->allTasks = DB::table('subtasks')->count();
+        $this->allTasks = DB::table('subtasks')->whereIn('tasK_id', Task::where('main',true)->where('binnacle_id')->pluck('id')->toArray())->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
     }
