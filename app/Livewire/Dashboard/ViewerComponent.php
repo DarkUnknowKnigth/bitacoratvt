@@ -73,6 +73,7 @@ class ViewerComponent extends Component
         $groups = Group::with(['tasks' => $commonTaskQuery])->get();
 
         $tasksWithoutGroup = Task::whereDoesntHave('group')
+            ->where('main', true)
             ->whereIn('binnacle_id',
                 Binnacle::where('location_id', Auth::user()->location->id)
                 ->orWhere('role_id', Auth::user()->role->id)
@@ -81,6 +82,23 @@ class ViewerComponent extends Component
                 ->pluck('id')
                 ->toArray()
             )
+            ->with([
+                'locations',
+                'subtasks.validations',
+                'subtasks.subtaskFailures',
+                'reviews' => function ($reviewQuery) {
+                    $reviewQuery->where('date', $this->selectedDate)
+                        ->when($this->selectedLocation, fn($q) => $q->where('location_id', $this->selectedLocation))
+                        ->when($this->selectedUser, fn($q) => $q->where('user_id', $this->selectedUser));
+                },
+                'subtasks.reviews' => function ($reviewQuery) {
+                    $reviewQuery->where('date', $this->selectedDate)
+                        ->when($this->selectedLocation, fn($q) => $q->where('location_id', $this->selectedLocation))
+                        ->when($this->selectedUser, fn($q) => $q->where('user_id', $this->selectedUser));
+                },
+                'subtasks.reviews.validation'
+            ])
+            ->orderBy('name')
             ->get();
 
         return view('livewire.dashboard.viewer-component', [
