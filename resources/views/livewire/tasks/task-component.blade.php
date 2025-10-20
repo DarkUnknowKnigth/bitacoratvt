@@ -76,7 +76,7 @@
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                 <div class="flex md:flex-row flex-col items-center justify-between text-center mb-4 gap-4">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
-                    <select name="binnacle_query_id" wire:model="binnacle_query_id" id="binnacle_query_id">
+                    <select name="binnacle_query_id" wire:model="binnacle_query_id" id="binnacle_query_id" wire:change="loadTasks();">
                         <option value="">Todas las bitácoras</option>
                         @foreach ($binnacles as $binnacle)
                             <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
