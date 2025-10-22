@@ -20,7 +20,8 @@
                 @include('partials._validation')
                 <div class="flex flex-col items-center justify-center text-center w-full">
                     <form wire:submit.prevent="{{ $binnacle_id ? 'update(' . $binnacle_id . ')' : 'save' }}"
-                        class="w-full">
+                        class="w-full"
+                        x-data="{type: $wire.entangle('type')}">
                         <div
                             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 items-center justify-center w-full">
                             <!-- Nombre -->
@@ -40,10 +41,10 @@
                                 </select>
                             </div>
                             <!-- Ubicación -->
-                            <div class="flex flex-col">
+                            <div class="flex flex-col" x-show="type == 'location'">
                                 <label for="location_id" class="mb-1">Ubicación:</label>
                                 <select wire:model="location_id" id="location_id"
-                                    class="w-full rounded-lg px-3 py-2 text-blue-950 dark:bg-slate-700 dark:text-gray-100">
+                                    class="w-full rounded-lg px-3 py-2 text-blue-950 dark:bg-slate-700 dark:text-gray-100 disabled:bg-slate-200 dark:disabled:bg-slate-600 disabled:cursor-not-allowed">
                                     <option value="">Ninguna</option>
                                     @foreach($locations as $location)
                                     <option value="{{ $location->id }}">{{ $location->name }}</option>
@@ -51,10 +52,10 @@
                                 </select>
                             </div>
                             <!-- Rol -->
-                            <div class="flex flex-col">
+                            <div class="flex flex-col" x-show="type == 'role'">
                                 <label for="role_id" class="mb-1">Rol Asignado:</label>
                                 <select wire:model="role_id" id="role_id"
-                                    class="w-full rounded-lg px-3 py-2 text-blue-950 dark:bg-slate-700 dark:text-gray-100">
+                                    class="w-full rounded-lg px-3 py-2 text-blue-950 dark:bg-slate-700 dark:text-gray-100 disabled:bg-slate-200 dark:disabled:bg-slate-600 disabled:cursor-not-allowed">
                                     <option value="">Ninguna</option>
                                     @foreach($roles as $role)
                                     <option value="{{ $role->id }}">{{ $role->name }}</option>

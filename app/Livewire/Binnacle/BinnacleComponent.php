@@ -53,12 +53,27 @@ class BinnacleComponent extends Component
     public function save()
     {
         $this->validate();
-        if($this->role_id && $this->location_id){
-            session()->flash('status', 'Seleccione solo una opcion de bitácora, debe de decidir si quiere que la modalidad de rol o de ubicacion no ambass.');
+
+        // Validar que solo uno de los dos (rol o ubicación) esté seleccionado
+        if ($this->type === 'location' && !$this->location_id) {
+            $this->addError('location_id', 'Debe seleccionar una ubicación para este tipo de bitácora.');
+            return;
+        }
+        if ($this->type === 'role' && !$this->role_id) {
+            $this->addError('role_id', 'Debe seleccionar un rol para este tipo de bitácora.');
+            return;
+        }
+
+        // Doble verificación para evitar que se guarden ambos por error
+        if ($this->role_id && $this->location_id) {
+            session()->flash('status', 'Error: No se pueden asignar una ubicación y un rol a la misma bitácora. Por favor, elija solo uno.');
             return redirect()->route('binnacles');
         }
 
-        Binnacle::create($this->only(['name', 'type', 'location_id', 'role_id']));
+        Binnacle::create($this->only(['name', 'type']) + [
+            'location_id' => $this->type === 'location' ? $this->location_id : null,
+            'role_id' => $this->type === 'role' ? $this->role_id : null,
+        ]);
 
         session()->flash('status', 'Bitácora creada exitosamente.');
         $this->resetFields();
@@ -77,7 +92,14 @@ class BinnacleComponent extends Component
     public function update(Binnacle $binnacle)
     {
         $this->validate();
-        $binnacle->update($this->only(['name', 'type', 'location_id', 'role_id']));
+
+        // Asegurar que solo se guarde el ID correspondiente al tipo
+        $data = $this->only(['name', 'type']);
+        $data['location_id'] = $this->type === 'location' ? $this->location_id : null;
+        $data['role_id'] = $this->type === 'role' ? $this->role_id : null;
+
+        $binnacle->update($data);
+
         session()->flash('status', 'Bitácora actualizada exitosamente.');
         $this->resetFields();
         return redirect()->route('binnacles');
@@ -94,5 +116,22 @@ class BinnacleComponent extends Component
     {
         $this->reset(['binnacle_id', 'name', 'type', 'location_id', 'role_id']);
         $this->resetErrorBag();
+    }
+
+    public function updatedType($value)
+    {
+        // Limpiar los campos de ID cuando cambia el tipo para evitar confusiones
+        $this->location_id = null;
+        $this->role_id = null;
+    }
+
+    public function updatedLocationId($value)
+    {
+        if ($value) $this->role_id = null;
+    }
+
+    public function updatedRoleId($value)
+    {
+        if ($value) $this->location_id = null;
     }
 }
