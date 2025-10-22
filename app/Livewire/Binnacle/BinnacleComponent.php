@@ -53,6 +53,10 @@ class BinnacleComponent extends Component
     public function save()
     {
         $this->validate();
+        if($this->role_id && $this->location_id){
+            session()->flash('status', 'Seleccione solo una opcion de bitácora, debe de decidir si quiere que la modalidad de rol o de ubicacion no ambass.');
+            return redirect()->route('binnacles');
+        }
 
         Binnacle::create($this->only(['name', 'type', 'location_id', 'role_id']));
 
