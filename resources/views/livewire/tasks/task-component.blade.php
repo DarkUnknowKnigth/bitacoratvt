@@ -26,6 +26,15 @@
                 <div class="flex flex-col items-center justify-center text-center">
                     <form wire:submit="{{$task_id?'update('.$task_id.')':'save()'}}" method="post">
                         <div class="flex flex-col md:grid md:grid-cols-4 gap-5 items-start justify-center w-full">
+                            <label for="binnacle_id">
+                                Bitácora:
+                            </label>
+                            <select name="binnacle_id" required wire:model="binnacle_id" wire:change="loadTasks()" id="binnacle_id" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950" >
+                                <option value="">Selecciona una bitácora</option>
+                                @foreach ($binnacles as $binnacle)
+                                    <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
+                                @endforeach
+                            </select>
                             <label for="name">
                                 Nombre de la actividad:
                             </label>
@@ -40,10 +49,10 @@
                             <label wire:show="main==0" for="parent">
                                 ¿Actividad principal a la que pertenece?:
                             </label>
-                            <select wire:show="main==0" name="parent" wire:model="parent" id="parent"  class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
+                            <select wire:show="main==0" name="parent" wire:model="parent" id="parent" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950" wire:change="setBinnacle()">
                                 <option value="">Selecciona una tarea</option>
                                 @foreach ($mainTasks as $t)
-                                    <option value="{{ $t->id }}">{{$t->name}}</option>
+                                    <option value="{{ $t->id }}" wire:key="opt-{{ $t->id }}" wire:click="$set('binnacle_id','{{ $t->binnacle_id }}')">{{$t->name}}</option>
                                 @endforeach
                             </select>
                             {{--
@@ -57,15 +66,7 @@
                                 @endforeach
                             </select>
                             --}}
-                            <label for="binnacle_query_id">
-                                Bitácora:
-                            </label>
-                            <select name="binnacle_id" required wire:model="binnacle_id" id="binnacle_id" class="w-full md:w-auto rounded-lg px-3 py-2 text-blue-950">
-                                <option value="">Ninguna</option>
-                                @foreach ($binnacles as $binnacle)
-                                    <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
-                                @endforeach
-                            </select>
+
                             <button type="submit" class="col-span-2 w-full text-white md:w-auto px-3 py-2 rounded-lg bg-amber-600 flex flex-row gap-2">@include('icons.save') Guardar</button>
                         </div>
                     </form>
@@ -76,12 +77,6 @@
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                 <div class="flex md:flex-row flex-col items-center justify-between text-center mb-4 gap-4">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
-                    <select name="binnacle_query_id" wire:model="binnacle_query_id" id="binnacle_query_id">
-                        <option value="">Todas las bitácoras</option>
-                        @foreach ($binnacles as $binnacle)
-                            <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
-                        @endforeach
-                    </select>
                     <div class="flex-grow">
                         <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar tarea por nombre..." class="w-full rounded-lg px-3 py-2 text-blue-950 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     </div>

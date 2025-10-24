@@ -34,54 +34,48 @@ class TaskComponent extends Component
     #[Validate('nullable|numeric|exists:binnacles,id')]
     public $binnacle_id;
     public $binnacle_query_id;
-    private function loadTasks()
+    public function loadTasks()
     {
         $this->tasks = Task::with(['subtasks', 'subtasks.validations','locations'])
             ->where('main', true)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
-            ->when($this->binnacle_query_id, function ($query) {
+            ->when($this->binnacle_id, function ($query) {
                 $query
-                ->where('binnacle_id', $this->binnacle_query_id);
+                ->where('binnacle_id', $this->binnacle_id);
             })
             ->orderBy('name')
             ->get();
     }
-
+    public function setBinnacle(){
+        $this->binnacle_id = Task::find($this->parent)->binnacle_id;
+    }
     public function render()
     {
+
+        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations','locations'])
+        ->when($this->binnacle_id, function($query){
+            $query->where('binnacle_id',$this->binnacle_id);
+        })
+        ->where('main', true)->get();
         return view('livewire.tasks.task-component');
     }
     public function mount()
     {
-        $this->mainTasks = Task::with(['subtasks', 'subtasks.validations','locations'])->where('main', true)->get();
         $this->loadTasks();
         $this->validations = Validation::all();
         $this->locations = Location::all();
         $this->binnacles = Binnacle::orderBy('name')->get();
     }
 
-    public function updatedSearch()
-    {
-        $this->loadTasks();
-    }
-    public function updatedBinnacleQueryId()
-    {
-        $this->loadTasks();
-    }
-    public function updatedParent($value){
-        // asigna el binnecle id que tenga la tarea padre
-        Task::find($value)->binnacle_id;
-        if ($this->parent) {
-            $parentTask = Task::find($this->parent);
-            $this->binnacle_id = $parentTask->binnacle_id;
-        }
-    }
-
     public function save()
     {
         $this->validate();
+        if(!$this->main){
+            $parentTask = Task::find($this->parent);
+            $this->binnacle_id = $parentTask->binnacle_id;
+        }
         $task = Task::create($this->only(['name', 'main', 'binnacle_id']));
         if ($this->parent && $this->main == 0) {
             $parentTask = Task::find($this->parent);
@@ -90,10 +84,10 @@ class TaskComponent extends Component
         if ($this->location_ids && count($this->location_ids) > 0) {
             $task->locations()->sync($this->location_ids);
         }
-        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id', 'binnacle_id');
-        session()->flash('status', 'Tarea creada.');
+        $this->reset('name', 'main', 'parent', 'location_ids', 'task_id');
+        // session()->flash('status', 'Tarea creada.');
         $this->loadTasks();
-        return redirect()->route('tasks');
+        // return redirect()->route('tasks');
     }
     public function destroy(Task $task)
     {
@@ -136,9 +130,9 @@ class TaskComponent extends Component
         if ($this->location_ids && count($this->location_ids) > 0) {
             $task->locations()->sync($this->location_ids);
         }
-        session()->flash('status', 'Tarea actualizada.');
+        // session()->flash('status', 'Tarea actualizada.');
         $this->reset('name', 'main', 'parent', 'location_ids', 'task_id', 'binnacle_id');
-        return redirect()->route('tasks');
+        // return redirect()->route('tasks');
     }
     public function addValidation($task_id)
     {
