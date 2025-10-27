@@ -45,7 +45,7 @@ class TaskComponent extends Component
                 $query
                 ->where('binnacle_id', $this->binnacle_id);
             })
-            ->orderBy('name')
+            ->orderBy('id')
             ->get();
     }
     public function setBinnacle(){
