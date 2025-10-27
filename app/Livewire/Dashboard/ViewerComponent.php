@@ -68,7 +68,7 @@ class ViewerComponent extends Component
                     },
                     'subtasks.reviews.validation'
                 ])
-                ->orderBy('name');
+                ->orderBy('id');
         };
         $groups = Group::with(['tasks' => $commonTaskQuery])->get();
 
@@ -98,7 +98,7 @@ class ViewerComponent extends Component
                 },
                 'subtasks.reviews.validation'
             ])
-            ->orderBy('name')
+            ->orderBy('id')
             ->get();
 
         return view('livewire.dashboard.viewer-component', [

@@ -45,7 +45,7 @@ class DashboardComponent extends Component
                     ->toArray()
                 );
             }]
-        )->orderBy('name')
+        )->orderBy('id')
         ->get();
 
         $this->tasksWithoutGroup = Task::where('main', true)
