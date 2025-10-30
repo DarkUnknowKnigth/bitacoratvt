@@ -141,10 +141,10 @@ class TaskComponent extends Component
             $task->validations()->attach($this->validation);
             $this->loadTasks();
             session()->flash('status', 'Validación agregada a la tarea.');
-            return redirect()->route('tasks');
+            // return redirect()->route('tasks');
         }
         session()->flash('error', 'No se pudo agregar la validación.');
-        return redirect()->route('tasks');
+        // return redirect()->route('tasks');
     }
     public function unvalidate(Task $task, Validation $validation)
     {
