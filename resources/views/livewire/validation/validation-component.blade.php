@@ -32,7 +32,7 @@
                             </label>
                             <select name="task" wire:model="task" id="task"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
                                 <option value="">Selecciona una opción</option>
-                                @foreach ($tasks->sortBy('name') as $t)
+                                @foreach ($tasks->sortBy('id') as $t)
                                     <option value="{{ $t->id }}"> {{$t->main ? '': $t->mainTasks()->first()->name.' ->'}} {{$t->name}} - {{$t->main ? 'Principal':'Subtarea'}}</option>
                                 @endforeach
                             </select>
