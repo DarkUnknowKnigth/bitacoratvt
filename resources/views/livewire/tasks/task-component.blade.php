@@ -132,7 +132,7 @@
                             </li>
                         @endif
                         <ul class="space-y-2">
-                            @foreach ($task->subtasks->sortBy('name') as $index => $st )
+                            @foreach ($task->subtasks->sortBy('name','desc') as $index => $st )
                                 <li class="ml-4 flex flex-col gap-4 w-full md:flex-row items-center justify-between {{ ($index+1)%2 == 0 ? $subtaskColors[0] : $subtaskColors[1] }} p-4 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                                     <span class="dark:text-amber-500 text-amber-800 ml-2 md:w-3/4 w-full">
                                         <span>
