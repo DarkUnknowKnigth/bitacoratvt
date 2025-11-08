@@ -91,7 +91,7 @@
                 <td>Ubicación, fecha y hora</td>
             </tr>
             {{-- Iterar sobre las Subtareas --}}
-            @foreach ($task->subtasks->sortBy('name') as $st)
+            @foreach ($task->subtasks->sortBy('id') as $st)
             <tr>
                 @php
                 $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id);
@@ -233,7 +233,7 @@
                 <td>Fallas</td>
                 <td>Ubicación, fecha y hora</td>
             </tr>
-            @foreach ($task->subtasks->sortBy('name') as $st)
+            @foreach ($task->subtasks->sortBy('id') as $st)
             <tr>
                 @php
                 $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id);
