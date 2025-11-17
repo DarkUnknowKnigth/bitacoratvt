@@ -199,7 +199,7 @@
             <thead class="bg-gray-100 dark:bg-gray-700">
                 <tr>
                     <th colspan="6" class="px-4 py-3 text-lg font-bold text-gray-800 dark:text-gray-300">
-                        Otras Tareas (Sin Grupo)
+                        {{-- Otras Tareas (Sin Grupo) --}}
                     </th>
                 </tr>
             </thead>
