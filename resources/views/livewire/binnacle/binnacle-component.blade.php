@@ -89,10 +89,18 @@
                             <p class="text-sm text-gray-600 dark:text-gray-300">
                                 Tipo: <span class="font-medium capitalize">{{ $binnacle->type }}</span>
                                 @if ($binnacle->type == 'location')
+                                    @if ($binnacle->location)
                                     Ubicación: <span class="font-medium">{{ $binnacle->location->name }}</span>
+                                    @else
+                                    Ubicación: <span class="font-medium">Asignada incorectamente</span>
+                                    @endif
                                 @endif
                                 @if ($binnacle->type == 'role')
+                                    @if ($binnacle->role)
                                     Rol: <span class="font-medium">{{ $binnacle->role->name }}</span>
+                                    @else
+                                    Rol: <span class="font-medium">Asignado incorectamente</span>
+                                    @endif
                                 @endif
                             </p>
                         </div>
