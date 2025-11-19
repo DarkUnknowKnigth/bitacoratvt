@@ -21,7 +21,7 @@
                     </span>
                     <span>
                         Sucursal
-                        @if (auth()->user()->role->slug=='admin')
+                        @if (auth()->user()->roles->pluck('slug')->contains('admin'))
                         <select name="location_id" wire:model="location_id" id="location_id"
                             class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950" wire:change="reloadReviews">
                             <option value="">Todos</option>
@@ -54,7 +54,7 @@
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Rendimiento por hora</h2>
                     <canvas id="performanceChart" style="max-height: 500px;"></canvas>
                 </div>
-                @if (auth()->user()->role->slug == 'admin')
+                @if (auth()->user()->roles->pluck('slug')->contains('admin'))
                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Rendimiento por Sucursal</h2>
                     <canvas id="locationChart" style="max-height: 500px;"></canvas>

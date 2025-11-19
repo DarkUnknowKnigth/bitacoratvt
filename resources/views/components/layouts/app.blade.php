@@ -23,9 +23,13 @@
             </header>
             <nav class="p-8 -mt-4 bg-blue-900 rounded-b-xl">
                 <ul class="flex flex-col gap-5 md:flex-row font-bold">
-                    @foreach (auth()->user()->role->modules()->orderBy('name')->get() as $module)
+                    @php
+                        $modules = [];
+                        $roles = auth()->user()->roles->pluck('id')->toArray();
+                        $modules = App\Models\Module::whereHas('roles', function ($query) use ($roles) { $query->whereIn('roles.id', $roles); })->orderBy('name')->get();
+                    @endphp
+                    @foreach ($modules as $module)
                         <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route($module->url) }}">{{$module->name}}</a></li>
-
                     @endforeach
                 </ul>
             </nav>

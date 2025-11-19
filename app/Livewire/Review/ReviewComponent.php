@@ -33,7 +33,7 @@ class ReviewComponent extends Component
         return view('livewire.review.review-component');
     }
     public function reloadReviews(){
-        if(auth()->user()->role->slug=='admin'){
+        if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->reviews = Review::with('location','validation')
             ->whereDate('date',$this->nowDate)
             ->when($this->location_id, function($query){
@@ -70,7 +70,7 @@ class ReviewComponent extends Component
         $this->location_id = $this->location_id ?: auth()->user()->location_id;
         $this->locations = Location::all();
         $this->user_id = $this->user_id ?: auth()->user()->id;
-        if(auth()->user()->role->slug=='admin'){
+        if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->users = User::all();
         }else{
             $this->users = User::where('id',auth()->user()->id)->get();
@@ -100,7 +100,7 @@ class ReviewComponent extends Component
 
     public function getPerformanceByLocation(){
         // Solo tiene sentido si el usuario es admin, que puede ver varias sucursales.
-        if (auth()->user()->role->slug !== 'admin') {
+        if (!auth()->user()->roles->pluck('slug')->contains('admin')) {
             return [];
         }
 
