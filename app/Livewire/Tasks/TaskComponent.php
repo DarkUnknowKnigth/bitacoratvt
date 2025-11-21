@@ -7,7 +7,6 @@ use App\Models\Failure;
 use App\Models\Location;
 use App\Models\Task;
 use App\Models\Validation;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -45,7 +44,7 @@ class TaskComponent extends Component
                 $query
                 ->where('binnacle_id', $this->binnacle_id);
             })
-            ->orderBy('id')
+            ->orderBy('id','desc')
             ->get();
     }
     public function setBinnacle(){

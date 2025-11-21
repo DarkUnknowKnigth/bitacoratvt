@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('location_id');
             $table->foreignId('validation_id')->nullable();
-            $table->double('value')->nullable();
+            $table->string('value')->nullable();
             $table->date('date');
             $table->time('time');
             $table->timestamps();

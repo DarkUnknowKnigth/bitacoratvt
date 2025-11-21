@@ -12,7 +12,7 @@
                 <div class="flex flex-col items-center justify-center text-center">
                     <label for="location">Sucursal</label>
                     <select class="w-full px-3 py-2" name="location" id="location" wire:model.live="selectedLocation">
-                        @if (auth()->user()->role->slug==='admin')
+                        @if (auth()->user()->roles->pluck('slug')->contains('admin'))
                         <option value="">Todas</option>
                         @endif
                         @foreach ($locations as $location)
@@ -23,7 +23,7 @@
                 <div class="flex flex-col items-center justify-center text-center">
                     <label for="user">Técnico</label>
                     <select name="user" id="user" wire:model.live="selectedUser">
-                        @if (auth()->user()->role->slug==='admin')
+                        @if (auth()->user()->roles->pluck('slug')->contains('admin'))
                         <option value="">Todos</option>
                         @endif
                         @foreach ($users as $user)
@@ -66,8 +66,11 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
-
-                    {{ $task->binnacle->name }}
+                    @if ($task->binnacle)
+                        {{ $task->binnacle->name }}
+                    @else
+                        Sin bitácora
+                    @endif
                 </td>
                 <td>
                     Subtareas completadas
@@ -100,7 +103,11 @@
                 <td>
                     {{$st->name}}
                     <br>
-                    {{ $st->binnacle->name }}
+                    @if ($st->binnacle)
+                        {{ $st->binnacle->name }}
+                    @else
+                        sin bitácora
+                    @endif
                 </td>
                 <td>
                     <ul>
@@ -199,7 +206,7 @@
             <thead class="bg-gray-100 dark:bg-gray-700">
                 <tr>
                     <th colspan="6" class="px-4 py-3 text-lg font-bold text-gray-800 dark:text-gray-300">
-                        Otras Tareas (Sin Grupo)
+                        {{-- Otras Tareas (Sin Grupo) --}}
                     </th>
                 </tr>
             </thead>
@@ -211,7 +218,11 @@
                 <td colspan="2">
                     {{$task->name}}
                     <br>
-                    {{ $task->binnacle->name }}
+                        @if ($task->binnacle)
+                            {{ $task->binnacle->name }}
+                        @else
+                            Sin bitácora
+                        @endif
                 </td>
                 <td>
                     Subtareas completadas
@@ -242,7 +253,11 @@
                 <td>
                     {{$st->name}}
                     <br>
-                    {{ $st->binnacle->name }}
+                    @if ($st->binnacle)
+                        {{ $st->binnacle->name }}
+                    @else
+                        sin bitácora
+                    @endif
                 </td>
                 <td>
                     <ul>

@@ -19,7 +19,7 @@ class UserComponent extends Component
     #[Validate('required')]
     public $location_id;
     #[Validate('required')]
-    public $role_id;
+    public $roles_selected;
     public $user_id;
     public $users = [];
     public $locations = [];
@@ -35,7 +35,10 @@ class UserComponent extends Component
     }
     public function save(){
         $this->validate();
-        User::create( $this->only(['name', 'email','password','location_id','role_id']));
+        $user = User::create( $this->only(['name', 'email','password','location_id']));
+        if ($this->roles_selected) {
+            $user->roles()->attach($this->roles_selected);
+        }
         session()->flash('status', 'Usuario creada.');
         $this->users = User::all();
         return redirect()->route('users');
@@ -51,8 +54,8 @@ class UserComponent extends Component
         $this->email = $user->email;
         // $this->password = $user->password;
         $this->location_id = $user->location_id;
-        $this->role_id = $user->role_id;
         $this->user_id = $user->id;
+        $this->roles_selected = $user->roles->pluck('id')->toArray();
     }
     public function update(User $user){
         $this->validate([
@@ -66,7 +69,10 @@ class UserComponent extends Component
             ]);
             $user->update( $this->only(['password']));
         }
-        $user->update( $this->only(['name','email','location_id','role_id']));
+        $user->update( $this->only(['name','email','location_id']));
+        if ($this->roles_selected) {
+            $user->roles()->sync($this->roles_selected);
+        }
         $this->users = User::all();
         session()->flash('status', 'Usuario actualizada.');
         return redirect()->route('users');

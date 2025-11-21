@@ -38,7 +38,7 @@ class DashboardComponent extends Component
                 $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
                 ->whereIn('binnacle_id',
                     Binnacle::where('location_id', Auth::user()->location->id)
-                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
                     ->select('id')
                     ->get()
                     ->pluck('id')
@@ -51,7 +51,7 @@ class DashboardComponent extends Component
         $this->tasksWithoutGroup = Task::where('main', true)
             ->whereIn('binnacle_id',
                 Binnacle::where('location_id', Auth::user()->location->id)
-                ->orWhere('role_id', Auth::user()->role->id)
+                ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
                 ->select('id')
                 ->get()
                 ->pluck('id')
@@ -63,7 +63,7 @@ class DashboardComponent extends Component
         $this->allTasks = DB::table('subtasks')->whereIn('tasK_id', Task::where('main',true)
                 ->whereIn('binnacle_id',
                     Binnacle::where('location_id', Auth::user()->location->id)
-                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
                     ->select('id')
                     ->get()
                     ->pluck('id')

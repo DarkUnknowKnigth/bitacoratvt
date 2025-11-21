@@ -170,9 +170,9 @@
                     {{-- Iterar sobre las tareas sin grupo --}}
                     @if($tasksWithoutGroup->count() > 0)
                     <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-2 my-4">
-                        <h3 class="px-4 py-2 text-lg font-bold text-gray-800 dark:text-gray-300">
+                        {{-- <h3 class="px-4 py-2 text-lg font-bold text-gray-800 dark:text-gray-300">
                             Otras Tareas (Sin Grupo)
-                        </h3>
+                        </h3> --}}
                     </div>
                     @endif
 

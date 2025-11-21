@@ -40,10 +40,10 @@
                                     <option value="{{ $l->id }}"> {{$l->name}}: {{$l->address}}</option>
                                 @endforeach
                             </select>
-                            <label class="w-full md:w-auto" for="role_id">
+                            <label class="w-full md:w-auto" for="roles_selected">
                                 Rol
                             </label>
-                            <select name="role_id" wire:model="role_id" id="role_id"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
+                            <select name="roles_selected" multiple wire:model="roles_selected" id="roles_selected"  class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950">
                                 <option value="">Seleccione</option>
                                 @foreach ($roles as $l)
                                     <option value="{{ $l->id }}"> {{$l->name}}: {{$l->slug}}</option>
@@ -74,7 +74,7 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ $user->name }}</td>
                                     <td class="px-6 py-4">{{ $user->email }}</td>
-                                    <td class="px-6 py-4">{{ $user->role ? $user->role->name : 'Sin rol' }}</td>
+                                    <td class="px-6 py-4">{{ $user->roles->count() > 0 ? $user->roles->pluck('name')->join(', ') : 'Sin rol' }}</td>
                                     <td class="px-6 py-4">{{ $user->location ? $user->location->name : 'Sin sucursal' }}</td>
                                     <td class="px-6 py-4 flex gap-2">
                                         <button class="px-3 gap-2 py-2 bg-yellow-400 text-gray-900 rounded-lg flex items-center justify-center" wire:click="edit({{ $user->id }}); document.getElementById('name').focus()">@include('icons.edit') Editar</button>

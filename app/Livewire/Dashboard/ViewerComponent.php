@@ -27,7 +27,7 @@ class ViewerComponent extends Component
 
     public function render()
     {
-        $locations = Location::when(Auth::user()->role->slug != 'admin', function($query){
+        $locations = Location::when(!Auth::user()->roles->pluck('slug')->contains('admin'), function($query){
                 $query->where('id', Auth::user()->location_id);
             })
             ->get();
@@ -35,7 +35,7 @@ class ViewerComponent extends Component
             ->when($this->selectedLocation, function ($query) {
                 $query->where('location_id', $this->selectedLocation);
             })
-            ->when(Auth::user()->role->slug != 'admin', function($query){
+            ->when(!Auth::user()->roles->pluck('slug')->contains('admin'), function($query){
                 $query->where('location_id', Auth::user()->location_id);
             })
             ->get();
@@ -46,7 +46,7 @@ class ViewerComponent extends Component
                 ->where('main', true)
                 ->whereIn('binnacle_id',
                     Binnacle::where('location_id', Auth::user()->location->id)
-                    ->orWhere('role_id', Auth::user()->role->id)
+                    ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
                     ->select('id')
                     ->get()
                     ->pluck('id')
@@ -76,7 +76,7 @@ class ViewerComponent extends Component
             ->where('main', true)
             ->whereIn('binnacle_id',
                 Binnacle::where('location_id', Auth::user()->location->id)
-                ->orWhere('role_id', Auth::user()->role->id)
+                ->orWhereIn('role_id',  Auth::user()->roles->pluck('id')->toArray())
                 ->select('id')
                 ->get()
                 ->pluck('id')
