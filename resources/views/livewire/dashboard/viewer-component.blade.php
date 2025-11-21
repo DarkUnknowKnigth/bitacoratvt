@@ -71,12 +71,12 @@
                 </td>
                 <td>
                     Subtareas completadas
-                    {{ $task->completedSubtasks($nowFormated, auth()->user()->location_id, auth()->user())->count() }} /
+                    {{ $task->completedSubtasks($nowFormated, auth()->user()->id, auth()->user())->count() }} /
                     {{ $task->subtasks->count() }}
                 </td>
                 <td>
                     @php
-                    $taskReview = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
+                    $taskReview = $task->completedReview($nowFormated, auth()->user()->id)->first();
                     @endphp
                     {{ $taskReview->comments ?? 'Sin comentarios adicionales' }}
                 </td>
@@ -94,8 +94,8 @@
             @foreach ($task->subtasks->sortBy('id') as $st)
             <tr>
                 @php
-                $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id);
-                $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->location_id, $task->id);
+                $reviewQuery = $st->completedReview($nowFormated, auth()->user()->id, $task->id);
+                $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->id, $task->id);
                 @endphp
                 <td>
                     {{$st->name}}
@@ -215,12 +215,12 @@
                 </td>
                 <td>
                     Subtareas completadas
-                    {{ $task->completedSubtasks($nowFormated, auth()->user()->location_id, auth()->user())->count() }} /
+                    {{ $task->completedSubtasks($nowFormated, auth()->user()->id, auth()->user())->count() }} /
                     {{ $task->subtasks->count() }}
                 </td>
                 <td>
                     @php
-                    $taskReview = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
+                    $taskReview = $task->completedReview($nowFormated, auth()->user()->id)->first();
                     @endphp
                     {{ $taskReview->comments ?? 'Sin comentarios adicionales' }}
                 </td>
@@ -236,8 +236,8 @@
             @foreach ($task->subtasks->sortBy('id') as $st)
             <tr>
                 @php
-                $reviewQuery = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id);
-                $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->location_id, $task->id);
+                $reviewQuery = $st->completedReview($nowFormated, auth()->user()->id, $task->id);
+                $prevReviewQuery = $st->completedReview($prevDate, auth()->user()->id, $task->id);
                 @endphp
                 <td>
                     {{$st->name}}

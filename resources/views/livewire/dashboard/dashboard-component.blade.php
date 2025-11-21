@@ -47,9 +47,9 @@
                             <br>
 
                         </span>
-                        @if ($task->completedReview($nowFormated, auth()->user()->location_id)->count() > 0)
+                        @if ($task->completedReview($nowFormated, auth()->user()->id)->count() > 0)
                         @php
-                        $rw = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
+                        $rw = $task->completedReview($nowFormated, auth()->user()->id)->first();
                         @endphp
                         <span class="text-amber-600 w-full flex gap-5 font-semibold">
                             <span>
@@ -99,10 +99,10 @@
                                     {{ $task->name }}
                                 </small>
                             </span>
-                            @if ($st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->count() >
+                            @if ($st->completedReview($nowFormated, auth()->user()->id, $task->id)->count() >
                             0)
                             @php
-                            $rw = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->first();
+                            $rw = $st->completedReview($nowFormated, auth()->user()->id, $task->id)->first();
                             @endphp
                             <span class="text-green-600 w-full font-semibold">
                                 <span>
@@ -185,9 +185,9 @@
 
 
                         </span>
-                        @if ($task->completedReview($nowFormated, auth()->user()->location_id)->count() > 0)
+                        @if ($task->completedReview($nowFormated, auth()->user()->id)->count() > 0)
                         @php
-                        $rw = $task->completedReview($nowFormated, auth()->user()->location_id)->first();
+                        $rw = $task->completedReview($nowFormated, auth()->user()->id)->first();
                         @endphp
                         <span class="text-amber-600 w-full font-semibold">
                             <span>
@@ -237,10 +237,10 @@
                                     {{ $task->name }}
                                 </small>
                             </span>
-                            @if ($st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->count() >
+                            @if ($st->completedReview($nowFormated, auth()->user()->id, $task->id)->count() >
                             0)
                             @php
-                            $rw = $st->completedReview($nowFormated, auth()->user()->location_id, $task->id)->first();
+                            $rw = $st->completedReview($nowFormated, auth()->user()->id, $task->id)->first();
                             @endphp
                             <span class="text-green-600 w-full font-semibold">
                                 <span>
