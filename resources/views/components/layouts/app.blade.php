@@ -22,7 +22,7 @@
                 </div>
             </header>
             <nav class="p-8 -mt-4 bg-blue-900 rounded-b-xl overflow-x-scroll overflow-y-hidden scrollbar-hidden-y">
-                <ul class="flex flex-col gap-5 md:flex-row font-bold">
+                <ul class="flex flex-col gap-5 md:flex-row font-bold items-center justify-around text-center">
                     @php
                         $modules = [];
                         $roles = auth()->user()->roles->pluck('id')->toArray();
