@@ -10,7 +10,7 @@
     </div>
 
     <!-- Main Container -->
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-8" x-data="{ showingTask: @entangle('showingTask') }">
         <!-- Tasks and simple progress section -->
         <div class="md:col-span-2 space-y-8">
             <!-- Task Progress Summary -->
@@ -40,12 +40,10 @@
 
                     @foreach ($group->tasks as $task)
                     {{-- Lógica de la Tarea --}}
-                    <li
+                    <li wire:click="toggleTask('{{ $task->id }}')"
                         class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                         <span class="md:w-3/4 font-bold text-lg">
                             {{ $task->name }}
-                            <br>
-
                         </span>
                         @if ($task->completedReview($nowFormated, auth()->user()->id)->count() > 0)
                         @php
@@ -82,17 +80,25 @@
                             </button>
                         </div> --}}
                         @endif
+                        <span x-show="showingTask == 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </span>
+                        <span x-show="showingTask == '{{ $task->id }}'">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </span>
                     </li>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2"  x-show="showingTask == '{{ $task->id }}'">
                         @foreach ($task->subtasks as $st )
                         <li
                             class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                             <span class="text-amber-500 ml-2 md:w-5/8 w-full">
-                                <span class="font-bold">
+                                <span class="font-bold flex flex-row justify-between">
                                     {{ $st->name }}
                                     <br>
-
-
                                 </span>
                                 <br>
                                 <small>

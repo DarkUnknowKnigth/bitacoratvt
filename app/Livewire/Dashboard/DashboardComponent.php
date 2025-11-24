@@ -28,7 +28,7 @@ class DashboardComponent extends Component
     public $title = "Actividades diarias";
     public $latitude = 0.0;
     public $longitude = 0.0;
-
+    public $showingTask = 0;
     // Método que se ejecuta al cargar el componente
     public function mount()
     {
@@ -137,5 +137,13 @@ class DashboardComponent extends Component
     {
         $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id', Auth::user()->location_id)->count();
         return view('livewire.dashboard.dashboard-component');
+    }
+    public function toggleTask($taskId){
+        if($this->showingTask == $taskId){
+            $this->showingTask = 0;
+        }else{
+            $this->showingTask = $taskId;
+        }
+
     }
 }
