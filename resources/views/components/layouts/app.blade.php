@@ -29,7 +29,7 @@
                         $modules = App\Models\Module::whereHas('roles', function ($query) use ($roles) { $query->whereIn('roles.id', $roles); })->orderBy('name')->get();
                     @endphp
                     @foreach ($modules as $module)
-                        <li class="text-amber-500 dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route($module->url) }}">{{$module->name}}</a></li>
+                        <li class="text-amber-500 text-center overflow-ellipsis dark:text-white hover:text-blue-800 hover:bg-amber-600 rounded-lg"><a class="px-2 py-2" href="{{ route($module->url) }}">{{$module->name}}</a></li>
                     @endforeach
                 </ul>
             </nav>
