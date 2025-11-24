@@ -10,10 +10,21 @@
     </div>
 
     <!-- Main Container -->
-    <div class="flex flex-col gap-8" x-data="{ showingTask: @entangle('showingTask') }">
+    <div class="flex flex-col gap-8"
+        x-data="{ showingTask: @entangle('showingTask'), selectedBinnalce: @entangle('selectedBinnalce') }">
         <!-- Tasks and simple progress section -->
         <div class="md:col-span-2 space-y-8">
             <!-- Task Progress Summary -->
+            <div>
+                <h1>Posees múltiples bitácoras, porfavor selecciona una bitácora</h1>
+                <select x-model="selectedBinnalce" name="binnacle_selector" id="binnacle_selector" wire:change="updateTasks()"
+                    class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    @foreach ($binnacles as $binnacle)
+                    <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div
                 class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Avance de Tareas</h2>
@@ -24,7 +35,7 @@
             </div>
 
             <!-- Task List -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6" x-show="selectedBinnalce">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Listado de Tareas</h2>
                 @include('partials._validation')
                 <ul class="space-y-4">
@@ -57,9 +68,9 @@
 
                                 @if (isset($rw->validation->id))
 
-                                    indico el valor de <b>{{ $rw->validation->value  ?? '---'}}</b>
+                                indico el valor de <b>{{ $rw->validation->value ?? '---'}}</b>
                                 @else
-                                    indico el valor de <b>{{ $rw->value ?? '---' }}</b>
+                                indico el valor de <b>{{ $rw->value ?? '---' }}</b>
 
                                 @endif
                                 y dijo {{ $rw->comments ?? '---' }}
@@ -73,25 +84,26 @@
                             <button
                                 class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 text-center items-center justify-center w-full"
                                 x-on:click="loading = true; getLocationAndReview({{ $task->id }}, null)"
-                                x-bind:disabled="loading"
-                                x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                x-bind:disabled="loading" x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
                                 <span x-show="!loading">@include('icons.save') Comentario general</span>
                                 <span x-show="loading">Obteniendo ubicación...</span>
                             </button>
                         </div> --}}
                         @endif
-                        <span x-show="showingTask == 0">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <span x-show="showingTask != '{{ $task->id }}'">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
                         </span>
                         <span x-show="showingTask == '{{ $task->id }}'">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
                             </svg>
                         </span>
                     </li>
-                    <ul class="space-y-2"  x-show="showingTask == '{{ $task->id }}'">
+                    <ul class="space-y-2" x-show="showingTask == '{{ $task->id }}'">
                         @foreach ($task->subtasks as $st )
                         <li
                             class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
@@ -118,9 +130,9 @@
 
                                     @if (isset($rw->validation->id))
 
-                                        indico el valor de <b>{{ $rw->validation->value  ?? '---'}}</b>
+                                    indico el valor de <b>{{ $rw->validation->value ?? '---'}}</b>
                                     @else
-                                        indico el valor de <b>{{ $rw->value ?? '---' }}</b>
+                                    indico el valor de <b>{{ $rw->value ?? '---' }}</b>
 
                                     @endif
                                     y dijo {{ $rw->comments ?? '---' }}
@@ -149,19 +161,18 @@
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
                             <div class="flex flex-row gap-2 w-1/2 md:max-w-2/8">
                                 <div x-data="{ loading: false }" class="w-1/2">
-                                    <button
-                                        class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
+                                    <button class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
                                         x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
                                         x-bind:disabled="loading"
                                         x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
-                                        <span x-show="!loading" class="flex flex-row gap-2 items-center justify-center">@include('icons.validate') Validar Tarea</span>
+                                        <span x-show="!loading"
+                                            class="flex flex-row gap-2 items-center justify-center">@include('icons.validate')
+                                            Validar Tarea</span>
                                         <span x-show="loading">Obteniendo ubicación...</span>
                                     </button>
                                 </div>
-                                <a
-                                    class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
-                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
-                                >
+                                <a class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
+                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}">
                                     @include('icons.cancel')
                                     Registrar Falla
                                 </a>
@@ -187,7 +198,7 @@
                     <li
                         class="flex md:flex-row flex-col gap-2 items-center justify-between p-4 bg-orange-50 dark:bg-blue-950 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
                         <span class="md:w-3/4 font-bold text-lg">{{ $task->name }}
-                        <br>
+                            <br>
 
 
                         </span>
@@ -203,9 +214,9 @@
 
                                 @if (isset($rw->validation->id))
 
-                                    indico el valor de <b>{{ $rw->validation->value  ?? '---'}}</b>
+                                indico el valor de <b>{{ $rw->validation->value ?? '---'}}</b>
                                 @else
-                                    indico el valor de <b>{{ $rw->value ?? '---' }}</b>
+                                indico el valor de <b>{{ $rw->value ?? '---' }}</b>
 
                                 @endif
                                 y dijo {{ $rw->comments ?? '---' }}
@@ -219,8 +230,7 @@
                             <button
                                 class="bg-amber-500 text-black rounded-lg px-3 py-2 flex flex-row gap-2 text-center items-center justify-center w-full"
                                 x-on:click="loading = true; getLocationAndReview({{ $task->id }}, null)"
-                                x-bind:disabled="loading"
-                                x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
+                                x-bind:disabled="loading" x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
                                 <span x-show="!loading">@include('icons.save') Comentario general</span>
                                 <span x-show="loading">Obteniendo ubicación...</span>
                             </button>
@@ -256,9 +266,9 @@
 
                                     @if (isset($rw->validation->id))
 
-                                        indico el valor de <b>{{ $rw->validation->value  ?? '---'}}</b>
+                                    indico el valor de <b>{{ $rw->validation->value ?? '---'}}</b>
                                     @else
-                                        indico el valor de <b>{{ $rw->value ?? '---' }}</b>
+                                    indico el valor de <b>{{ $rw->value ?? '---' }}</b>
 
                                     @endif
                                     y dijo {{ $rw->comments ?? '---' }}
@@ -287,19 +297,18 @@
                                 placeholder="Comentario (opcional)" wire:model="comments.st-{{$st->id}}">
                             <div class="flex flex-row gap-2 w-1/2 md:max-w-2/8">
                                 <div x-data="{ loading: false }" class="w-1/2">
-                                    <button
-                                        class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
+                                    <button class="bg-green-500 text-black rounded-lg text-xs px-3 py-2 w-full"
                                         x-on:click="loading = true; getLocationAndReview({{ $task->id }}, {{ $st->id }})"
                                         x-bind:disabled="loading"
                                         x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }">
-                                        <span x-show="!loading" class="flex flex-row gap-2 items-center justify-center">@include('icons.validate') Validar Tarea</span>
+                                        <span x-show="!loading"
+                                            class="flex flex-row gap-2 items-center justify-center">@include('icons.validate')
+                                            Validar Tarea</span>
                                         <span x-show="loading">Obteniendo ubicación...</span>
                                     </button>
                                 </div>
-                                <a
-                                    class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
-                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}"
-                                >
+                                <a class=" bg-red-500 text-white rounded-lg px-3 text-xs py-2 flex flex-row gap-2 items-center justify-center w-1/2"
+                                    href="{{route('failures', ['task_id' => $task->id, 'subtask_id' => $st->id])}}">
                                     @include('icons.cancel')
                                     Registrar Falla
                                 </a>
@@ -315,6 +324,7 @@
                     @endif
                 </ul>
             </div>
+
         </div>
     </div>
     <script>

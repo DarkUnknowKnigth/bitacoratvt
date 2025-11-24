@@ -21,7 +21,7 @@
                     <a href="{{ route('home') }}" class="py-2 text-3xl font-bold tracking-tight text-blue-700 dark:text-blue-400">Bitacora TVT</a>
                 </div>
             </header>
-            <nav class="p-8 -mt-4 bg-blue-900 rounded-b-xl">
+            <nav class="p-8 -mt-4 bg-blue-900 rounded-b-xl overflow-x-scroll overflow-y-hidden scrollbar-hidden-y">
                 <ul class="flex flex-col gap-5 md:flex-row font-bold">
                     @php
                         $modules = [];

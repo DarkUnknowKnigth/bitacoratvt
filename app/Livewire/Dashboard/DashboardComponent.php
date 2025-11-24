@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class DashboardComponent extends Component
@@ -29,52 +30,17 @@ class DashboardComponent extends Component
     public $latitude = 0.0;
     public $longitude = 0.0;
     public $showingTask = 0;
+    public $binnacles = [];
+    #[Validate('required|numeric')]
+    public $selectedBinnalce = "";
     // Método que se ejecuta al cargar el componente
     public function mount()
     {
+        $this->binnacles = Binnacle::whereIn('role_id', Auth::user()->roles->pluck('id')->toArray())->orWhere('location_id', Auth::user()->location->id)->get();
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
-        $this->groups = Group::with([
-            'tasks' => function ($query) {
-                $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
-                ->whereIn('binnacle_id',
-                    Binnacle::where('location_id', Auth::user()->location->id)
-                    ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
-                    ->select('id')
-                    ->get()
-                    ->pluck('id')
-                    ->toArray()
-                );
-            }]
-        )->orderBy('id')
-        ->get();
-
-        $this->tasksWithoutGroup = Task::where('main', true)
-            ->whereIn('binnacle_id',
-                Binnacle::where('location_id', Auth::user()->location->id)
-                ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
-                ->select('id')
-                ->get()
-                ->pluck('id')
-                ->toArray()
-            )
-            ->whereDoesntHave('group')
-            ->with(['subtasks', 'subtasks.validations'])
-            ->get();
-        $this->allTasks = DB::table('subtasks')->whereIn('tasK_id', Task::where('main',true)
-                ->whereIn('binnacle_id',
-                    Binnacle::where('location_id', Auth::user()->location->id)
-                    ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
-                    ->select('id')
-                    ->get()
-                    ->pluck('id')
-                    ->toArray()
-                )
-                ->pluck('id')
-                ->toArray()
-            )
-            ->count();
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
+        $this->updateTasks();
     }
     // Método para alternar el estado de una tarea
     public function toggleTaskStatus(int $taskId)
@@ -136,14 +102,85 @@ class DashboardComponent extends Component
     public function render()
     {
         $this->completedTasksCount = Review::where('date', $this->nowFormated)->where('location_id', Auth::user()->location_id)->count();
-        return view('livewire.dashboard.dashboard-component');
+        return view('livewire.dashboard.dashboard-component',[
+            'tasks' => $this->tasks,
+            'groups' => $this->groups,
+            'tasksWithoutGroup' => $this->tasksWithoutGroup,
+            'allTasks' => $this->allTasks,
+            'completedTasksCount' => $this->completedTasksCount,
+        ]);
     }
-    public function toggleTask($taskId){
-        if($this->showingTask == $taskId){
+    public function toggleTask($taskId)
+    {
+        if ($this->showingTask == $taskId) {
             $this->showingTask = 0;
-        }else{
+        } else {
             $this->showingTask = $taskId;
         }
+    }
+    public function updateTasks()
+    {
+        $this->groups = Group::with(
+            [
+                'tasks' => function ($query) {
+                    $query->where('main', true)->with(['subtasks', 'subtasks.validations', 'locations'])
+                        ->whereIn(
+                            'binnacle_id',
+                            Binnacle::when($this->selectedBinnalce, function ($query) {
+                                $query->where('id', $this->selectedBinnalce);
+                            })
+                                ->when($this->selectedBinnalce == null, function ($query) {
+                                    $query->where('location_id', Auth::user()->location->id)
+                                        ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray());
+                                })
+                                ->select('id')
+                                ->get()
+                                ->pluck('id')
+                                ->toArray()
+                        );
+                }
+            ]
+        )->orderBy('id')
+            ->get();
 
+        $this->tasksWithoutGroup = Task::where('main', true)
+            ->whereIn(
+                'binnacle_id',
+                Binnacle::when($this->selectedBinnalce, function ($query) {
+                    $query->where('id', $this->selectedBinnalce);
+                })
+                ->when($this->selectedBinnalce == null, function ($query) {
+                    $query->where('location_id', Auth::user()->location->id)
+                        ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray());
+                })
+                ->select('id')
+                ->get()
+                ->pluck('id')
+                ->toArray()
+            )
+            ->whereDoesntHave('group')
+            ->with(['subtasks', 'subtasks.validations'])
+            ->get();
+        $this->allTasks = DB::table('subtasks')->whereIn(
+            'tasK_id',
+            Task::where('main', true)
+                ->whereIn(
+                    'binnacle_id',
+                    Binnacle::when($this->selectedBinnalce, function ($query) {
+                        $query->where('id', $this->selectedBinnalce);
+                    })
+                    ->when($this->selectedBinnalce == null, function ($query) {
+                        $query->where('location_id', Auth::user()->location->id)
+                            ->orWhereIn('role_id', Auth::user()->roles->pluck('id')->toArray());
+                    })
+                    ->select('id')
+                    ->get()
+                    ->pluck('id')
+                    ->toArray()
+                )
+                ->pluck('id')
+                ->toArray()
+        )
+            ->count();
     }
 }
