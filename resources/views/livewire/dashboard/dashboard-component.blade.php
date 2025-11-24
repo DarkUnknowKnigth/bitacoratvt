@@ -247,7 +247,7 @@
                             </svg>
                         </span>
                     </li>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2" x-show="showingTask == '{{ $task->id }}'">
                         @foreach ($task->subtasks as $st )
                         <li
                             class="flex flex-col gap-4 md:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg shadow-sm transition-transform transform hover:scale-[1.01] hover:shadow-md">
