@@ -20,11 +20,11 @@ class ReviewComponent extends Component
     public $failures = [];
     public $locations = [];
 
-    #[Url(as: 'fecha', keep: true)]
+    #[Url(as: 'fecha', keep: false)]
     public $nowDate = '';
-    #[Url(as: 'sucursal', keep: true)]
+    #[Url(as: 'sucursal', keep: false)]
     public $location_id = '';
-    #[Url(as: 'usuario', keep: true)]
+    #[Url(as: 'usuario', keep: false)]
     public $user_id;
 
     public function render()
