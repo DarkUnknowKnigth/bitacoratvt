@@ -176,6 +176,7 @@
                                 <th scope="col" class="px-6 py-3">Fecha y Hora</th>
                                 <th scope="col" class="px-6 py-3">Tipo</th>
                                 <th scope="col" class="px-6 py-3">Tarea</th>
+                                <th scope="col" class="px-6 py-3">Usuario</th>
                                 <th scope="col" class="px-6 py-3">Sucursal</th>
                                 <th scope="col" class="px-6 py-3">Valor</th>
                                 <th scope="col" class="px-6 py-3">Comentario</th>
@@ -201,6 +202,7 @@
                                             {{ $review->task->name }}
                                         @endif
                                     </td>
+                                    <td class="px-6 py-4">{{ $review->user->name }}</td>
                                     <td class="px-6 py-4">{{ $review->location->name }}</td>
                                     <td class="px-6 py-4">
                                         @if ($review->validation_id)
