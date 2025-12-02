@@ -1,7 +1,7 @@
 <div class="min-h-screen dark:bg-slate-900 font-sans p-8 text-gray-900 dark:text-gray-100">
     <!-- Dashboard Header -->
     <div class="flex flex-col md:flex-row gap-2 items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Administrador de bitácoras</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-blue-800 dark:text-blue-400">Historial de bitácoras</h1>
         <div class="flex space-x-4">
             <!-- Button to create review -->
             @include('auth._auth')
@@ -16,10 +16,10 @@
             <div
                 class="bg-white px-5 dark:bg-slate-800 rounded-xl shadow-lg py-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 flex md:flex-row flex-col gap-5">
-                    <span>
+                    <span class="flex flew-row gap-2 items-center justify-center">
                         Día <input type="date" wire:model="nowDate" wire:change="reloadReviews">
                     </span>
-                    <span>
+                    <span  class="flex flew-row gap-2 items-center justify-center">
                         Sucursal
                         @if (auth()->user()->roles->pluck('slug')->contains('admin'))
                         <select name="location_id" wire:model="location_id" id="location_id"
@@ -33,7 +33,7 @@
                         {{ auth()->user()->location->name }}
                         @endif
                     </span>
-                    <span>
+                    <span class="flex flew-row gap-2 items-center justify-center">
                         Usuarios
                         <select name="user_id" wire:model="user_id" id="user_id"
                             class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950" wire:change="reloadReviews">
@@ -43,6 +43,7 @@
                             @endforeach
                         </select>
                     </span>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">Exportar</button>
                 </h2>
             </div>
             <div class="grid md:grid-cols-2 grid-cols-1 gap-8">
