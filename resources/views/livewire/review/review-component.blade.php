@@ -19,6 +19,16 @@
                     <span class="flex flew-row gap-2 items-center justify-center">
                         Día <input type="date" wire:model="nowDate" wire:change="reloadReviews">
                     </span>
+                    <span class="flex flew-row gap-2 items-center justify-center">
+                        Bitácoras
+                        <select name="binnacle_id" wire:model="binnacle_id" id="binnacle_id"
+                            class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950" wire:change="reloadReviews">
+                            <option value="">Todos</option>
+                            @foreach ($binnacles as $binnacle)
+                            <option value="{{ $binnacle->id }}">{{ $binnacle->name }}</option>
+                            @endforeach
+                        </select>
+                    </span>
                     <span  class="flex flew-row gap-2 items-center justify-center">
                         Sucursal
                         @if (auth()->user()->roles->pluck('slug')->contains('admin'))
@@ -43,7 +53,7 @@
                             @endforeach
                         </select>
                     </span>
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">Exportar</button>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300" wire:click="export()">Exportar</button>
                 </h2>
             </div>
             <div class="grid md:grid-cols-2 grid-cols-1 gap-8">

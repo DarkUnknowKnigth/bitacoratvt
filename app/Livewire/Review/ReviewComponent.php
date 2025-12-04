@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Review;
 
+use App\Exports\ReviewExport;
+use App\Models\Binnacle;
 use App\Models\Failure;
 use App\Models\Location;
 use App\Models\Review;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReviewComponent extends Component
 {
@@ -19,6 +22,7 @@ class ReviewComponent extends Component
     public $reviews = [];
     public $failures = [];
     public $locations = [];
+    public $binnacles = [];
 
     #[Url(as: 'fecha', keep: false)]
     public $nowDate = '';
@@ -26,6 +30,8 @@ class ReviewComponent extends Component
     public $location_id = '';
     #[Url(as: 'usuario', keep: false)]
     public $user_id;
+    #[Url(as: 'bitacora', keep: false)]
+    public $binnacle_id;
 
     public function render()
     {
@@ -42,6 +48,11 @@ class ReviewComponent extends Component
             })
             ->when($this->user_id, function($query){
                 $query->where('user_id',$this->user_id);
+            })
+            ->when($this->binnacle_id, function($query){
+                $tasksIds = Binnacle::find($this->binnacle_id)->tasks()->pluck('id')->toArray();
+                $query->whereIn('task_id',$tasksIds)
+                ->orWhereIn('subtask_id',$tasksIds);
             })
             ->get();
         } else {
@@ -75,7 +86,7 @@ class ReviewComponent extends Component
         }else{
             $this->users = User::where('id',auth()->user()->id)->get();
         }
-
+        $this->binnacles = Binnacle::all();
         $this->reloadReviews();
     }
     public function destroy(Review $review){
@@ -110,5 +121,16 @@ class ReviewComponent extends Component
             ->select('locations.name as location_name', DB::raw('COUNT(reviews.id) as total'))
             ->groupBy('locations.name');
         return $query->get()->toArray();
+    }
+    public function export(){
+        $day = Carbon::parse($this->nowDate);
+        if(!$this->binnacle_id){
+            return false;
+        }
+        $location = Location::find($this->location_id);
+        $user = User::find($this->user_id);
+        $binnacle = Binnacle::find($this->binnacle_id);
+        return Excel::download(new ReviewExport($day,$binnacle,$location,$user ),'Exportable-'.$day->format('Y-m-d').'.xlsx');
+
     }
 }
