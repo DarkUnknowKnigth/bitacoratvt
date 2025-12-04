@@ -46,7 +46,7 @@ class ReviewExport implements FromCollection
             ->map(function($review){
                 return [
                     'ID' => $review->id,
-                    'Bitácora' => $review->binnacle->name,
+                    'Bitácora' => $this->binnacle->name,
                     'Fecha' => $review->date,
                     'Hora' => $review->time,
                     'Usuario' => $review->user->name,
