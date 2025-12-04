@@ -26,6 +26,28 @@ class ReviewExport implements FromCollection
         $this->location = $location;
         $this->user = $user;
     }
+    public function headers()
+    {
+        return [
+            'ID',
+            'Bitácora',
+            'Fecha',
+            'Hora',
+            'Usuario',
+            'Sucursal',
+            'Tarea',
+            'Subtarea',
+            'Validación',
+            'Observación',
+            'Captura',
+            'Latitud',
+            'Longitud',
+            'Comentario',
+            'Creado',
+            'Actualizado',
+            'Mapa'
+        ];
+    }
     public function collection()
     {
         return Review::with('location','validation')
