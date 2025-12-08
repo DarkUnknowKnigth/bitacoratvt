@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'main','binnacle_id'];
+    protected $fillable = ['name', 'main','binnacle_id','position'];
     public function reviews()
     {
         return $this->hasMany(Review::class)->where('subtask_id',null);
