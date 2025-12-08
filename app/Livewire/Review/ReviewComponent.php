@@ -38,13 +38,13 @@ class ReviewComponent extends Component
         if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->reviews = Review::with('location','validation')
             ->whereDate('date',$this->nowDate)
-            ->when($this->user_id, function($query){
-                $query->where('user_id',$this->user_id);
-            })
             ->when($this->binnacle_id, function($query){
                 $tasksIds = Binnacle::find($this->binnacle_id)->tasks()->pluck('id')->toArray();
                 $query->whereIn('task_id',$tasksIds)
                 ->orWhereIn('subtask_id',$tasksIds);
+            })
+            ->when($this->user_id, function($query){
+                $query->where('user_id',$this->user_id);
             })
             ->get();
         } else {
