@@ -36,7 +36,9 @@ class DashboardComponent extends Component
     // Método que se ejecuta al cargar el componente
     public function mount()
     {
-        $this->binnacles = Binnacle::whereIn('role_id', Auth::user()->roles->pluck('id')->toArray())->orWhere('location_id', Auth::user()->location->id)->get();
+        $this->binnacles = Binnacle::whereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
+        // ->orWhere('location_id', Auth::user()->location->id)
+        ->get();
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
         $this->nowFormated = Carbon::now()->format('Y-m-d');
         $this->nowTimeFormated = Carbon::now()->format('H:i');
