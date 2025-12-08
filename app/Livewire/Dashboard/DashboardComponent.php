@@ -38,6 +38,7 @@ class DashboardComponent extends Component
     {
         $this->binnacles = Binnacle::whereIn('role_id', Auth::user()->roles->pluck('id')->toArray())
         // ->orWhere('location_id', Auth::user()->location->id)
+        ->orderBy('name')
         ->get();
         // Carga de tareas iniciales (datos estáticos para el ejemplo)
         $this->nowFormated = Carbon::now()->format('Y-m-d');
