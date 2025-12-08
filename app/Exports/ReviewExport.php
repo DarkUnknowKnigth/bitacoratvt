@@ -16,14 +16,12 @@ class ReviewExport implements FromCollection
     */
     protected $day;
     protected $binnacle;
-    protected $location;
     protected $user;
 
-    public function __construct(Carbon $day, Binnacle $binnacle, ?Location $location, ?User $user)
+    public function __construct(Carbon $day, Binnacle $binnacle, ?User $user)
     {
         $this->day = $day;
         $this->binnacle = $binnacle;
-        $this->location = $location;
         $this->user = $user;
     }
     public function headers()
@@ -52,10 +50,6 @@ class ReviewExport implements FromCollection
     {
         return Review::with('location','validation')
             ->whereDate('date',$this->day->format('Y-m-d'))
-            ->when($this->location, function($query){
-                $query->where('location_id',$this->location->id);
-
-            })
             ->when($this->user, function($query){
                 $query->where('user_id',$this->user->id);
             })

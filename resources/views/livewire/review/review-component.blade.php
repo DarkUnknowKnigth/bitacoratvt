@@ -29,20 +29,6 @@
                             @endforeach
                         </select>
                     </span>
-                    <span  class="flex flew-row gap-2 items-center justify-center">
-                        Sucursal
-                        @if (auth()->user()->roles->pluck('slug')->contains('admin'))
-                        <select name="location_id" wire:model="location_id" id="location_id"
-                            class="w-full md:w-auto rounded-lg px-3 py2 text-blue-950" wire:change="reloadReviews">
-                            <option value="">Todos</option>
-                            @foreach ($locations as $l)
-                            <option value="{{ $l->id }}">{{ $l->name }}</option>
-                            @endforeach
-                        </select>
-                        @else
-                        {{ auth()->user()->location->name }}
-                        @endif
-                    </span>
                     <span class="flex flew-row gap-2 items-center justify-center">
                         Usuarios
                         <select name="user_id" wire:model="user_id" id="user_id"

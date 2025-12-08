@@ -5,7 +5,6 @@ namespace App\Livewire\Review;
 use App\Exports\ReviewExport;
 use App\Models\Binnacle;
 use App\Models\Failure;
-use App\Models\Location;
 use App\Models\Review;
 use App\Models\User;
 use Carbon\Carbon;
@@ -21,13 +20,10 @@ class ReviewComponent extends Component
     public $users = [];
     public $reviews = [];
     public $failures = [];
-    public $locations = [];
     public $binnacles = [];
 
     #[Url(as: 'fecha', keep: false)]
     public $nowDate = '';
-    #[Url(as: 'sucursal', keep: false)]
-    public $location_id = '';
     #[Url(as: 'usuario', keep: false)]
     public $user_id;
     #[Url(as: 'bitacora', keep: false)]
@@ -42,10 +38,6 @@ class ReviewComponent extends Component
         if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->reviews = Review::with('location','validation')
             ->whereDate('date',$this->nowDate)
-            ->when($this->location_id, function($query){
-                $query->where('location_id',$this->location_id);
-
-            })
             ->when($this->user_id, function($query){
                 $query->where('user_id',$this->user_id);
             })
@@ -65,9 +57,6 @@ class ReviewComponent extends Component
         // Cargar fallas correspondientes a los filtros
         $this->failures = Failure::with(['task', 'subtask', 'user', 'location'])
             ->whereDate('date', $this->nowDate)
-            ->when($this->location_id, function($query) {
-                $query->where('location_id', $this->location_id);
-            })
             ->when($this->user_id, function($query) {
                 $query->where('user_id', $this->user_id);
             })
@@ -78,8 +67,6 @@ class ReviewComponent extends Component
     }
     public function mount(){
         $this->nowDate = $this->nowDate ?: Carbon::now()->format('Y-m-d');
-        $this->location_id = $this->location_id ?: auth()->user()->location_id;
-        $this->locations = Location::all();
         $this->user_id = $this->user_id ?: auth()->user()->id;
         if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->users = User::all();
@@ -96,10 +83,6 @@ class ReviewComponent extends Component
     }
     public function getHourlyPerformance(){
         $query = Review::whereDate('date', $this->nowDate)
-            ->when($this->location_id, function($query){
-                $query->where('location_id',$this->location_id);
-
-            })
             ->when($this->user_id, function($query){
                 $query->where('user_id',$this->user_id);
             })
@@ -127,10 +110,9 @@ class ReviewComponent extends Component
         if(!$this->binnacle_id){
             return false;
         }
-        $location = Location::find($this->location_id);
         $user = User::find($this->user_id);
         $binnacle = Binnacle::find($this->binnacle_id);
-        return Excel::download(new ReviewExport($day,$binnacle,$location,$user ),'Exportable-'.$day->format('Y-m-d').'.xlsx');
+        return Excel::download(new ReviewExport($day,$binnacle,$user ),'Exportable-'.$day->format('Y-m-d').'.xlsx');
 
     }
 }
