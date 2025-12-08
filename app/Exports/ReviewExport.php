@@ -49,15 +49,14 @@ class ReviewExport implements FromCollection
     public function collection()
     {
         return Review::with('location','validation')
-            ->whereDate('date',$this->day->format('Y-m-d'))
+            ->when($this->binnacle, function($query){
+                $tasksIds = Binnacle::find($this->binnacle->id)->tasks()->pluck('id')->toArray();
+                $query->whereIn('subtask_id',$tasksIds);
+            })
             ->when($this->user, function($query){
                 $query->where('user_id',$this->user->id);
             })
-            ->when($this->binnacle, function($query){
-                $tasksIds = Binnacle::find($this->binnacle->id)->tasks()->pluck('id')->toArray();
-                $query->whereIn('task_id',$tasksIds)
-                ->orWhereIn('subtask_id',$tasksIds);
-            })
+            ->whereDate('date',$this->day->format('Y-m-d'))
             ->get()
             ->map(function($review){
                 return [
