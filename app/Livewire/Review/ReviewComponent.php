@@ -96,10 +96,11 @@ class ReviewComponent extends Component
         if (!auth()->user()->roles->pluck('slug')->contains('admin')) {
             return [];
         }
-
         $query = Review::join('locations', 'reviews.location_id', '=', 'locations.id')
+            ->when($this->user_id, function($query){
+                $query->where('user_id',$this->user_id);
+            })
             ->whereDate('date', $this->nowDate)
-
             ->select('locations.name as location_name', DB::raw('COUNT(reviews.id) as total'))
             ->groupBy('locations.name');
         return $query->get()->toArray();
