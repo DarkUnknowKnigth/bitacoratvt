@@ -67,7 +67,7 @@ class ReviewComponent extends Component
     }
     public function mount(){
         $this->nowDate = $this->nowDate ?: Carbon::now()->format('Y-m-d');
-        $this->user_id = $this->user_id ?: auth()->user()->id;
+        // $this->user_id = $this->user_id ?: auth()->user()->id;
         if(auth()->user()->roles->pluck('slug')->contains('admin')){
             $this->users = User::all();
         }else{
