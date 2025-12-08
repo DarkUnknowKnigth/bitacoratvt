@@ -200,7 +200,14 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">{{ $review->user->name }}</td>
-                                    <td class="px-6 py-4">{{ $review->location->name }} <br> {{ $review->user->roles->pluck('slug')->join(', ')}}</td>
+                                    <td class="px-6 py-4">
+                                        {{ $review->location->name }} <br>
+                                        @if ($review->subtask_id && isset($review->subtask->id))
+                                            {{ $review->subtask->binnacle->name }}
+                                        @elseif ($review->task_id && isset($review->task->id))
+                                            {{ $review->task->binnacle->name }}
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-4">
                                         @if ($review->validation_id)
                                             {{ $review->validation->value }}
