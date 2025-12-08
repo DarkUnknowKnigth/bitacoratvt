@@ -18,7 +18,7 @@ class ReviewExport implements FromCollection
     protected $binnacle;
     protected $user;
 
-    public function __construct(Carbon $day, Binnacle $binnacle, ?User $user)
+    public function __construct(Carbon $day, ?Binnacle $binnacle, ?User $user)
     {
         $this->day = $day;
         $this->binnacle = $binnacle;

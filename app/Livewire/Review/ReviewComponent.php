@@ -107,9 +107,6 @@ class ReviewComponent extends Component
     }
     public function export(){
         $day = Carbon::parse($this->nowDate);
-        if(!$this->binnacle_id){
-            return false;
-        }
         $user = User::find($this->user_id);
         $binnacle = Binnacle::find($this->binnacle_id);
         return Excel::download(new ReviewExport($day,$binnacle,$user ),'Exportable-'.$day->format('Y-m-d').'.xlsx');
