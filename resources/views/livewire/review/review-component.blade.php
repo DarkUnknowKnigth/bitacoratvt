@@ -200,7 +200,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">{{ $review->user->name }}</td>
-                                    <td class="px-6 py-4">{{ $review->location->name }}</td>
+                                    <td class="px-6 py-4">{{ $review->location->name }} <br> {{ $review->user->roles->pluck('slug')->join(',')}}</td>
                                     <td class="px-6 py-4">
                                         @if ($review->validation_id)
                                             {{ $review->validation->value }}
