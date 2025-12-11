@@ -25,14 +25,14 @@
                     @endforeach
                 </select>
             </div>
-            <div
+            {{-- <div
                 class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Avance de Tareas</h2>
                 <div class="flex flex-col items-center justify-center text-center">
                     <span class="text-3xl font-bold text-blue-700 dark:text-blue-400">{{ $completedTasksCount }} /
                         {{$allTasks}}</span>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Task List -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6" x-show="selectedBinnalce">
