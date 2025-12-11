@@ -107,6 +107,14 @@ class BinnacleComponent extends Component
 
     public function destroy(Binnacle $binnacle)
     {
+        foreach ($binnacle->tasks as $task) {
+            foreach ($task->subtasks as $subtask) {
+                $subtask->reviews()->delete();
+                $subtask->delete();
+            }
+            $task->reviews()->delete();
+            $task->delete();
+        }
         $binnacle->delete();
         session()->flash('status', 'Bitácora eliminada.');
         return redirect()->route('binnacles');
